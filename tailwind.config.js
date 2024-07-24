@@ -51,6 +51,11 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        skyBlue: {
+          // light: "#3A7CA5",
+          DEFAULT: "#3FA2F6",
+          // dark: "#0B2D45",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

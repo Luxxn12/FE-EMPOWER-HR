@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "@/pages";
 import ProtectedRoute from "./protected-route";
+import Login from "@/pages/auth/login";
 
 const App = () => {
 
@@ -11,7 +12,11 @@ const App = () => {
                 {
                     path: "/",
                     element: <Home />
-                }
+                },
+                {
+                    path: "/login",
+                    element: <Login />
+                },
             ]
         }
     ]);
