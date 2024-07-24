@@ -4,6 +4,8 @@ import ProtectedRoute from "./protected-route";
 import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
 import Message from "@/pages/message";
+import Dashboard from "@/pages/dashboard";
+import Attendance from "@/pages/attendance";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -25,6 +27,14 @@ const App = () => {
         {
           path: "/message",
           element: <Message />,
+        },
+        {
+          path: "/dashboard",
+          element: <Dashboard />,
+        },
+        {
+          path: "/attendance",
+          element: <Attendance />,
         },
       ],
     },

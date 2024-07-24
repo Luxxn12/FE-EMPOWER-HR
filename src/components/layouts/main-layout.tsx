@@ -72,7 +72,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           isSidebarOpen ? "blur-sm" : ""
         }`}
       >
-        <nav className="flex py-4 lg:px-8 justify-between items-center border-b border-gray-300">
+        <nav className="flex py-4 lg:px-5 justify-between items-center">
           <div className="flex gap-4">
             <button
               onClick={toggleSidebar}
@@ -108,7 +108,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             </a>
           </div>
         </nav>
-        <main>{children}</main>
+        <div className="lg:px-5">
+        <div className="border-b  border-gray-300"/>
+        </div>
+        <main className="lg:px-5 py-8">
+          {children}   
+      </main>
       </div>
     </>
   );

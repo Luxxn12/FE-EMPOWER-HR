@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import appLogo from "../assets/app-logo2.png";
 import { CircleGauge, ContactRound } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -14,12 +15,18 @@ const Sidebar: React.FC<SidebarProps> = ({
   onClickOutside,
 }) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const [activeMenu, setActiveMenu] = useState("");
+
+  useEffect(() => {
+    setActiveMenu(location.pathname);
+  }, [location]);
 
   return (
     <>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30"
+          className="fixed inset-0 bg-red/50 backdrop-blur-sm z-30"
           onClick={onClickOutside}
         />
       )}
@@ -38,20 +45,57 @@ const Sidebar: React.FC<SidebarProps> = ({
           <ul className="space-y-2 font-medium my-4">
             <li>
               <a
-                href="#"
-                className="flex items-center p-2 bg-gray-100 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                href="/dashboard"
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  activeMenu === "/dashboard" ? "bg-white dark:bg-gray-700 text-blue-500" : ""
+                }`}
               >
-                <CircleGauge className="text-gray-400" />
-                <span className="ms-3 text-sm text-gray-400">Dashboard</span>
+                <CircleGauge  />
+                <span className="ms-3 text-sm">Dashboard</span>
               </a>
             </li>
             <li>
               <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                href="/attendance"
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  activeMenu === "/attendance" ? "bg-white dark:bg-gray-700 text-blue-500" : ""
+                }`}
               >
-                <ContactRound className="text-gray-400" />
-                <span className="ms-3 text-sm text-gray-400">Attendance</span>
+                <ContactRound  />
+                <span className="ms-3 text-sm">Attendance</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/leaves"
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  activeMenu === "/leaves" ? "bg-white dark:bg-gray-700 text-blue-500" : ""
+                }`}
+              >
+                <ContactRound  />
+                <span className="ms-3 text-sm">Leaves</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/payroll"
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  activeMenu === "/payroll" ? "bg-white dark:bg-gray-700 text-blue-500" : ""
+                }`}
+              >
+                <ContactRound  />
+                <span className="ms-3 text-sm">Payroll</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/employees"
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  activeMenu === "/employees" ? "bg-white dark:bg-gray-700 text-blue-500" : ""
+                }`}
+              >
+                <ContactRound  />
+                <span className="ms-3 text-sm">Employees</span>
               </a>
             </li>
           </ul>
