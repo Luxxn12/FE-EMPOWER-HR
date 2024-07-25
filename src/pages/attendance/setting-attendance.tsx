@@ -1,9 +1,15 @@
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -79,16 +85,67 @@ export default function SettingAttendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to={
-                              "/attendance/settings/schedule/1/edit"
-                            }
+                        <Link to={"/attendance/settings/schedule/1/edit"}>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start"
                           >
                             Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Detail</DropdownMenuItem>
+                          </Button>
+                        </Link>
+                        <Dialog>
+                          <DialogTrigger
+                            asChild
+                            className="w-full justify-start"
+                          >
+                            <Button variant="ghost">Details</Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
+                            <DialogHeader>
+                              <DialogTitle className="items-start">
+                                Detail Schedule
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="grid grid-cols-2 mt-4">
+                              <text className="font-medium">Schedule name</text>
+                              <p>Schedule 1</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">
+                                Effective date
+                              </text>
+                              <p>23 Juli 2024</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Shift pattern</text>
+                              <p>29 day</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Schedule in</text>
+                              <p>08:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Schedule out</text>
+                              <p>16:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Break start</text>
+                              <p>12:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Break end</text>
+                              <p>13:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Description</text>
+                              <p>
+                                Lorem ipsum, dolor sit amet consectetur
+                                adipisicing elit. Voluptatem et, quis numquam
+                                ullam tempora officia alias.
+                              </p>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -114,16 +171,67 @@ export default function SettingAttendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to={
-                              "/attendance/settings/schedule/1/edit"
-                            }
+                        <Link to={"/attendance/settings/schedule/1/edit"}>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start"
                           >
                             Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Detail</DropdownMenuItem>
+                          </Button>
+                        </Link>
+                        <Dialog>
+                          <DialogTrigger
+                            asChild
+                            className="w-full justify-start"
+                          >
+                            <Button variant="ghost">Details</Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
+                            <DialogHeader>
+                              <DialogTitle className="items-start">
+                                Detail Schedule
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="grid grid-cols-2 mt-4">
+                              <text className="font-medium">Schedule name</text>
+                              <p>Schedule 1</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">
+                                Effective date
+                              </text>
+                              <p>23 Juli 2024</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Shift pattern</text>
+                              <p>29 day</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Schedule in</text>
+                              <p>08:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Schedule out</text>
+                              <p>16:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Break start</text>
+                              <p>12:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Break end</text>
+                              <p>13:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Description</text>
+                              <p>
+                                Lorem ipsum, dolor sit amet consectetur
+                                adipisicing elit. Voluptatem et, quis numquam
+                                ullam tempora officia alias.
+                              </p>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -149,16 +257,67 @@ export default function SettingAttendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to={
-                              "/attendance/settings/schedule/1/edit"
-                            }
+                        <Link to={"/attendance/settings/schedule/1/edit"}>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start"
                           >
                             Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Detail</DropdownMenuItem>
+                          </Button>
+                        </Link>
+                        <Dialog>
+                          <DialogTrigger
+                            asChild
+                            className="w-full justify-start"
+                          >
+                            <Button variant="ghost">Details</Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
+                            <DialogHeader>
+                              <DialogTitle className="items-start">
+                                Detail Schedule
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="grid grid-cols-2 mt-4">
+                              <text className="font-medium">Schedule name</text>
+                              <p>Schedule 1</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">
+                                Effective date
+                              </text>
+                              <p>23 Juli 2024</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Shift pattern</text>
+                              <p>29 day</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Schedule in</text>
+                              <p>08:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Schedule out</text>
+                              <p>16:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Break start</text>
+                              <p>12:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Break end</text>
+                              <p>13:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Description</text>
+                              <p>
+                                Lorem ipsum, dolor sit amet consectetur
+                                adipisicing elit. Voluptatem et, quis numquam
+                                ullam tempora officia alias.
+                              </p>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -184,16 +343,67 @@ export default function SettingAttendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to={
-                              "/attendance/settings/schedule/1/edit"
-                            }
+                        <Link to={"/attendance/settings/schedule/1/edit"}>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start"
                           >
                             Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Detail</DropdownMenuItem>
+                          </Button>
+                        </Link>
+                        <Dialog>
+                          <DialogTrigger
+                            asChild
+                            className="w-full justify-start"
+                          >
+                            <Button variant="ghost">Details</Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
+                            <DialogHeader>
+                              <DialogTitle className="items-start">
+                                Detail Schedule
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="grid grid-cols-2 mt-4">
+                              <text className="font-medium">Schedule name</text>
+                              <p>Schedule 1</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">
+                                Effective date
+                              </text>
+                              <p>23 Juli 2024</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Shift pattern</text>
+                              <p>29 day</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Schedule in</text>
+                              <p>08:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Schedule out</text>
+                              <p>16:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Break start</text>
+                              <p>12:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Break end</text>
+                              <p>13:00</p>
+                            </div>
+                            <div className="grid grid-cols-2">
+                              <text className="font-medium">Description</text>
+                              <p>
+                                Lorem ipsum, dolor sit amet consectetur
+                                adipisicing elit. Voluptatem et, quis numquam
+                                ullam tempora officia alias.
+                              </p>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
