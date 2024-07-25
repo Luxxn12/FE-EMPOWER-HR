@@ -13,6 +13,7 @@ import DetailAttendance from "@/pages/attendance/detail-attendance";
 import SettingAttendance from "@/pages/attendance/setting-attendance";
 import AddSchedule from "@/pages/attendance/add-schedule";
 import CreateEmployee from "@/pages/employee/create";
+import DetailEmployee from "@/pages/employee/show";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -54,6 +55,10 @@ const App = () => {
             {
               path: "create",
               element: <CreateEmployee />,
+            },
+            {
+              path: "show",
+              element: <DetailEmployee />,
             },
           ],
         },
