@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Ellipsis, SearchIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function SettingAttendance() {
   return (
@@ -36,7 +37,9 @@ export default function SettingAttendance() {
               className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
             />
           </div>
-          <Button>Create new schedule </Button>
+          <Link to={"/attendance/settings/schedule"}>
+            <Button>Create new schedule </Button>
+          </Link>
         </div>
       </div>
       <div className="py-8">
