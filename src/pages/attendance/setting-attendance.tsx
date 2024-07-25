@@ -79,7 +79,15 @@ export default function SettingAttendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            to={
+                              "/attendance/settings/schedule/1/edit"
+                            }
+                          >
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Detail</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -106,7 +114,15 @@ export default function SettingAttendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            to={
+                              "/attendance/settings/schedule/1/edit"
+                            }
+                          >
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Detail</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -133,7 +149,15 @@ export default function SettingAttendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            to={
+                              "/attendance/settings/schedule/1/edit"
+                            }
+                          >
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Detail</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -160,7 +184,15 @@ export default function SettingAttendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            to={
+                              "/attendance/settings/schedule/1/edit"
+                            }
+                          >
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Detail</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
