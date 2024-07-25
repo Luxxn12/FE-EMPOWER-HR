@@ -4,6 +4,7 @@ import ProtectedRoute from "./protected-route";
 import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
 import Message from "@/pages/message";
+import CreateMessage from "@/pages/message/create";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -24,7 +25,16 @@ const App = () => {
         },
         {
           path: "/message",
-          element: <Message />,
+          children: [
+            {
+              index: true,
+              element: <Message />,
+            },
+            {
+              path: "create",
+              element: <CreateMessage />,
+            },
+          ],
         },
       ],
     },
