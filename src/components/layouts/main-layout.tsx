@@ -67,12 +67,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         onClickOutside={handleClickOutside}
       />
 
+
       <div
-        className={`p-4 h-screen bg-gray-100 sm:ml-64 ${
+        className={`p-4 flex flex-col min-h-screen bg-gray-100 sm:ml-64 ${
           isSidebarOpen ? "blur-sm" : ""
         }`}
       >
-        <nav className="flex py-4 lg:px-8 justify-between items-center border-b border-gray-300">
+        <nav className="flex py-4 lg:px-5 justify-between items-center">
           <div className="flex gap-4">
             <button
               onClick={toggleSidebar}
@@ -108,7 +109,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             </a>
           </div>
         </nav>
-        <main>{children}</main>
+        <div className="lg:px-5">
+        <div className="border-b  border-gray-300"/>
+        </div>
+        <main className="lg:px-5 py-8">
+          {children}   
+      </main>
       </div>
     </>
   );
