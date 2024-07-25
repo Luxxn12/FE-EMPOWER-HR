@@ -67,8 +67,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         onClickOutside={handleClickOutside}
       />
 
+
       <div
-        className={`p-4 h-screen bg-gray-100 sm:ml-64 ${
+        className={`p-4 flex flex-col min-h-screen bg-gray-100 sm:ml-64 ${
           isSidebarOpen ? "blur-sm" : ""
         }`}
       >

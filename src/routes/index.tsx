@@ -6,6 +6,7 @@ import Register from "@/pages/auth/register";
 import Message from "@/pages/message";
 import Dashboard from "@/pages/dashboard";
 import Attendance from "@/pages/attendance";
+import LiveAttendance from "@/pages/attendance/live-attendance";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -35,6 +36,10 @@ const App = () => {
         {
           path: "/attendance",
           element: <Attendance />,
+        },
+        {
+          path: "/attendance/live-attendance",
+          element: <LiveAttendance />,
         },
       ],
     },

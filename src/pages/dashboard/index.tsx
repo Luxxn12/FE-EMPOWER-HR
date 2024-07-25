@@ -1,6 +1,9 @@
 import MainLayout from '@/components/layouts/main-layout';
 import { Button } from '@/components/ui/button';
-import ImgDashboard from '@/assets/img-dashboard.png'
+import ImgDashboard from '@/assets/image-dashboard.png'
+import { Link } from 'react-router-dom';
+import { PaiChart } from '@/components/pai-chart';
+import { EmploymentStatus } from '@/components/employment-status';
 
 export default function Dashboard() {
   return (
@@ -13,7 +16,9 @@ export default function Dashboard() {
               <h6 className='text-gray-400 text-sm mt-2'>Tuesday, 23 July</h6>
               <div className='pt-10'>
                 <h6 className='font-bold text-sm mb-4'>Shortcut</h6>
+                <Link to={'/attendance/live-attendance'}>
                 <Button variant="outline" className='rounded-3xl'>Live acttendance</Button>
+                </Link>
               </div>
             </div>
             <div>
@@ -49,11 +54,12 @@ export default function Dashboard() {
         </div>
         <div className='grid lg:grid-cols-2 grid-cols-1 gap-5 mt-8'>
           <div className='py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm'>
-          <text className='text-xl'>Employment Status</text>
-            
+            <text className='text-xl'>Employment Status</text>
+            <EmploymentStatus/>
           </div>
           <div className='py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm'>
           <text className='text-xl'>Gender Diversity</text>
+            <PaiChart/>
 
           </div>
         </div>
