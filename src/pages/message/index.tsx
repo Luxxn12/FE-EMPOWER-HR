@@ -8,9 +8,15 @@ const Message = () => {
       title="Empower HR - Message"
       description="User Empower HR - Message"
     >
-      <section className="container py-4">
-        <h5 className="text-lg text-gray-500 font-semibold">Messages</h5>
-        <div className="bg-white border-gray-900 my-4 lg:w-3/4">
+      <section className="lg:container py-8">
+        <div className="flex justify-between">
+          <h5 className="text-lg text-gray-500 font-semibold">Messages</h5>
+          <div className="flex gap-2">
+            <Button>Approval list</Button>
+            <Button>New message</Button>
+          </div>
+        </div>
+        <div className="bg-white border-gray-900 my-4">
           <div className="grid grid-cols-5 gap-4">
             <div className="col-span-1 p-4 flex items-center justify-center">
               <Mail
@@ -37,7 +43,7 @@ const Message = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white border-gray-900 my-4 lg:w-3/4">
+        <div className="bg-white border-gray-900 my-4">
           <div className="grid grid-cols-5 gap-4">
             <div className="col-span-1 p-4 flex items-center justify-center">
               <Mail
