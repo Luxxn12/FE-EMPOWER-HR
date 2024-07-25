@@ -127,8 +127,7 @@ export default function Attendance() {
           </div>
           <div className="flex gap-5 mt-5 xl:mt-0">
             <Button variant="outline">
-              <DownloadIcon className="mr-2 h-4 w-4" />
-              Export
+              <DownloadIcon className=" h-5 w-5" />
             </Button>
             <div className="relative">
               <SearchIcon size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
