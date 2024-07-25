@@ -12,6 +12,7 @@ import Employees from "@/pages/employee";
 import DetailAttendance from "@/pages/attendance/detail-attendance";
 import SettingAttendance from "@/pages/attendance/setting-attendance";
 import AddSchedule from "@/pages/attendance/add-schedule";
+import EditSchedule from "@/pages/attendance/edit-schedule";
 import CreateEmployee from "@/pages/employee/create";
 
 const App = () => {
@@ -80,6 +81,10 @@ const App = () => {
         {
           path: "/attendance/settings/schedule",
           element: <AddSchedule />,
+        },
+        {
+          path: "/attendance/settings/schedule/:attendance_id/edit",
+          element: <EditSchedule />,
         },
       ],
     },
