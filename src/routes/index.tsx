@@ -11,6 +11,7 @@ import CreateMessage from "@/pages/message/create";
 import Employees from "@/pages/employee";
 import DetailAttendance from "@/pages/attendance/detail-attendance";
 import SettingAttendance from "@/pages/attendance/setting-attendance";
+import AddSchedule from "@/pages/attendance/add-schedule";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -70,6 +71,10 @@ const App = () => {
         {
           path: "/attendance/settings",
           element: <SettingAttendance />,
+        },
+        {
+          path: "/attendance/settings/schedule",
+          element: <AddSchedule />,
         },
       ],
     },
