@@ -7,6 +7,7 @@ import Message from "@/pages/message";
 import Dashboard from "@/pages/dashboard";
 import Attendance from "@/pages/attendance";
 import LiveAttendance from "@/pages/attendance/live-attendance";
+import CreateMessage from "@/pages/message/create";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -27,7 +28,16 @@ const App = () => {
         },
         {
           path: "/message",
-          element: <Message />,
+          children: [
+            {
+              index: true,
+              element: <Message />,
+            },
+            {
+              path: "create",
+              element: <CreateMessage />,
+            },
+          ],
         },
         {
           path: "/dashboard",
