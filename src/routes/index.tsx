@@ -9,6 +9,9 @@ import Attendance from "@/pages/attendance";
 import LiveAttendance from "@/pages/attendance/live-attendance";
 import CreateMessage from "@/pages/message/create";
 import Employees from "@/pages/employee";
+import DetailAttendance from "@/pages/attendance/detail-attendance";
+import SettingAttendance from "@/pages/attendance/setting-attendance";
+import AddSchedule from "@/pages/attendance/add-schedule";
 import CreateEmployee from "@/pages/employee/create";
 
 const App = () => {
@@ -65,6 +68,18 @@ const App = () => {
         {
           path: "/attendance/live-attendance",
           element: <LiveAttendance />,
+        },
+        {
+          path: "/attendance/:attendance_id",
+          element: <DetailAttendance />,
+        },
+        {
+          path: "/attendance/settings",
+          element: <SettingAttendance />,
+        },
+        {
+          path: "/attendance/settings/schedule",
+          element: <AddSchedule />,
         },
       ],
     },

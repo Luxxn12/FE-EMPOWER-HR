@@ -34,7 +34,9 @@ export default function Attendance() {
     <MainLayout title="" description="">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Attendance</h1>
-        <Button>Settings</Button>
+        <Link to={'/attendance/settings'}>
+          <Button>Settings</Button>
+        </Link>
       </div>
       <div className="py-4 mt-6">
         <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 grid-cols-1 gap-5">
@@ -127,11 +129,13 @@ export default function Attendance() {
           </div>
           <div className="flex gap-5 mt-5 xl:mt-0">
             <Button variant="outline">
-              <DownloadIcon className="mr-2 h-4 w-4" />
-              Export
+              <DownloadIcon className=" h-5 w-5" />
             </Button>
             <div className="relative">
-              <SearchIcon size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <SearchIcon
+                size={20}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              />
               <Input
                 type="search"
                 placeholder="Search"
