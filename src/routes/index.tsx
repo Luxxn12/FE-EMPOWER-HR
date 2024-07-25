@@ -12,6 +12,7 @@ import Employees from "@/pages/employee";
 import DetailAttendance from "@/pages/attendance/detail-attendance";
 import SettingAttendance from "@/pages/attendance/setting-attendance";
 import AddSchedule from "@/pages/attendance/add-schedule";
+import CreateEmployee from "@/pages/employee/create";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const App = () => {
             {
               index: true,
               element: <Employees />,
+            },
+            {
+              path: "create",
+              element: <CreateEmployee />,
             },
           ],
         },

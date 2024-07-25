@@ -11,7 +11,6 @@ import { ArrowDownToLine, Ellipsis, Search } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
