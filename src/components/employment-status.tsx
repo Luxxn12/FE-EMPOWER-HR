@@ -21,7 +21,7 @@ const chartConfig = {
 
 export function EmploymentStatus() {
   return (
-    <div>
+    <div className="pt-10">
       <ChartContainer config={chartConfig}>
         <BarChart
           accessibilityLayer

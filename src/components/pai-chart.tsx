@@ -39,7 +39,7 @@ export function PaiChart() {
           <Pie data={chartData} dataKey="visitors" nameKey="browser" />
         </PieChart>
       </ChartContainer>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 p-5">
         <div className="flex justify-between">
           <div className="flex gap-3">
             <Squircle className="bg-[#5D54D5] text-[#5D54D5] rounded-md" />
