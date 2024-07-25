@@ -9,6 +9,7 @@ import Attendance from "@/pages/attendance";
 import LiveAttendance from "@/pages/attendance/live-attendance";
 import CreateMessage from "@/pages/message/create";
 import Employees from "@/pages/employee";
+import DetailAttendance from "@/pages/attendance/detail-attendance";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const App = () => {
         {
           path: "/attendance/live-attendance",
           element: <LiveAttendance />,
+        },
+        {
+          path: "/attendance/:attendance_id",
+          element: <DetailAttendance />,
         },
       ],
     },
