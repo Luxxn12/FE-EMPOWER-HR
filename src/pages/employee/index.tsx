@@ -16,6 +16,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Link } from "react-router-dom";
 
 const Employees = () => {
   return (
@@ -25,7 +26,12 @@ const Employees = () => {
     >
       <div className="flex justify-between">
         <h5 className="text-xl text-gray-500 font-semibold">Employees</h5>
-        <Button>Add Employee</Button>
+        <Link
+          to="/employees/create"
+          className="bg-skyBlue text-[#EEEEEE] hover:bg-skyBlue/90  h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+        >
+          Add Employee
+        </Link>
       </div>
       <div className="flex justify-between my-4">
         <div>

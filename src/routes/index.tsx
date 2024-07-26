@@ -18,6 +18,8 @@ import DetailEmployee from "@/pages/employee/show";
 import Companies from "@/pages/companies";
 import EditCompanies from "@/pages/companies/edit-companies";
 import Leaves from "@/pages/leaves";
+import EditPersonal from "@/pages/employee/edit/personal";
+import EditEmployment from "@/pages/employee/edit/empoloyment";
 import RequestLeaves from "@/pages/leaves/request-leaves";
 import DetailLeave from "@/pages/leaves/detail-leave";
 
@@ -65,6 +67,14 @@ const App = () => {
             {
               path: "show",
               element: <DetailEmployee />,
+            },
+            {
+              path: "edit/personal",
+              element: <EditPersonal />,
+            },
+            {
+              path: "edit/employment",
+              element: <EditEmployment />,
             },
           ],
         },
