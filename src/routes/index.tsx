@@ -18,7 +18,12 @@ import DetailEmployee from "@/pages/employee/show";
 import Companies from "@/pages/companies";
 import EditCompanies from "@/pages/companies/edit-companies";
 import Leaves from "@/pages/leaves";
+<<<<<<< HEAD
+import EditPersonal from "@/pages/employee/edit/personal";
+import EditEmployment from "@/pages/employee/edit/empoloyment";
+=======
 import RequestLeaves from "@/pages/leaves/request-leaves";
+>>>>>>> 598f82fbdb902a73a4b064eeddd2309e66c011f5
 
 const App = () => {
   const router = createBrowserRouter([
@@ -64,6 +69,14 @@ const App = () => {
             {
               path: "show",
               element: <DetailEmployee />,
+            },
+            {
+              path: "edit/personal",
+              element: <EditPersonal />,
+            },
+            {
+              path: "edit/employment",
+              element: <EditEmployment />,
             },
           ],
         },
