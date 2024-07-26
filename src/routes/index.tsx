@@ -17,6 +17,7 @@ import CreateEmployee from "@/pages/employee/create";
 import DetailEmployee from "@/pages/employee/show";
 import Companies from "@/pages/companies";
 import EditCompanies from "@/pages/companies/edit-companies";
+import Leaves from "@/pages/leaves";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -100,6 +101,10 @@ const App = () => {
         {
           path: "/companies/edit",
           element: <EditCompanies />,
+        },
+        {
+          path: "/leaves",
+          element: <Leaves />,
         },
       ],
     },
