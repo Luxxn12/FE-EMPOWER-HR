@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import appLogo from "../assets/app-logo2.png";
 import {
   Banknote,
+  Building2,
   CalendarClock,
   CircleGauge,
   ContactRound,
@@ -117,6 +118,25 @@ const Sidebar: React.FC<SidebarProps> = ({
               >
                 <UsersRound />
                 <span className="ms-3 text-sm">Employees</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/companies"
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  activeMenu === "/companies"
+                    ? "bg-white dark:bg-gray-700 text-blue-500"
+                    : ""
+                  }
+                  ${
+                  activeMenu === "/companies/edit"
+                    ? "bg-white dark:bg-gray-700 text-blue-500"
+                    : ""
+                }  
+                  `}
+              >
+                <Building2 />
+                <span className="ms-3 text-sm">Companies</span>
               </Link>
             </li>
           </ul>
