@@ -18,6 +18,7 @@ import DetailEmployee from "@/pages/employee/show";
 import Companies from "@/pages/companies";
 import EditCompanies from "@/pages/companies/edit-companies";
 import Leaves from "@/pages/leaves";
+import RequestLeaves from "@/pages/leaves/request-leaves";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -105,6 +106,10 @@ const App = () => {
         {
           path: "/leaves",
           element: <Leaves />,
+        },
+        {
+          path: "/leaves/request-leaves",
+          element: <RequestLeaves />,
         },
       ],
     },
