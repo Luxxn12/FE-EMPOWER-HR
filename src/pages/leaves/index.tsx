@@ -1,35 +1,127 @@
 import { DatePicker } from "@/components/date-picker";
 import { Filter } from "@/components/filter";
 import MainLayout from "@/components/layouts/main-layout";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DownloadIcon, SearchIcon } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon, DownloadIcon, SearchIcon } from "lucide-react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Leaves() {
+  const [date, setDate] = React.useState<Date>();
   return (
     <MainLayout title="" description="">
       <div className="flex  justify-between">
-        <h1 className="text-2xl font-bold">Schedule</h1>
+        <h1 className="text-2xl font-bold">Leaves</h1>
         <div className="flex gap-5">
           <Link to={""}>
             <Button variant={"outline"}>Settings</Button>
           </Link>
-          <Link to={""}>
-            <Button>Leaves report</Button>
-          </Link>
+          <Dialog>
+            <DialogTrigger asChild className="w-full justify-start">
+              <Button>Leaves report</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
+              <AlertDialogHeader>
+                <DialogTitle className="items-start">
+                  Print leaves report
+                </DialogTitle>
+                <DialogDescription>
+                  Please selectdate to print leaves report
+                </DialogDescription>
+              </AlertDialogHeader>
+              <div className="grid grid-cols-2 gap-4 mb-3">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Strat date *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="name">End date *</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+              <div className="flex justify-end gap-5">
+                <Button variant={"outline"}>Cancel</Button>
+                <Button className="pl-4 pr-4">Submit</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
       <div className="pt-8">
         <div className="py-6  px-6 border border-[#D5D5D5] bg-white rounded-md">
           <div className="flex md:flex-col xl:flex-row flex-col gap-8">
             <div className="flex  flex-col">
-              <text className="text-gray-500 text-sm">
-                Employees
-              </text>
+              <text className="text-gray-500 text-sm">Employees</text>
               <text className="text-2xl font-bold">Time off</text>
             </div>
             <div className="grid w-full xl:container xl:grid-cols-3 lg::grid-cols-3 grid-cols-2 gap-4 ">

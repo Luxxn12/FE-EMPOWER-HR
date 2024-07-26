@@ -84,11 +84,18 @@ const Sidebar: React.FC<SidebarProps> = ({
             <li>
               <a
                 href="/leaves"
-                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group 
+                  ${
                   activeMenu === "/leaves"
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
-                }`}
+                  }
+                  ${
+                  activeMenu === "/leaves/request-leaves"
+                    ? "bg-white dark:bg-gray-700 text-blue-500"
+                    : ""
+                  }
+                    `}
               >
                 <CalendarClock />
                 <span className="ms-3 text-sm">Leaves</span>
