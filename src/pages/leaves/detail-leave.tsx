@@ -1,5 +1,3 @@
-import { DatePicker } from "@/components/date-picker";
-import { Filter } from "@/components/filter";
 import MainLayout from "@/components/layouts/main-layout";
 import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -30,20 +28,16 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon, DownloadIcon, SearchIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import React from "react";
-import { Link } from "react-router-dom";
 
-export default function Leaves() {
+export default function DetailLeave() {
   const [date, setDate] = React.useState<Date>();
   return (
     <MainLayout title="" description="">
       <div className="flex  justify-between">
-        <h1 className="text-2xl font-bold">Leaves</h1>
-        <div className="flex gap-5">
-          <Link to={""}>
-            <Button variant={"outline"}>Settings</Button>
-          </Link>
+        <h1 className="text-2xl font-bold">Comfirmation</h1>
+        <div>
           <Dialog>
             <DialogTrigger asChild className="w-full justify-start">
               <Button>Leaves report</Button>
@@ -121,60 +115,29 @@ export default function Leaves() {
         <div className="py-6  px-6 border border-[#D5D5D5] bg-white rounded-md">
           <div className="flex md:flex-col xl:flex-row flex-col gap-8">
             <div className="flex  flex-col">
-              <text className="text-gray-500 text-sm">Employees</text>
-              <text className="text-2xl font-bold">Time off</text>
+              <text className="text-gray-500 text-sm">Leaves request</text>
+              <text className="text-2xl font-bold">Username</text>
             </div>
-            <div className="grid w-full xl:container xl:grid-cols-3 lg::grid-cols-3 grid-cols-2 gap-4 ">
+            <div className="grid w-full xl:container xl:grid-cols-3 lg::grid-cols-3 grid-cols-2 gap-8 ">
               <div className="flex gap-6">
                 <Separator orientation="vertical" />
                 <div className="flex flex-col  h-full justify-center">
-                  <text className="text-gray-500">On time</text>
-                  <text className="text-xl font-bold text-blue-400">3</text>
+                  <text className="text-gray-500">Quota</text>
+                  <text className="text-xl font-bold text-blue-400">0</text>
                 </div>
               </div>
               <div className="flex gap-6">
                 <Separator orientation="vertical" />
                 <div className="flex flex-col h-full justify-center">
-                  <text className="text-gray-500">Late clock in</text>
-                  <text className="text-xl font-bold text-blue-400">30</text>
-                </div>
-              </div>
-              <div className="flex gap-6">
-                <Separator orientation="vertical" />
-                <div className="flex flex-col  h-full justify-center">
-                  <text className="text-gray-500">Absent</text>
-                  <text className="text-xl font-bold text-blue-400">40</text>
+                  <text className="text-gray-500">Used</text>
+                  <text className="text-xl font-bold text-blue-400">0</text>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="py-8">
-        <div className="flex xl:flex-row  flex-col justify-between">
-          <div className="flex gap-5">
-            <DatePicker />
-            <Filter />
-          </div>
-          <div className="flex gap-5 mt-5 xl:mt-0">
-            <Button variant="outline">
-              <DownloadIcon className=" h-5 w-5" />
-            </Button>
-            <div className="relative">
-              <SearchIcon
-                size={20}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-              />
-              <Input
-                type="search"
-                placeholder="Search"
-                className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="py-4">
+      <div className="pt-8">
         <div className="border rounded-lg w-full">
           <div className="relative w-full overflow-auto">
             <Table>
@@ -204,41 +167,7 @@ export default function Leaves() {
                   <TableCell>1 Aug 2024</TableCell>
                   <TableCell>14 Aug 2024</TableCell>
                   <TableCell>
-                    <Link to={"/leaves/1"}>
-                      <text className="text-green-600">Approved</text>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox id="select-1" />
-                  </TableCell>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>A-3</TableCell>
-                  <TableCell>Software Engineer</TableCell>
-                  <TableCell>Leave</TableCell>
-                  <TableCell>1 Aug 2024</TableCell>
-                  <TableCell>14 Aug 2024</TableCell>
-                  <TableCell>
-                    <Link to={"/leaves/1"}>
-                      <text className="text-red-600">reject</text>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox id="select-1" />
-                  </TableCell>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>A-3</TableCell>
-                  <TableCell>Software Engineer</TableCell>
-                  <TableCell>Leave</TableCell>
-                  <TableCell>1 Aug 2024</TableCell>
-                  <TableCell>14 Aug 2024</TableCell>
-                  <TableCell>
-                    <Link to={"/leaves/1"}>
-                      <text className="text-yellow-600">Waiting Approve</text>
-                    </Link>
+                    <text className="text-yellow-600">Waiting Approve</text>
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -246,8 +175,27 @@ export default function Leaves() {
           </div>
         </div>
       </div>
-      <div className="text-xs text-muted-foreground mt-3">
-        Showing <strong>1-5</strong> of <strong>20</strong> records
+      <div className="pt-8 flex flex-col">
+        <text className="text-xl font-bold">Approve</text>
+        <text className="text-sm  text-gray-500 mt-1">
+          submit to send a leave approval request
+        </text>
+        <div className="mt-3">
+          <Button>Submit</Button>
+        </div>
+      </div>
+      <Separator className="my-8 bg-gray-300" />
+      <div className="flex flex-col">
+        <text className="text-xl font-bold">Reject</text>
+        <div className="grid xl:grid-cols-2 grid-cols-1">
+          <div className="space-y-2">
+            <Label htmlFor="reason">Reason</Label>
+            <Input type="text" id="reason" placeholder="reason" />
+          </div>
+        </div>
+        <div className="mt-3">
+          <Button className="bg-red-500">Reject</Button>
+        </div>
       </div>
     </MainLayout>
   );
