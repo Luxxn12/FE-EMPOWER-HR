@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { AlignJustify, CircleUser, Mail } from "lucide-react";
 import { Helmet } from "react-helmet";
+import { useLocation } from "react-router-dom";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -23,6 +24,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   description = "",
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+  const pathname = location.pathname;
+
+  const pathnames = pathname.replace(/^\/|\/$/g, "").split("/");
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -73,47 +78,59 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         }`}
       >
         <div className="sticky top-0 z-10 bg-gray-100">
-          
-        <nav className="flex py-4 lg:px-5 justify-between items-center ">
-          <div className="flex gap-4">
-            <button
-              onClick={toggleSidebar}
-              type="button"
-              className="inline-flex items-center -mt-0.5 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            >
-              <span className="sr-only">Open sidebar</span>
-              <AlignJustify />
-            </button>
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
+          <nav className="flex py-4 lg:px-5 justify-between items-center ">
+            <div className="flex gap-4">
+              <button
+                onClick={toggleSidebar}
+                type="button"
+                className="inline-flex items-center -mt-0.5 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              >
+                <span className="sr-only">Open sidebar</span>
+                <AlignJustify />
+              </button>{" "}
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/">
+                      Dashboard
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  {pathnames.map((path, index) => {
+                    const href = `/${pathnames.slice(0, index + 1).join("/")}`;
+                    return (
+                      <React.Fragment key={index}>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                          {index === pathnames.length - 1 ? (
+                            <BreadcrumbPage>
+                              {path.charAt(0).toUpperCase() + path.slice(1)}
+                            </BreadcrumbPage>
+                          ) : (
+                            <BreadcrumbLink href={href}>
+                              {path.charAt(0).toUpperCase() + path.slice(1)}
+                            </BreadcrumbLink>
+                          )}
+                        </BreadcrumbItem>
+                      </React.Fragment>
+                    );
+                  })}
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
 
-          <div className="flex gap-4">
-            <a href="#" className="hover:underline">
-              <Mail className="text-gray-500" />{" "}
-            </a>
-            <a href="#" className="hover:underline">
-              <CircleUser className="text-gray-500" />{" "}
-            </a>
+            <div className="flex gap-4">
+              <a href="#" className="hover:underline">
+                <Mail className="text-gray-500" />{" "}
+              </a>
+              <a href="#" className="hover:underline">
+                <CircleUser className="text-gray-500" />{" "}
+              </a>
+            </div>
+          </nav>
+          <div className="lg:px-5">
+            <div className="border-b  border-gray-300" />
           </div>
-        </nav>
-        <div className="lg:px-5">
-          <div className="border-b  border-gray-300" />
         </div>
-      </div>
 
         <main className="lg:px-5 py-8">{children}</main>
       </div>
