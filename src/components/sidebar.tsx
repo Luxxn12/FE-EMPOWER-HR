@@ -29,6 +29,10 @@ const Sidebar: React.FC<SidebarProps> = ({
     setActiveMenu(location.pathname);
   }, [location]);
 
+  const isActive = (paths: string[]): boolean => {
+    return paths.includes(activeMenu);
+  };
+
   return (
     <>
       {isSidebarOpen && (
@@ -51,42 +55,36 @@ const Sidebar: React.FC<SidebarProps> = ({
           <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700"></hr>
           <ul className="space-y-2 font-medium my-4">
             <li>
-              <a
-                href="/dashboard"
+              <Link
+                to="/dashboard"
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  activeMenu === "/dashboard"
+                  isActive(["/dashboard"])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
                 }`}
               >
                 <CircleGauge />
                 <span className="ms-3 text-sm">Dashboard</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/attendance"
+              <Link
+                to="/attendance"
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  activeMenu === "/attendance"
+                  isActive(["/attendance", "/attendance/live-attendance"])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
-                }${
-                  activeMenu === "/attendance/live-attendance"
-                    ? "bg-white dark:bg-gray-700 text-blue-500"
-                    : ""
-                }
-                  `}
+                }`}
               >
                 <ContactRound />
                 <span className="ms-3 text-sm">Attendance</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/leaves"
-                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group 
-                  ${
-                  activeMenu === "/leaves"
+              <Link
+                to="/leaves"
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  isActive(["/leaves"])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
                   }
@@ -99,26 +97,32 @@ const Sidebar: React.FC<SidebarProps> = ({
               >
                 <CalendarClock />
                 <span className="ms-3 text-sm">Leaves</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/payroll"
+              <Link
+                to="/payroll"
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  activeMenu === "/payroll"
+                  isActive(["/payroll", "/payroll/setting"])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
                 }`}
               >
                 <Banknote />
                 <span className="ms-3 text-sm">Payroll</span>
-              </a>
+              </Link>
             </li>
             <li>
               <Link
                 to="/employees"
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  activeMenu === "/employees"
+                  isActive([
+                    "/employees",
+                    "/employees/create",
+                    "/employees/show",
+                    "/employees/edit/personal",
+                    "/employees/edit/employment",
+                  ])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
                 }`}
@@ -131,16 +135,10 @@ const Sidebar: React.FC<SidebarProps> = ({
               <Link
                 to="/companies"
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  activeMenu === "/companies"
+                  isActive(["/companies", "/companies/edit"])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
-                  }
-                  ${
-                  activeMenu === "/companies/edit"
-                    ? "bg-white dark:bg-gray-700 text-blue-500"
-                    : ""
-                }  
-                  `}
+                }`}
               >
                 <Building2 />
                 <span className="ms-3 text-sm">Companies</span>
