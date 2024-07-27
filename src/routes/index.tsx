@@ -22,6 +22,7 @@ import EditEmployment from "@/pages/employee/edit/empoloyment";
 import RequestLeaves from "@/pages/leaves/request-leaves";
 import DetailLeave from "@/pages/leaves/detail-leave";
 import Payroll from "@/pages/payroll";
+import SettingPayroll from "@/pages/payroll/setting";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -84,6 +85,10 @@ const App = () => {
             {
               index: true,
               element: <Payroll />,
+            },
+            {
+              path: "setting",
+              element: <SettingPayroll />,
             },
           ],
         },
