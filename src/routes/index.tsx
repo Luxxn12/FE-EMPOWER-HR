@@ -9,7 +9,7 @@ import CreateMessage from "@/pages/message/create";
 import Employees from "@/pages/employee";
 import DetailAttendance from "@/pages/attendance/detail-attendance";
 import SettingAttendance from "@/pages/attendance/admin/setting-attendance";
-import AddSchedule from "@/pages/attendance/add-schedule";
+import AddSchedule from "@/pages/attendance/admin/add-schedule";
 import EditSchedule from "@/pages/attendance/edit-schedule";
 import CreateEmployee from "@/pages/employee/create";
 import DetailEmployee from "@/pages/employee/show";

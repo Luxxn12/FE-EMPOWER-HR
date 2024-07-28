@@ -1,6 +1,6 @@
 import { Response } from "@/utils/types/apis";
 import { openAPI } from "../axiosWithConfig";
-import { ISchedule } from "./type";
+import { ISchedule, ScheduleSchema } from "./type";
 
 export const getSchedule = async () => {
   try {
@@ -10,6 +10,21 @@ export const getSchedule = async () => {
   } catch (error: any) {
     if (error.response && error.response.data) {
       const { message } = error.response.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};
+
+export const addSchedule = async (
+  body: ScheduleSchema
+): Promise<Response<any>> => {
+  try {
+    const resp = await openAPI.post<Response<any>>("/schedule", body);
+    return resp.data;
+  } catch (error: any) {
+    if (error.resp && error.resp.data) {
+      const { message } = error.resp.data;
       throw new Error(message);
     }
     throw error;

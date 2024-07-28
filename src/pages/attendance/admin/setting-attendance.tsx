@@ -32,6 +32,7 @@ import { Link } from "react-router-dom";
 export default function SettingAttendance() {
   const [schedule, setSchedule] = useState<ISchedule[]>([]);
   const [error, setError] = useState<string | null>(null);
+  
   const fetchSchedule = async () => {
     try {
       const resp = await getSchedule();
