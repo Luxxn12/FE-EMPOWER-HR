@@ -67,7 +67,7 @@ const App = () => {
               element: <CreateEmployee />,
             },
             {
-              path: "show",
+              path: "/employees/:employee_id",
               element: <DetailEmployee />,
             },
             {

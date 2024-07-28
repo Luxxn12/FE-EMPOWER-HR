@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import { IEmployeeGetAll } from "@/utils/apis/employee/type";
 import { getAllEmployee } from "@/utils/apis/employee/api";
 import { toast } from "sonner";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const Employees = () => {
   const [isData, setData] = useState<IEmployeeGetAll[]>([]);
@@ -126,7 +127,10 @@ const Employees = () => {
           </thead>
           <tbody>
             {isData?.map((item) => (
-              <tr key={item.id} className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+              <tr
+                key={item.id}
+                className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              >
                 <td className="w-4 p-4">
                   <div className="flex items-center">
                     <input
@@ -153,7 +157,22 @@ const Employees = () => {
                 <td className="px-6 py-4">{item.job_level}</td>
                 <td className="px-6 py-4">{item.join_date}</td>
                 <td className="flex items-center px-6 py-4">
-                  <Ellipsis />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button aria-haspopup="true" size="icon" variant="ghost">
+                        <Ellipsis className="h-4 w-4" />
+                        <span className="sr-only">Toggle menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem asChild>
+                        <Link to={`/employees/${item.id}`}>
+                        Detail
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </td>
               </tr>
             ))}
