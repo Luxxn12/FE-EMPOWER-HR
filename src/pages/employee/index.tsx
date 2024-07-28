@@ -17,15 +17,34 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { IEmployeeGetAll } from "@/utils/apis/employee/type";
+import { getAllEmployee } from "@/utils/apis/employee/api";
+import { toast } from "sonner";
 
 const Employees = () => {
+  const [isData, setData] = useState<IEmployeeGetAll[]>([]);
+
+  async function fetchData() {
+    try {
+      const response = await getAllEmployee();
+      setData(response.data);
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <MainLayout
       title="Empower HR - Employees"
       description="Empower HR - Employees"
     >
       <div className="flex justify-between">
-        <h5 className="text-xl text-gray-500 font-semibold">Employees</h5>
+        <h5 className="text-2xl font-semibold">Employees</h5>
         <Link
           to="/employees/create"
           className="bg-skyBlue text-[#EEEEEE] hover:bg-skyBlue/90  h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
@@ -33,7 +52,7 @@ const Employees = () => {
           Add Employee
         </Link>
       </div>
-      <div className="flex justify-between my-4">
+      <div className="flex justify-between my-8">
         <div>
           <Select>
             <SelectTrigger className="w-[180px]">
@@ -92,16 +111,13 @@ const Employees = () => {
                 Job position
               </th>
               <th scope="col" className="px-6 py-3">
-                Job level
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Employment status
               </th>
               <th scope="col" className="px-6 py-3">
-                Job date
+                Job level
               </th>
               <th scope="col" className="px-6 py-3">
-                End date
+                Join date
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -109,62 +125,38 @@ const Employees = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label htmlFor="checkbox-table-search-1" className="sr-only">
-                    checkbox
-                  </label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap"
-              >
-                Empower employee
-              </th>
-              <td className="px-6 py-4">Software Engineer</td>
-              <td className="px-6 py-4">Junior</td>
-              <td className="px-6 py-4">Probation</td>
-              <td className="px-6 py-4">01 Jan 2010</td>
-              <td className="px-6 py-4">-</td>
-              <td className="flex items-center px-6 py-4">
-                <Ellipsis />
-              </td>
-            </tr>
-            <tr className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label htmlFor="checkbox-table-search-1" className="sr-only">
-                    checkbox
-                  </label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap"
-              >
-                Empower employee
-              </th>
-              <td className="px-6 py-4">Software Engineer</td>
-              <td className="px-6 py-4">Junior</td>
-              <td className="px-6 py-4">Probation</td>
-              <td className="px-6 py-4">01 Jan 2010</td>
-              <td className="px-6 py-4">-</td>
-              <td className="flex items-center px-6 py-4">
-                <Ellipsis />
-              </td>
-            </tr>
+            {isData?.map((item) => (
+              <tr key={item.id} className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td className="w-4 p-4">
+                  <div className="flex items-center">
+                    <input
+                      id="checkbox-table-search-1"
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label
+                      htmlFor="checkbox-table-search-1"
+                      className="sr-only"
+                    >
+                      checkbox
+                    </label>
+                  </div>
+                </td>
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap"
+                >
+                  {item.name}
+                </th>
+                <td className="px-6 py-4">{item.job_position}</td>
+                <td className="px-6 py-4">{item.employment_status}</td>
+                <td className="px-6 py-4">{item.job_level}</td>
+                <td className="px-6 py-4">{item.join_date}</td>
+                <td className="flex items-center px-6 py-4">
+                  <Ellipsis />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
