@@ -10,7 +10,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  // DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -98,10 +98,18 @@ export default function SettingAttendance() {
               {schedule && schedule.length > 0 ? (
                 schedule.map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell className="text-gray-500 font-semibold">{item.name}</TableCell>
-                    <TableCell className="text-gray-500">{item.affective_date}</TableCell>
-                    <TableCell className="text-gray-500">{item.schedule_in}</TableCell>
-                    <TableCell className="text-gray-500">{item.schedule_out}</TableCell>
+                    <TableCell className="text-gray-500 font-semibold">
+                      {item.name}
+                    </TableCell>
+                    <TableCell className="text-gray-500">
+                      {item.affective_date}
+                    </TableCell>
+                    <TableCell className="text-gray-500">
+                      {item.schedule_in}
+                    </TableCell>
+                    <TableCell className="text-gray-500">
+                      {item.schedule_out}
+                    </TableCell>
                     <TableCell className="text-gray-500">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -138,48 +146,36 @@ export default function SettingAttendance() {
                                 </DialogTitle>
                               </DialogHeader>
                               <div className="grid grid-cols-2 mt-4">
-                                <text className="font-medium">
-                                  Schedule name
-                                </text>
-                                <p>Schedule 1</p>
+                                <h5 className="font-medium">Schedule name</h5>
+                                <p>{item.name}</p>
                               </div>
                               <div className="grid grid-cols-2">
-                                <text className="font-medium">
-                                  Effective date
-                                </text>
-                                <p>23 Juli 2024</p>
+                                <h5 className="font-medium">Effective date</h5>
+                                <p>{item.affective_date}</p>
                               </div>
                               <div className="grid grid-cols-2">
-                                <text className="font-medium">
-                                  Shift pattern
-                                </text>
-                                <p>29 day</p>
+                                <h5 className="font-medium">Shift pattern</h5>
+                                <p>{item.repeat_until}</p>
                               </div>
                               <div className="grid grid-cols-2">
-                                <text className="font-medium">Schedule in</text>
-                                <p>08:00</p>
+                                <h5 className="font-medium">Schedule in</h5>
+                                <p>{item.schedule_in}</p>
                               </div>
                               <div className="grid grid-cols-2">
-                                <text className="font-medium">
-                                  Schedule out
-                                </text>
-                                <p>16:00</p>
+                                <h5 className="font-medium">Schedule out</h5>
+                                <p>{item.schedule_out}</p>
                               </div>
                               <div className="grid grid-cols-2">
-                                <text className="font-medium">Break start</text>
-                                <p>12:00</p>
+                                <h5 className="font-medium">Break start</h5>
+                                <p>{item.break_start}</p>
                               </div>
                               <div className="grid grid-cols-2">
-                                <text className="font-medium">Break end</text>
-                                <p>13:00</p>
+                                <h5 className="font-medium">Break end</h5>
+                                <p>{item.break_end}</p>
                               </div>
                               <div className="grid grid-cols-2">
-                                <text className="font-medium">Description</text>
-                                <p>
-                                  Lorem ipsum, dolor sit amet consectetur
-                                  adipisicing elit. Voluptatem et, quis numquam
-                                  ullam tempora officia alias.
-                                </p>
+                                <h5 className="font-medium">Description</h5>
+                                <p>{item.description}</p>
                               </div>
                             </DialogContent>
                           </Dialog>
