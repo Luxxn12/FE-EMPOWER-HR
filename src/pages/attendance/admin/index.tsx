@@ -1,5 +1,5 @@
 import { DatePicker } from "@/components/date-picker";
-import { Filter } from "@/components/filter";
+// import { Filter } from "@/components/filter";
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +23,7 @@ import { getAttendance } from "@/utils/apis/attendance/api";
 import { IAttendance } from "@/utils/apis/attendance/type";
 import {
   CircleAlert,
-  CircleCheck,
+  // CircleCheck,
   DownloadIcon,
   Ellipsis,
   SearchIcon,
@@ -38,7 +38,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 export default function Attendance() {
   const [attendance, setAttendance] = useState<IAttendance[]>([]);
@@ -46,6 +47,7 @@ export default function Attendance() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [itemsPerPage] = useState(10);
+  const navigate = useNavigate();
 
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(today);
@@ -78,7 +80,12 @@ export default function Attendance() {
     <MainLayout title="" description="">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Attendance</h1>
-        <Button variant="outline">Settings</Button>
+        <Button
+          variant="outline"
+          onClick={() => navigate("/attendance/settings")}
+        >
+          Settings
+        </Button>
       </div>
       {/* <div className="py-4 mt-6">
         <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 grid-cols-1 gap-5">
@@ -170,7 +177,7 @@ export default function Attendance() {
         <div className="flex xl:flex-row  flex-col justify-between">
           <div className="flex gap-5">
             <DatePicker onDateChange={handleDateChange} />
-            <Filter />
+            {/* <Filter /> */}
           </div>
           <div className="flex gap-5 mt-5 xl:mt-0">
             <Button variant="outline">
@@ -190,7 +197,7 @@ export default function Attendance() {
           </div>
         </div>
       </div>
-      <div className="py-4">
+      <div className="mb-4">
         {error && (
           <div
             className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -204,56 +211,67 @@ export default function Attendance() {
           </div>
         )}
 
-        <div className="rounded-lg w-full">
-          <div className="relative w-full overflow-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-gray-300">
-                  <TableHead className="text-black">Employee Name</TableHead>
-                  <TableHead className="text-black">Employee ID</TableHead>
-                  <TableHead className="text-black">Date</TableHead>
-                  <TableHead className="text-black">Clock In</TableHead>
-                  <TableHead className="text-black">Clock Out</TableHead>
-                  <TableHead className="text-black">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {attendance && attendance.length > 0 ? (
-                  attendance.map((item, index) => (
-                    <TableRow key={index} className="border-gray-300">
-                      <TableCell className="font-medium">
-                        {item.status}
-                      </TableCell>
-                      <TableCell>{item.personal_id}</TableCell>
-                      <TableCell>{item.date}</TableCell>
-                      <TableCell>{item.clock_in}</TableCell>
-                      <TableCell>{item.clock_out}</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              aria-haspopup="true"
-                              size="icon"
-                              variant="ghost"
-                            >
-                              <Ellipsis className="h-4 w-4" />
-                              <span className="sr-only">Toggle menu</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>Detail</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <div>No attendance data available</div>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+        <div className="relative w-full overflow-auto bg-white rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-gray-600">Employee Name</TableHead>
+                <TableHead className="text-gray-600">Employee ID</TableHead>
+                <TableHead className="text-gray-600">Date</TableHead>
+                <TableHead className="text-gray-600">Clock In</TableHead>
+                <TableHead className="text-gray-600">Clock Out</TableHead>
+                <TableHead className="text-gray-600">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {attendance && attendance.length > 0 ? (
+                attendance.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="text-gray-500 font-semibold">
+                      {item.name}
+                    </TableCell>
+                    <TableCell className="text-gray-500">
+                      {item.personal_id}
+                    </TableCell>
+                    <TableCell className="text-gray-500">{item.date}</TableCell>
+                    <TableCell className="text-gray-500">
+                      {item.clock_in}
+                    </TableCell>
+                    <TableCell className="text-gray-500">
+                      {item.clock_out}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <Ellipsis className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem>Detail</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <div>No attendance data available</div>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+      <div className="flex justify-start">
+        <div className="text-xs text-gray-400 mb-2">
+          Showing <strong>{(currentPage - 1) * itemsPerPage + 1}</strong> to{" "}
+          <strong>{currentPage * itemsPerPage}</strong> of{" "}
+          <strong>{totalPages * itemsPerPage}</strong> records
         </div>
       </div>
       <Pagination>
@@ -261,7 +279,7 @@ export default function Attendance() {
           <PaginationItem>
             <PaginationPrevious
               onClick={() => handlePageChange(currentPage - 1)}
-              // disabled={currentPage === 1}
+              disabled={currentPage === 1}
             />
           </PaginationItem>
           {[...Array(totalPages)].map((_, pageIndex) => (
@@ -274,16 +292,11 @@ export default function Attendance() {
           <PaginationItem>
             <PaginationNext
               onClick={() => handlePageChange(currentPage + 1)}
-              // disabled={currentPage === totalPages}
+              disabled={currentPage === totalPages}
             />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-      <div className="text-xs text-muted-foreground mt-3">
-        Showing <strong>{(currentPage - 1) * itemsPerPage + 1}</strong> to{" "}
-        <strong>{currentPage * itemsPerPage}</strong> of{" "}
-        <strong>{totalPages * itemsPerPage}</strong> records
-      </div>
     </MainLayout>
   );
 }

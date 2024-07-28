@@ -4,12 +4,11 @@ import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
 import Message from "@/pages/message";
 import Dashboard from "@/pages/dashboard";
-import Attendance from "@/pages/attendance";
 import LiveAttendance from "@/pages/attendance/live-attendance";
 import CreateMessage from "@/pages/message/create";
 import Employees from "@/pages/employee";
 import DetailAttendance from "@/pages/attendance/detail-attendance";
-import SettingAttendance from "@/pages/attendance/setting-attendance";
+import SettingAttendance from "@/pages/attendance/admin/setting-attendance";
 import AddSchedule from "@/pages/attendance/add-schedule";
 import EditSchedule from "@/pages/attendance/edit-schedule";
 import CreateEmployee from "@/pages/employee/create";
@@ -24,6 +23,7 @@ import DetailLeave from "@/pages/leaves/detail-leave";
 import Payroll from "@/pages/payroll";
 import SettingPayroll from "@/pages/payroll/setting";
 import EditPayroll from "@/pages/payroll/edit";
+import Attendance from "@/pages/attendance/admin";
 
 const App = () => {
   const router = createBrowserRouter([

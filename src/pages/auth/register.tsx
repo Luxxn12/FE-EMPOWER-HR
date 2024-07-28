@@ -35,6 +35,7 @@ const Register = () => {
     setIsLoading(true);
     try {
       const resp = await userRegister(data);
+      console.error(resp);
       navigate("/login");
     } catch (error: any) {
       console.log(error);
