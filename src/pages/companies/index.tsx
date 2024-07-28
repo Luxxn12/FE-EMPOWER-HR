@@ -1,7 +1,7 @@
 import MainLayout from "@/components/layouts/main-layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { openAPI } from "@/utils/apis/axiosWithConfig";
+import { getCompanies } from "@/utils/apis/companies/api";
 import { ICompanies } from "@/utils/apis/companies/type";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -10,17 +10,17 @@ import { toast } from "sonner";
 export default function Companies() {
   const [isData, setData] = useState<ICompanies>();
 
-  const getCompanies = async () => {
+  const fetchData = async () => {
     try {
-      const response = await openAPI.get("/companies");
-      setData(response.data.data);
+      const response = await getCompanies()
+      setData(response.data);
     } catch (error) {
       toast.error((error as Error).message);
     }
   };
 
   useEffect(() => {
-    getCompanies();
+    fetchData();
   }, []);
 
   return (
