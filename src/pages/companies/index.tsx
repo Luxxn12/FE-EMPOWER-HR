@@ -1,9 +1,28 @@
 import MainLayout from "@/components/layouts/main-layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { openAPI } from "@/utils/apis/axiosWithConfig";
+import { ICompanies } from "@/utils/apis/companies/type";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Companies() {
+  const [isData, setData] = useState<ICompanies>();
+
+  const getCompanies = async () => {
+    try {
+      const response = await openAPI.get("/companies");
+      setData(response.data.data);
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  useEffect(() => {
+    getCompanies();
+  }, []);
+
   return (
     <MainLayout title="" description="">
       <div className="flex justify-between">
@@ -14,7 +33,7 @@ export default function Companies() {
       </div>
       <div className="flex justify-center mt-4 ">
         <Avatar style={{ width: 200, height: 200 }}>
-          <AvatarImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQprurNAQRxVr4U41l33XS3epf10AWgUU3UwWdbVsxn3lPn08KGauhaW_viFWJ4JVxnms4&usqp=CAU" />
+          <AvatarImage src={isData?.company_picture} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </div>
@@ -27,29 +46,33 @@ export default function Companies() {
             <div className="flex flex-col xl:py-4 py-0">
               <div className="flex flex-col mb-4">
                 <text className="font-bold">Company name</text>
-                <text className="mt-1">Name Perusahaan</text>
+                <text className="mt-1">{isData?.company_name}</text>
               </div>
               <div className="flex flex-col mb-4">
                 <text className="font-bold">Email</text>
-                <text className="mt-1">expemple@gmail.com</text>
+                <text className="mt-1">{isData?.email}</text>
               </div>
               <div className="flex flex-col mb-4">
                 <text className="font-bold">Phone Number</text>
-                <text className="mt-1">0289182091</text>
+                <text className="mt-1">{isData?.phone}</text>
+              </div>
+              <div className="flex flex-col mb-4">
+                <text className="font-bold">Signature</text>
+                <img src={isData?.signature} alt={isData?.signature} />
               </div>
             </div>
             <div className="flex flex-col xl:py-4 py-0">
               <div className="flex flex-col mb-4">
-                <text className="font-bold">Npwp</text>
-                <text className="mt-1">128182012001</text>
-              </div>
-              <div className="flex flex-col mb-4">
                 <text className="font-bold">Address</text>
-                <text className="mt-1">Jalan Batu Bara</text>
+                <text className="mt-1">{isData?.address}</text>
               </div>
               <div className="flex flex-col mb-4">
-                <text className="font-bold">Signature</text>
-                <text className="mt-1">Signature</text>
+                <text className="font-bold">Npwp</text>
+                <text className="mt-1">{isData?.npwp}</text>
+              </div>
+              <div className="flex flex-col mb-4">
+                <text className="font-bold">Company Address</text>
+                <text className="mt-1">{isData?.company_address}</text>
               </div>
             </div>
           </div>
