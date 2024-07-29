@@ -27,12 +27,13 @@ import { getSchedule } from "@/utils/apis/schedule/api";
 import { ISchedule } from "@/utils/apis/schedule/type";
 import { CircleAlert, Ellipsis, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SettingAttendance() {
   const [schedule, setSchedule] = useState<ISchedule[]>([]);
   const [error, setError] = useState<string | null>(null);
-  
+  const navigate = useNavigate();
+
   const fetchSchedule = async () => {
     try {
       const resp = await getSchedule();
@@ -64,9 +65,11 @@ export default function SettingAttendance() {
               className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
             />
           </div>
-          <Link to={"/attendance/settings/schedule"}>
-            <Button>Create new schedule </Button>
-          </Link>
+          {schedule && schedule.length == 0 && (
+            <Link to={"/attendance/settings/schedule"}>
+              <Button>Create new schedule </Button>
+            </Link>
+          )}
         </div>
       </div>
       <div className="py-8">
@@ -125,14 +128,17 @@ export default function SettingAttendance() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <Link to={"/attendance/settings/schedule/1/edit"}>
-                            <Button
-                              variant="ghost"
-                              className="w-full justify-start"
-                            >
-                              Edit
-                            </Button>
-                          </Link>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start"
+                            onClick={() =>
+                              navigate(
+                                `/attendance/settings/schedule/${item.id}/edit`
+                              )
+                            }
+                          >
+                            Edit
+                          </Button>
                           <Dialog>
                             <DialogTrigger
                               asChild
@@ -186,7 +192,14 @@ export default function SettingAttendance() {
                   </TableRow>
                 ))
               ) : (
-                <div>No attendance data available</div>
+                <TableRow>
+                  <TableCell
+                    colSpan={6}
+                    className="text-center text-red-400 py-4"
+                  >
+                    No schedule data available
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>

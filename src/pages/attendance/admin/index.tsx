@@ -23,6 +23,7 @@ import { getAttendance } from "@/utils/apis/attendance/api";
 import { IAttendance } from "@/utils/apis/attendance/type";
 import {
   CircleAlert,
+  CircleCheck,
   // CircleCheck,
   DownloadIcon,
   Ellipsis,
@@ -38,7 +39,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 
 export default function Attendance() {
@@ -76,6 +77,8 @@ export default function Attendance() {
     setCurrentPage(page);
   };
 
+  console.log(attendance)
+
   return (
     <MainLayout title="" description="">
       <div className="flex justify-between">
@@ -87,7 +90,7 @@ export default function Attendance() {
           Settings
         </Button>
       </div>
-      {/* <div className="py-4 mt-6">
+      {/* <div className="my-2">
         <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 grid-cols-1 gap-5">
           <Link to={"/attendance/live-attendance"}>
             <div className="p-5 border border-[#D5D5D5] bg-white rounded-md cursor-pointer">
@@ -121,7 +124,7 @@ export default function Attendance() {
           </Link>
         </div>
       </div> */}
-      <div className="bg-white p-6 mt-3 border border-[#D5D5D5] rounded-md overflow-hidden">
+      <div className="bg-white p-6 mt-3 border border-gray-200 rounded-md overflow-hidden">
         <div className="flex flex-wrap justify-between">
           <div className="w-3/10 p-4">
             <p className="text-gray-500 text-xs">
@@ -136,36 +139,29 @@ export default function Attendance() {
               <div className="flex gap-6">
                 <Separator orientation="vertical" />
                 <div className="flex flex-col  h-full justify-center">
-                  <text className="text-gray-500">On time</text>
-                  <text className="text-xl font-bold text-blue-400">3</text>
+                  <h5 className="text-gray-500 text-sm">On time</h5>
+                  <p className="text-lg font-bold text-emerald-300">3</p>
                 </div>
               </div>
               <div className="flex gap-6">
                 <Separator orientation="vertical" />
                 <div className="flex flex-col h-full justify-center">
-                  <text className="text-gray-500">Late clock in</text>
-                  <text className="text-xl font-bold text-blue-400">30</text>
+                  <h5 className="text-gray-500 text-sm">Late clock-in</h5>
+                  <p className="text-lg font-bold text-rose-300">3</p>
                 </div>
               </div>
               <div className="flex gap-6">
                 <Separator orientation="vertical" />
                 <div className="flex flex-col  h-full justify-center">
-                  <text className="text-gray-500">Absent</text>
-                  <text className="text-xl font-bold text-blue-400">40</text>
+                  <h5 className="text-gray-500 text-sm">Absent</h5>
+                  <p className="text-lg font-bold text-gray-500">0</p>
                 </div>
               </div>
               <div className="flex gap-6">
                 <Separator orientation="vertical" />
                 <div className="flex flex-col  h-full justify-center">
-                  <text className="text-gray-500">No clock</text>
-                  <text className="text-xl font-bold text-blue-400">3</text>
-                </div>
-              </div>
-              <div className="flex gap-6">
-                <Separator orientation="vertical" />
-                <div className="flex flex-col  h-full justify-center">
-                  <text className="text-gray-500">No clock out</text>
-                  <text className="text-xl font-bold text-blue-400">3</text>
+                  <h5 className="text-gray-500 text-sm">No clock-out</h5>
+                  <p className="text-lg font-bold text-gray-500">0</p>
                 </div>
               </div>
             </div>
@@ -228,10 +224,10 @@ export default function Attendance() {
                 attendance.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell className="text-gray-500 font-semibold">
-                      {item.name}
+                      {item.employementData[0].name}
                     </TableCell>
                     <TableCell className="text-gray-500">
-                      {item.personal_id}
+                      {item.employementData[0].id_personal}
                     </TableCell>
                     <TableCell className="text-gray-500">{item.date}</TableCell>
                     <TableCell className="text-gray-500">
@@ -261,7 +257,14 @@ export default function Attendance() {
                   </TableRow>
                 ))
               ) : (
-                <div>No attendance data available</div>
+                <TableRow>
+                  <TableCell
+                    colSpan={6}
+                    className="text-center text-red-400 py-4"
+                  >
+                    No attendance data available
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>

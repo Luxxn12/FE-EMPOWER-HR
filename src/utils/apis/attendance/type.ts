@@ -1,3 +1,8 @@
+interface IEmploymentData {
+  id_personal: number;
+  name: string;
+}
+
 export interface IAttendance {
   id: number;
   name: string;
@@ -7,5 +12,5 @@ export interface IAttendance {
   date: string;
   long: string;
   lat: string;
-  personal_id: number;
+  employementData: IEmploymentData[]
 }
