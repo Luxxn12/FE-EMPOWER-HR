@@ -10,7 +10,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  // DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -23,35 +22,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getSchedule } from "@/utils/apis/schedule/api";
-import { ISchedule } from "@/utils/apis/schedule/type";
 import { CircleAlert, Ellipsis, SearchIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useAuth } from "@/utils/contexts/token";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function SettingAttendance() {
-  const [schedule, setSchedule] = useState<ISchedule[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { schedules, error } = useAuth();
   const navigate = useNavigate();
-
-  const fetchSchedule = async () => {
-    try {
-      const resp = await getSchedule();
-
-      setSchedule(resp.data);
-    } catch (error: any) {
-      setError(error.message || "Something went wrong");
-    }
-  };
-
-  useEffect(() => {
-    fetchSchedule();
-  }, []);
 
   return (
     <MainLayout title="" description="">
       <h1 className="text-2xl font-bold">Settings Attendance</h1>
-      <div className="flex xl:flex-row xl:items-center  flex-col justify-between mt-8">
+
+      <div className="flex xl:flex-row xl:items-center flex-col justify-between mt-8">
         <h1 className="text-xl font-medium text-gray-600">Schedule</h1>
         <div className="flex gap-5 mt-5 xl:mt-0">
           <div className="relative">
@@ -65,13 +48,14 @@ export default function SettingAttendance() {
               className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
             />
           </div>
-          {schedule && schedule.length == 0 && (
-            <Link to={"/attendance/settings/schedule"}>
-              <Button>Create new schedule </Button>
+          {schedules.length === 0 && (
+            <Link to="/attendance/settings/schedule">
+              <Button>Create new schedule</Button>
             </Link>
           )}
         </div>
       </div>
+
       <div className="py-8">
         {error && (
           <div
@@ -85,23 +69,28 @@ export default function SettingAttendance() {
             </div>
           </div>
         )}
+
         <div className="relative w-full overflow-auto bg-white rounded-md border">
-          <Table className="border-gray-300">
+          <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="text-gray-600">Schedule name</TableHead>
-                <TableHead className="text-gray-600">Effective date</TableHead>
-                <TableHead className="text-gray-600">Schedule in</TableHead>
-                <TableHead className="text-gray-600">Schedule out</TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
+                {[
+                  "Schedule name",
+                  "Effective date",
+                  "Schedule in",
+                  "Schedule out",
+                  "Action",
+                ].map((header, index) => (
+                  <TableHead key={index} className="text-gray-600">
+                    {header}
+                  </TableHead>
+                ))}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {schedule && schedule.length > 0 ? (
-                schedule.map((item, index) => (
-                  <TableRow key={index}>
+              {schedules.length > 0 ? (
+                schedules.map((item) => (
+                  <TableRow key={item.id}>
                     <TableCell className="text-gray-500 font-semibold">
                       {item.name}
                     </TableCell>
@@ -114,7 +103,7 @@ export default function SettingAttendance() {
                     <TableCell className="text-gray-500">
                       {item.schedule_out}
                     </TableCell>
-                    <TableCell className="text-gray-500">
+                    <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -148,42 +137,26 @@ export default function SettingAttendance() {
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
                               <DialogHeader>
-                                <DialogTitle className="items-start">
-                                  Detail Schedule
-                                </DialogTitle>
+                                <DialogTitle>Detail Schedule</DialogTitle>
                               </DialogHeader>
-                              <div className="grid grid-cols-2 mt-4">
-                                <h5 className="font-medium">Schedule name</h5>
-                                <p>{item.name}</p>
-                              </div>
-                              <div className="grid grid-cols-2">
-                                <h5 className="font-medium">Effective date</h5>
-                                <p>{item.affective_date}</p>
-                              </div>
-                              <div className="grid grid-cols-2">
-                                <h5 className="font-medium">Shift pattern</h5>
-                                <p>{item.repeat_until}</p>
-                              </div>
-                              <div className="grid grid-cols-2">
-                                <h5 className="font-medium">Schedule in</h5>
-                                <p>{item.schedule_in}</p>
-                              </div>
-                              <div className="grid grid-cols-2">
-                                <h5 className="font-medium">Schedule out</h5>
-                                <p>{item.schedule_out}</p>
-                              </div>
-                              <div className="grid grid-cols-2">
-                                <h5 className="font-medium">Break start</h5>
-                                <p>{item.break_start}</p>
-                              </div>
-                              <div className="grid grid-cols-2">
-                                <h5 className="font-medium">Break end</h5>
-                                <p>{item.break_end}</p>
-                              </div>
-                              <div className="grid grid-cols-2">
-                                <h5 className="font-medium">Description</h5>
-                                <p>{item.description}</p>
-                              </div>
+                              {Object.entries({
+                                "Schedule name": item.name,
+                                "Effective date": item.affective_date,
+                                "Shift pattern": item.repeat_until,
+                                "Schedule in": item.schedule_in,
+                                "Schedule out": item.schedule_out,
+                                "Break start": item.break_start,
+                                "Break end": item.break_end,
+                                Description: item.description,
+                              }).map(([label, value]) => (
+                                <div
+                                  className="grid grid-cols-2 mt-4"
+                                  key={label}
+                                >
+                                  <h5 className="font-medium">{label}</h5>
+                                  <p>{value}</p>
+                                </div>
+                              ))}
                             </DialogContent>
                           </Dialog>
                         </DropdownMenuContent>
@@ -194,7 +167,7 @@ export default function SettingAttendance() {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={6}
+                    colSpan={5}
                     className="text-center text-red-400 py-4"
                   >
                     No schedule data available

@@ -15,3 +15,29 @@ export const getAttendance = async () => {
     throw error;
   }
 };
+
+export const clockIn = async (data: Partial<IAttendance>) => {
+  try {
+    const resp = await openAPI.post("/attendance", data);
+    return resp.data as Response<IAttendance>;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const { message } = error.response.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};
+
+export const clockOut = async (id: number, data: Partial<IAttendance>) => {
+  try {
+    const resp = await openAPI.put(`/attendance/${id}`, data);
+    return resp.data as Response<IAttendance>;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const { message } = error.response.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};

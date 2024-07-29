@@ -12,5 +12,6 @@ export interface IAttendance {
   date: string;
   long: string;
   lat: string;
+  notes: string;
   employementData: IEmploymentData[]
 }

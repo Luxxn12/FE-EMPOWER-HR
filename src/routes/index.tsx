@@ -122,7 +122,7 @@ const App = () => {
           element: <AddSchedule />,
         },
         {
-          path: "/attendance/settings/schedule/:attendance_id/edit",
+          path: "/attendance/settings/schedule/:schedule_id/edit",
           element: <EditSchedule />,
         },
         {
