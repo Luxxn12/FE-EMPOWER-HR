@@ -16,6 +16,21 @@ export const getSchedule = async () => {
   }
 };
 
+export const getScheduleById = async (
+  id: string
+): Promise<{ data: ScheduleSchema }> => {
+  try {
+    const resp = await openAPI.get<{ data: ScheduleSchema }>(`/schedule/${id}`);
+    return resp.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const { message } = error.response.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};
+
 export const addSchedule = async (
   body: ScheduleSchema
 ): Promise<Response<any>> => {
@@ -25,6 +40,22 @@ export const addSchedule = async (
   } catch (error: any) {
     if (error.resp && error.resp.data) {
       const { message } = error.resp.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};
+
+export const updateSchedule = async (
+  id: string,
+  body: ScheduleSchema
+): Promise<Response<any>> => {
+  try {
+    const resp = await openAPI.put<Response<any>>(`/schedule/${id}`, body);
+    return resp.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const { message } = error.response.data;
       throw new Error(message);
     }
     throw error;
