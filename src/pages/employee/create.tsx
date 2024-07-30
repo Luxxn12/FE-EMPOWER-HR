@@ -1,37 +1,58 @@
 import { FormEvent, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
-import { FormData } from "@/utils/apis/employee/type";
+import { employmentSchema, EmploymentSchema, FormData, payrollSchema, PayrollSchema, personalSchema, PersonalSchema } from "@/utils/apis/employee/type";
 import { FormPersonal } from "@/components/formPersonal";
 import FormEmployment from "@/components/formEmployment";
 import FormPayroll from "@/components/formPayroll";
 import { useMultistepForm } from "@/components/useMultiStepForm";
+import { createEmployee } from "@/utils/apis/employee/api";
+import { toast } from "sonner";
 
 const INITIAL_DATA: FormData = {
-  name: "",
-  email: "",
-  phone: "",
-  place_birth: "",
-  birth_date: "",
-  status: "",
-  gender: "",
-  religion: "",
-  nik: "",
-  address: "",
-  employment_status: "",
-  schedule: "",
-  join_date: "",
-  job_level: "",
-  department: "",
-  approval_line: "",
-  job_position: "",
-  salary: "",
-  bank_name: "",
-  account_number: "",
 }
 
 const CreateEmployee = () => {
   const [data, setData] = useState(INITIAL_DATA)
+
+  const formPersonal = useForm<PersonalSchema>({
+    resolver: zodResolver(personalSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      place_birth: "",
+      birth_date: "",
+      status: "",
+      gender: "",
+      religion: "",
+      nik: "",
+      address: "",
+    },
+  });
+  const formEmployment = useForm<EmploymentSchema>({
+    resolver: zodResolver(employmentSchema),
+    defaultValues: {
+      employment_status: "",
+      schedule: "",
+      join_date: "",
+      job_level: "",
+      department: "",
+      approval_line: "",
+      job_position: "",
+    },
+  });
+  const formPayroll = useForm<PayrollSchema>({
+    resolver: zodResolver(payrollSchema),
+    defaultValues: {
+      salary: "",
+      bank_name: "",
+      account_number: "",
+    },
+  });
+
   function updateFields(fields: Partial<FormData>) {
     setData(prev => {
       return { ...prev, ...fields }
@@ -44,11 +65,16 @@ const CreateEmployee = () => {
       <FormPayroll {...data} updateFields={updateFields} />,
     ])
 
-  function onSubmit(e: FormEvent) {
-    e.preventDefault()
-    if (!isLastStep) return next()
-    alert("Successful Account Creation")
-  }
+    const handleSubmit = async (e: FormEvent) => {
+      e.preventDefault()
+      if (!isLastStep) return next() 
+      try {
+        await createEmployee(data)
+        toast.success("data Success")
+      } catch (error: any) {
+        alert(error.message)
+      }
+    }
 
   return (
     <MainLayout
@@ -59,7 +85,7 @@ const CreateEmployee = () => {
 
       <div className="flex flex-wrap items-center mt-6 w-full text-sm font-medium text-center text-gray-500">
       </div>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit}>
           <div className="flex items-center mb-4 sm:mb-0 sm:mr-4">
              {currentStepIndex + 1} / {steps.length}
           </div>

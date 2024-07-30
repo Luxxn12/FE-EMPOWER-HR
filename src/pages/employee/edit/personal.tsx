@@ -3,8 +3,34 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { getEmployeeById } from "@/utils/apis/employee/api";
+import { updatePersonalSchema, UpdatePersonalSchema } from "@/utils/apis/employee/type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditPersonal = () => {
+  const [date, setDate] = useState<Date | undefined>();
+  const [isLoading, setIsLoading] = useState(false);
+  const { employee_id } = useParams<{ employee_id: string }>();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    reset,
+  } = useForm<UpdatePersonalSchema>({
+    resolver: zodResolver(updatePersonalSchema),
+  })
+
+  useEffect(() => {
+    
+  }, [])
+
+
   return (
     <MainLayout
       title="Empower HR - Employees"
