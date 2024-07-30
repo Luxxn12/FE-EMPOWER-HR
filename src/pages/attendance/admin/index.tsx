@@ -28,17 +28,17 @@ import {
 } from "@/components/ui/pagination";
 import { getAttendance } from "@/utils/apis/attendance/api";
 import { ISchedule } from "@/utils/apis/schedule/type";
-import { CircleAlert, DownloadIcon, Ellipsis, SearchIcon } from "lucide-react";
+import { DownloadIcon, Ellipsis, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { IAttendance } from "@/utils/apis/attendance/type";
 import { useAuth } from "@/utils/contexts/token";
+import { toast } from "sonner";
 
 export default function Attendance() {
-  const { schedules } = useAuth(); // Ambil jadwal dari context
+  const { schedules } = useAuth();
   const [attendance, setAttendance] = useState<IAttendance[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -54,7 +54,7 @@ export default function Attendance() {
       setCurrentPage(resp.meta[0].currentPage);
       setTotalPages(resp.meta[0].totalPages);
     } catch (error: any) {
-      setError(error.message || "Something went wrong");
+      toast.error(error.message);
     }
   };
 
@@ -199,18 +199,6 @@ export default function Attendance() {
           </div>
         </div>
       </div>
-
-      {error && (
-        <div
-          className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
-          role="alert"
-        >
-          <CircleAlert className="flex-shrink-0 inline w-4 h-4 me-3" />
-          <div>
-            <span className="font-medium">Warning!</span> {error}
-          </div>
-        </div>
-      )}
 
       <div className="relative w-full overflow-auto bg-white rounded-md border">
         <Table>

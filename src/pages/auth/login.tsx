@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { userLogin } from "@/utils/apis/auth/api";
 import { useAuth } from "@/utils/contexts/token";
+import { toast } from "sonner";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,8 +35,9 @@ const Login = () => {
       const resp = await userLogin(data);
       setToken(resp.data.token);
       navigate("/dashboard");
+      toast.success(resp.message);
     } catch (error: any) {
-      console.log(error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }

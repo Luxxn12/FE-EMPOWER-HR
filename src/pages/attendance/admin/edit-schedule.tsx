@@ -10,7 +10,11 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { ISchedule, scheduleSchema, ScheduleSchema } from "@/utils/apis/schedule/type";
+import {
+  ISchedule,
+  scheduleSchema,
+  ScheduleSchema,
+} from "@/utils/apis/schedule/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format, parse } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -19,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateSchedule } from "@/utils/apis/schedule/api";
 import { useAuth } from "@/utils/contexts/token";
+import { toast } from "sonner";
 
 export default function EditSchedule() {
   const [date, setDate] = useState<Date | undefined>();
@@ -67,8 +72,8 @@ export default function EditSchedule() {
             setValue("affective_date", format(effectiveDate, "dd-MM-yyyy"));
           }
         }
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        toast.error(error);
       }
     }
     fetchSchedule();
@@ -78,18 +83,18 @@ export default function EditSchedule() {
     setIsLoading(true);
     try {
       const resp = await updateSchedule(schedule_id!, data);
-      console.log(resp);
       fetchSchedules();
       navigate("/attendance/settings");
+      toast.success(resp.message);
     } catch (error: any) {
-      console.log(error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <MainLayout title="" description="">
+    <MainLayout title="Empower HR - Schedule" description="Empower HR - Edit Schedule">
       <h1 className="text-2xl font-bold">Edit Schedule</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="py-5">
         <div className="w-full mb-3 space-y-2">

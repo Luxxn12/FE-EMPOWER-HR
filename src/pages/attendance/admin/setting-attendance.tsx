@@ -22,16 +22,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CircleAlert, Ellipsis, SearchIcon } from "lucide-react";
+import { Ellipsis, SearchIcon } from "lucide-react";
 import { useAuth } from "@/utils/contexts/token";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function SettingAttendance() {
   const { schedules, error } = useAuth();
   const navigate = useNavigate();
 
+  if (error) {
+    toast.error(error);
+  }
+
   return (
-    <MainLayout title="" description="">
+    <MainLayout title="Empower HR - Setting Attendance" description="Empower HR - Setting Attendance">
       <h1 className="text-2xl font-bold">Settings Attendance</h1>
 
       <div className="flex xl:flex-row xl:items-center flex-col justify-between mt-8">
@@ -57,19 +62,6 @@ export default function SettingAttendance() {
       </div>
 
       <div className="py-8">
-        {error && (
-          <div
-            className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            <CircleAlert className="flex-shrink-0 inline w-4 h-4 me-3" />
-            <span className="sr-only">Info</span>
-            <div>
-              <span className="font-medium">Warning!</span> {error}
-            </div>
-          </div>
-        )}
-
         <div className="relative w-full overflow-auto bg-white rounded-md border">
           <Table>
             <TableHeader>
