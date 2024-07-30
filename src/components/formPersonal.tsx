@@ -2,16 +2,19 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { PersonalSchema } from "@/utils/apis/employee/type";
 import { UseFormReturn } from "react-hook-form";
-import { CustomFormField } from "./custome-form-field";
+import { CustomFormField } from "@/components/custom-form-field";
+import { Form } from "@/components/ui/form";
 
 
 
 type PersonalDataProps = {
   form: UseFormReturn<PersonalSchema, any, undefined>
+  onSubmit: (data: PersonalSchema) => void
 }
 
 export function FormPersonal({
-  form
+  form,
+  onSubmit
 }: PersonalDataProps) {
 
   return (
@@ -20,7 +23,8 @@ export function FormPersonal({
       <p className="text-gray-500">
         Fill all employee personal basic information data
       </p>
-      <form className="space-y-3 my-4 lg:w-3/4">
+      <Form {...form}>
+      <form className="space-y-3 my-4 lg:w-3/4" onSubmit={form.handleSubmit(onSubmit)}>
         <CustomFormField control={form.control} name="name" label="Fullname">
           {(field) => (
             <Input
@@ -32,7 +36,7 @@ export function FormPersonal({
             />
           )}
         </CustomFormField>
-        {/* <CustomFormField control={form.control} name="email" label="Email">
+        <CustomFormField control={form.control} name="email" label="Email">
           {(field) => (
             <Input
               {...field}
@@ -43,7 +47,7 @@ export function FormPersonal({
               value={field.value as string}
             />
           )}
-        </CustomFormField> */}
+        </CustomFormField>
         <CustomFormField control={form.control} name="phone" label="Phone number">
           {(field) => (
             <Input
@@ -134,7 +138,7 @@ export function FormPersonal({
             />
           )}
         </CustomFormField>
-      </form>
+      </form></Form>
     </>
   );
 }

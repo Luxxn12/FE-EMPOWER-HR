@@ -1,27 +1,18 @@
-import { Employment } from "@/utils/apis/employee/type";
+import { EmploymentSchema } from "@/utils/apis/employee/type";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { UseFormReturn } from "react-hook-form";
+import { Form } from "./ui/form";
+import { CustomFormField, CustomFormSelect } from "./custom-form-field";
+import { categoriesApproval, categoriesJobLevel, categoriesPosition, categorisSchedule, categorisStatus } from "@/utils/constant";
 
-type EmploymentDataProps = Employment & {
-  updateFields: (fields: Partial<Employment>) => void;
+type EmploymentDataProps = {
+  form: UseFormReturn<EmploymentSchema, any, undefined>
+  onSubmit: (data: EmploymentSchema) => void
 };
 
 function FormEmployment({
-  employment_status,
-  schedule,
-  join_date,
-  job_level,
-  department,
-  approval_line,
-  job_position,
-  updateFields,
+  form,
+  onSubmit
 }: EmploymentDataProps) {
   return (
     <>
@@ -29,102 +20,81 @@ function FormEmployment({
       <p className="text-gray-500">
         Fill all employee data information related to company
       </p>
-      <form className="space-y-3 my-4 lg:w-3/4">
-        <div className="grid gap-6 mb-6 md:grid-cols-2">
-          <div>
-            <Label htmlFor="emplymentStatus">Employment status *</Label>
-            <Select
-              onValueChange={(value) =>
-                updateFields({ employment_status: value })
-              }
-              value={employment_status}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Employment status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="permanen">permanent</SelectItem>
-                <SelectItem value="contract">contract</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="schedule">Schedule *</Label>
-            <Select
-              onValueChange={(value) => updateFields({ schedule: value })}
-              value={schedule}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Office Schedule" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Office Schedule</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="joinDate">Join date *</Label>
-            <Input
-              id="joinDate"
-              type="date"
-              onChange={(e) => updateFields({ join_date: e.target.value })}
-              value={join_date}
+      <Form {...form}>
+        <form className="space-y-3 my-4 lg:w-3/4" onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid gap-6 mb-6 md:grid-cols-2">
+            <CustomFormSelect
+              control={form.control}
+              name="employment_status"
+              label="Employment status "
+              placeholder="Select a Category"
+              options={categorisStatus}
             />
-          </div>
-          <div>
-            <Label htmlFor="jobLevel">Job level *</Label>
-            <Select
-              onValueChange={(value) => updateFields({ job_level: value })}
-              value={job_level}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Manager" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Manager</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="departement">Departement *</Label>
-            <Input
-              id="departement"
-              type="text"
-              placeholder="IT Division"
-              onChange={(e) => updateFields({ department: e.target.value })}
-              value={department}
+            <CustomFormSelect
+              control={form.control}
+              name="schedule"
+              label="schedule "
+              placeholder="Select a Category"
+              options={categorisSchedule}
             />
+
+            <div>
+              <CustomFormField control={form.control} name="join_date" label="Join date">
+                {(field) => (
+                  <Input
+                    {...field}
+                    placeholder="+628xxxxxxxx"
+                    type="date"
+                    disabled={form.formState.isSubmitting}
+                    aria-disabled={form.formState.isSubmitting}
+                    value={field.value as string}
+                  />
+                )}
+              </CustomFormField>
+            </div>
+            <div>
+              <CustomFormSelect
+                control={form.control}
+                name="job_level"
+                label="Job level "
+                placeholder="Select a Category"
+                options={categoriesJobLevel}
+              />
+            </div>
+            <div>
+              <CustomFormField control={form.control} name="department" label="Department">
+                {(field) => (
+                  <Input
+                    {...field}
+                    placeholder="Department"
+                    disabled={form.formState.isSubmitting}
+                    aria-disabled={form.formState.isSubmitting}
+                    value={field.value as string}
+                  />
+                )}
+              </CustomFormField>
+            </div>
+            <div>
+            <CustomFormSelect
+                control={form.control}
+                name="approval_line"
+                label="Approval line "
+                placeholder="Select a Category"
+                options={categoriesApproval}
+              />
+            </div>
+            <div>
+            <CustomFormSelect
+                control={form.control}
+                name="job_position"
+                label="Job positionroval "
+                placeholder="Select a Category"
+                options={categoriesPosition}
+              />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="approvalLine">Approval line *</Label>
-            <Select
-              onValueChange={(value) => updateFields({ approval_line: value })}
-              value={approval_line}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="empower hr" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Bambang</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="approvalLine">Job position *</Label>
-            <Select
-              onValueChange={(value) => updateFields({ job_position: value })}
-              value={job_position}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="empower hr" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Software Engineer">Software Engineer</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </form>
+        </form>
+      </Form>
     </>
   );
 }

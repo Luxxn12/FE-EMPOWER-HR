@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import MainLayout from "@/components/layouts/main-layout";
@@ -11,12 +11,8 @@ import { useMultistepForm } from "@/components/useMultiStepForm";
 import { createEmployee } from "@/utils/apis/employee/api";
 import { toast } from "sonner";
 
-const INITIAL_DATA: FormData = {
-}
 
 const CreateEmployee = () => {
-  const [data, setData] = useState(INITIAL_DATA)
-
   const formPersonal = useForm<PersonalSchema>({
     resolver: zodResolver(personalSchema),
     defaultValues: {
@@ -53,28 +49,23 @@ const CreateEmployee = () => {
     },
   });
 
-  function updateFields(fields: Partial<FormData>) {
-    setData(prev => {
-      return { ...prev, ...fields }
-    })
+  const onSubmit = async (data: PersonalSchema | EmploymentSchema | PayrollSchema) => {
+    if (!isLastStep) return next() 
+    // try {
+    //   await createEmployee(data)
+    //   toast.success("data Success")
+    // } catch (error: any) {
+    //   alert(error.message)
+    // }
   }
+
   const { steps, currentStepIndex, step, isFirstStep, isLastStep, back, next } =
     useMultistepForm([
-      <FormPersonal {...data} updateFields={updateFields} />,
-      <FormEmployment {...data} updateFields={updateFields} />,
-      <FormPayroll {...data} updateFields={updateFields} />,
+      <FormPersonal form={formPersonal} onSubmit={onSubmit} />,
+      <FormEmployment  form={formEmployment} onSubmit={onSubmit} />,
+      <FormPayroll  form={formPayroll} onSubmit={onSubmit} />,
     ])
 
-    const handleSubmit = async (e: FormEvent) => {
-      e.preventDefault()
-      if (!isLastStep) return next() 
-      try {
-        await createEmployee(data)
-        toast.success("data Success")
-      } catch (error: any) {
-        alert(error.message)
-      }
-    }
 
   return (
     <MainLayout
@@ -85,7 +76,7 @@ const CreateEmployee = () => {
 
       <div className="flex flex-wrap items-center mt-6 w-full text-sm font-medium text-center text-gray-500">
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
           <div className="flex items-center mb-4 sm:mb-0 sm:mr-4">
              {currentStepIndex + 1} / {steps.length}
           </div>
