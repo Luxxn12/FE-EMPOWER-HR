@@ -3,17 +3,20 @@ import { Input } from "./ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { Form } from "./ui/form";
 import { CustomFormField, CustomFormSelect } from "./custom-form-field";
-import { categoriesApproval, categoriesJobLevel, categoriesPosition, categorisSchedule, categorisStatus } from "@/utils/constant";
+import {
+  categoriesApproval,
+  categoriesJobLevel,
+  categoriesPosition,
+  categorisSchedule,
+  categorisStatus,
+} from "@/utils/constant";
 
 type EmploymentDataProps = {
-  form: UseFormReturn<EmploymentSchema, any, undefined>
-  onSubmit: (data: EmploymentSchema) => void
+  form: UseFormReturn<EmploymentSchema, any, undefined>;
+  onSubmit: () => void;
 };
 
-function FormEmployment({
-  form,
-  onSubmit
-}: EmploymentDataProps) {
+function FormEmployment({ form, onSubmit }: EmploymentDataProps) {
   return (
     <>
       <h5 className="text-md font-semibold">Employment data</h5>
@@ -21,7 +24,11 @@ function FormEmployment({
         Fill all employee data information related to company
       </p>
       <Form {...form}>
-        <form className="space-y-3 my-4 lg:w-3/4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          id="forms"
+          className="space-y-3 my-4 lg:w-3/4"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <CustomFormSelect
               control={form.control}
@@ -39,7 +46,11 @@ function FormEmployment({
             />
 
             <div>
-              <CustomFormField control={form.control} name="join_date" label="Join date">
+              <CustomFormField
+                control={form.control}
+                name="join_date"
+                label="Join date"
+              >
                 {(field) => (
                   <Input
                     {...field}
@@ -62,7 +73,11 @@ function FormEmployment({
               />
             </div>
             <div>
-              <CustomFormField control={form.control} name="department" label="Department">
+              <CustomFormField
+                control={form.control}
+                name="department"
+                label="Department"
+              >
                 {(field) => (
                   <Input
                     {...field}
@@ -75,7 +90,7 @@ function FormEmployment({
               </CustomFormField>
             </div>
             <div>
-            <CustomFormSelect
+              <CustomFormSelect
                 control={form.control}
                 name="approval_line"
                 label="Approval line "
@@ -84,7 +99,7 @@ function FormEmployment({
               />
             </div>
             <div>
-            <CustomFormSelect
+              <CustomFormSelect
                 control={form.control}
                 name="job_position"
                 label="Job positionroval "

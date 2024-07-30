@@ -1,26 +1,26 @@
-
-import { Input } from './ui/input';
-import { PayrollSchema } from '@/utils/apis/employee/type';
-import { UseFormReturn } from 'react-hook-form';
-import { Form } from './ui/form';
-import { CustomFormField, CustomFormSelect } from './custom-form-field';
-import { categorisBank } from '@/utils/constant';
+import { Input } from "./ui/input";
+import { PayrollSchema } from "@/utils/apis/employee/type";
+import { UseFormReturn } from "react-hook-form";
+import { Form } from "./ui/form";
+import { CustomFormField, CustomFormSelect } from "./custom-form-field";
+import { categorisBank } from "@/utils/constant";
 
 type PayrollDataProps = {
-  form: UseFormReturn<PayrollSchema, any, undefined>
-  onSubmit: (data: PayrollSchema) => void
+  form: UseFormReturn<PayrollSchema, any, undefined>;
+  onSubmit: () => void;
 };
 
-function FormPayroll({
-  form,
-  onSubmit
-}: PayrollDataProps) {
+function FormPayroll({ form, onSubmit }: PayrollDataProps) {
   return (
     <>
       <h5 className="text-md font-semibold">Salary</h5>
       <p className="text-gray-500">Input employee salary info</p>
       <Form {...form}>
-        <form className="my-4 lg:w-3/4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          id="forms"
+          className="my-4 lg:w-3/4"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <CustomFormField control={form.control} name="salary" label="Salary">
             {(field) => (
               <Input
@@ -44,7 +44,11 @@ function FormPayroll({
               placeholder="Select a Category"
               options={categorisBank}
             />
-            <CustomFormField control={form.control} name="account_number" label="Account number">
+            <CustomFormField
+              control={form.control}
+              name="account_number"
+              label="Account number"
+            >
               {(field) => (
                 <Input
                   {...field}

@@ -1,16 +1,21 @@
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
-import { employmentSchema, EmploymentSchema, FormData, payrollSchema, PayrollSchema, personalSchema, PersonalSchema } from "@/utils/apis/employee/type";
+import {
+  employmentSchema,
+  EmploymentSchema,
+  payrollSchema,
+  PayrollSchema,
+  personalSchema,
+  PersonalSchema,
+} from "@/utils/apis/employee/type";
 import { FormPersonal } from "@/components/formPersonal";
 import FormEmployment from "@/components/formEmployment";
 import FormPayroll from "@/components/formPayroll";
 import { useMultistepForm } from "@/components/useMultiStepForm";
 import { createEmployee } from "@/utils/apis/employee/api";
 import { toast } from "sonner";
-
 
 const CreateEmployee = () => {
   const formPersonal = useForm<PersonalSchema>({
@@ -49,23 +54,28 @@ const CreateEmployee = () => {
     },
   });
 
-  const onSubmit = async (data: PersonalSchema | EmploymentSchema | PayrollSchema) => {
-    if (!isLastStep) return next() 
-    // try {
-    //   await createEmployee(data)
-    //   toast.success("data Success")
-    // } catch (error: any) {
-    //   alert(error.message)
-    // }
-  }
+  const onSubmit = async () => {
+    if (!isLastStep) return next();
+
+    try {
+      const body = {
+        ...formPersonal.getValues(),
+        ...formEmployment.getValues(),
+        ...formPayroll.getValues(),
+      };
+      await createEmployee(body);
+      toast.success("data Success");
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
 
   const { steps, currentStepIndex, step, isFirstStep, isLastStep, back, next } =
     useMultistepForm([
       <FormPersonal form={formPersonal} onSubmit={onSubmit} />,
-      <FormEmployment  form={formEmployment} onSubmit={onSubmit} />,
-      <FormPayroll  form={formPayroll} onSubmit={onSubmit} />,
-    ])
-
+      <FormEmployment form={formEmployment} onSubmit={onSubmit} />,
+      <FormPayroll form={formPayroll} onSubmit={onSubmit} />,
+    ]);
 
   return (
     <MainLayout
@@ -74,25 +84,22 @@ const CreateEmployee = () => {
     >
       <h5 className="text-xl text-gray-500 font-semibold">Add Employees</h5>
 
-      <div className="flex flex-wrap items-center mt-6 w-full text-sm font-medium text-center text-gray-500">
+      <div className="flex flex-wrap items-center mt-6 w-full text-sm font-medium text-center text-gray-500"></div>
+      <div className="flex items-center mb-4 sm:mb-0 sm:mr-4">
+        {currentStepIndex + 1} / {steps.length}
       </div>
-      <form onSubmit={onSubmit}>
-          <div className="flex items-center mb-4 sm:mb-0 sm:mr-4">
-             {currentStepIndex + 1} / {steps.length}
-          </div>
-        <div className="mt-6">
-          {step}
-        </div>
+      <div className="mt-6">{step}</div>
 
-        <div className="mt-6 flex justify-start gap-2">
-          {!isFirstStep && (
-            <Button type="button" onClick={back}>
-              Back
-            </Button>
-          )}
-          <Button type="submit">{isLastStep ? "Finish" : "Next"}</Button>
-        </div>
-      </form>
+      <div className="mt-6 flex justify-start gap-2">
+        {!isFirstStep && (
+          <Button type="button" onClick={back}>
+            Back
+          </Button>
+        )}
+        <Button type="submit" form="forms">
+          {isLastStep ? "Finish" : "Next"}
+        </Button>
+      </div>
     </MainLayout>
   );
 };
