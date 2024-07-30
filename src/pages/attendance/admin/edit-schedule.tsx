@@ -10,20 +10,28 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { getScheduleById, updateSchedule } from "@/utils/apis/schedule/api";
-import { scheduleSchema, ScheduleSchema } from "@/utils/apis/schedule/type";
+import {
+  ISchedule,
+  scheduleSchema,
+  ScheduleSchema,
+} from "@/utils/apis/schedule/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format, parse } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import { updateSchedule } from "@/utils/apis/schedule/api";
+import { useAuth } from "@/utils/contexts/token";
+import { toast } from "sonner";
 
 export default function EditSchedule() {
   const [date, setDate] = useState<Date | undefined>();
   const [isLoading, setIsLoading] = useState(false);
-  const { id } = useParams<{ id: string }>();
+  const { schedule_id } = useParams();
   const navigate = useNavigate();
+
+  const { schedules, fetchSchedules } = useAuth();
 
   const {
     register,
@@ -38,48 +46,55 @@ export default function EditSchedule() {
   useEffect(() => {
     async function fetchSchedule() {
       try {
-        const response = await getScheduleById(id!);
-        const schedule = response.data;
-        reset({
-          name: schedule.name,
-          schedule_in: schedule.schedule_in,
-          schedule_out: schedule.schedule_out,
-          break_start: schedule.break_start,
-          break_end: schedule.break_end,
-          repeat_until: schedule.repeat_until,
-          affective_date: schedule.affective_date,
-          description: schedule.description || "",
-        });
+        if (schedule_id) {
+          const numericId = Number(schedule_id);
+          const schedule = schedules.find(
+            (schedule: ISchedule) => schedule.id === numericId
+          );
+          if (schedule) {
+            reset({
+              name: schedule.name,
+              schedule_in: schedule.schedule_in,
+              schedule_out: schedule.schedule_out,
+              break_start: schedule.break_start,
+              break_end: schedule.break_end,
+              repeat_until: schedule.repeat_until,
+              affective_date: schedule.affective_date,
+              description: schedule.description || "",
+            });
 
-        const effectiveDate = parse(
-          schedule.affective_date,
-          "dd-MM-yyyy",
-          new Date()
-        );
-        setDate(effectiveDate);
-        setValue("affective_date", format(effectiveDate, "dd-MM-yyyy"));
-      } catch (error) {
-        console.error(error);
+            const effectiveDate = parse(
+              schedule.affective_date,
+              "dd-MM-yyyy",
+              new Date()
+            );
+            setDate(effectiveDate);
+            setValue("affective_date", format(effectiveDate, "dd-MM-yyyy"));
+          }
+        }
+      } catch (error: any) {
+        toast.error(error);
       }
     }
     fetchSchedule();
-  }, [id, reset, setValue]);
+  }, [schedule_id, reset, setValue, schedules]);
 
   async function onSubmit(data: ScheduleSchema) {
     setIsLoading(true);
     try {
-      const resp = await updateSchedule(id!, data);
-      console.log(resp);
+      const resp = await updateSchedule(schedule_id!, data);
+      fetchSchedules();
       navigate("/attendance/settings");
+      toast.success(resp.message);
     } catch (error: any) {
-      console.log(error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <MainLayout title="" description="">
+    <MainLayout title="Empower HR - Schedule" description="Empower HR - Edit Schedule">
       <h1 className="text-2xl font-bold">Edit Schedule</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="py-5">
         <div className="w-full mb-3 space-y-2">

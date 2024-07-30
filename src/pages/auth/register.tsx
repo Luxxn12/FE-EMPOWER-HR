@@ -9,6 +9,7 @@ import { useState } from "react";
 import { userRegister } from "@/utils/apis/auth/api";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,10 +36,10 @@ const Register = () => {
     setIsLoading(true);
     try {
       const resp = await userRegister(data);
-      console.error(resp);
       navigate("/login");
+      toast.success(resp.message);
     } catch (error: any) {
-      console.log(error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }

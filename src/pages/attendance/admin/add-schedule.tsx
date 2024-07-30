@@ -18,6 +18,7 @@ import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function AddSchedule() {
   const [date, setDate] = useState<Date | undefined>();
@@ -47,17 +48,17 @@ export default function AddSchedule() {
     setIsLoading(true);
     try {
       const resp = await addSchedule(data);
-      console.log(resp);
       navigate("/attendance/settings");
+      toast.success(resp.message);
     } catch (error: any) {
-      console.log(error);
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <MainLayout title="" description="">
+    <MainLayout title="Empower HR - Schedule" description="Empower HR - Create Schedule">
       <h1 className="text-2xl font-bold">Add schedule</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="py-5">
         <div className="w-full mb-3 space-y-2">
