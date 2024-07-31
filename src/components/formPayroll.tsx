@@ -1,69 +1,68 @@
-import { Label } from './ui/label';
-import { Input } from './ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Payroll } from '@/utils/apis/employee/type';
+import { Input } from "./ui/input";
+import { PayrollSchema } from "@/utils/apis/employee/type";
+import { UseFormReturn } from "react-hook-form";
+import { Form } from "./ui/form";
+import { CustomFormField, CustomFormSelect } from "./custom-form-field";
+import { categorisBank } from "@/utils/constant";
 
-type PayrollDataProps = Payroll & {
-  updateFields: (fields: Partial<Payroll>) => void;
+type PayrollDataProps = {
+  form: UseFormReturn<PayrollSchema, any, undefined>;
+  onSubmit: () => void;
 };
 
-function FormPayroll({
-  salary,
-  bank_name,
-  account_number,
-  updateFields
-}:PayrollDataProps) {
+function FormPayroll({ form, onSubmit }: PayrollDataProps) {
   return (
     <>
-    <h5 className="text-md font-semibold">Salary</h5>
-    <p className="text-gray-500">Input employee salary info</p>
-    <form className="my-4 lg:w-3/4">
-      <div className="my-3">
-        <Label htmlFor="departement">Basic salary *</Label>
-        <Input
-          id="departement"
-          type="text"
-            placeholder="Rp. 5.000.000"
-            value={salary}
-            onChange={e => updateFields({ salary: e.target.value })}
-        />
-      </div>
-      <h5 className="text-md font-semibold">Bank account</h5>
-      <p className="text-gray-500">
-        The employee’s bank account is used for payroll
-      </p>
-      <div className="grid gap-6 mb-6 md:grid-cols-2 my-3">
-        <div>
-          <Label htmlFor="bankName">Bank name *</Label>
-            <Select
-              onValueChange={(value) => updateFields({ bank_name: value })}
-              value={bank_name}
+      <h5 className="text-md font-semibold">Salary</h5>
+      <p className="text-gray-500">Input employee salary info</p>
+      <Form {...form}>
+        <form
+          id="forms"
+          className="my-4 lg:w-3/4"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <CustomFormField control={form.control} name="salary" label="Salary">
+            {(field) => (
+              <Input
+                {...field}
+                placeholder="Rp. 5.000.000"
+                disabled={form.formState.isSubmitting}
+                aria-disabled={form.formState.isSubmitting}
+                value={field.value as string}
+              />
+            )}
+          </CustomFormField>
+          <h5 className="text-md font-semibold mt-6">Bank account</h5>
+          <p className="text-gray-500">
+            The employee’s bank account is used for payroll
+          </p>
+          <div className="grid gap-6 mb-6 md:grid-cols-2 my-3">
+            <CustomFormSelect
+              control={form.control}
+              name="bank_name"
+              label="Bank Name"
+              placeholder="Select a Category"
+              options={categorisBank}
+            />
+            <CustomFormField
+              control={form.control}
+              name="account_number"
+              label="Account number"
             >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="BCA" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="bca">bca</SelectItem>
-              <SelectItem value="bni">bni</SelectItem>
-              <SelectItem value="bri">bri</SelectItem>
-              <SelectItem value="mandiri">mandiri</SelectItem>
-              <SelectItem value="btn">btn</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label htmlFor="accountNumber">Acount number *</Label>
-          <Input
-            id="accountNumber"
-            type="text"
-              placeholder="123xxxxxxxxx"
-              value={account_number}
-              onChange={e => updateFields({ account_number: e.target.value })}
-          />
-        </div>
-      </div>
-    </form>
-  </>
+              {(field) => (
+                <Input
+                  {...field}
+                  placeholder="123xxxxxxxxx"
+                  disabled={form.formState.isSubmitting}
+                  aria-disabled={form.formState.isSubmitting}
+                  value={field.value as string}
+                />
+              )}
+            </CustomFormField>
+          </div>
+        </form>
+      </Form>
+    </>
   );
 }
 

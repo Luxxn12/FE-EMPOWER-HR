@@ -68,7 +68,7 @@ const DetailEmployee = () => {
                     </div>
                     <div className="px-4 py-5 sm:px-6">
                       <Link
-                        to="/employees/edit/personal"
+                        to={`/employees/personal/${item.id}`}
                         className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                       >
                         Edit
@@ -83,7 +83,7 @@ const DetailEmployee = () => {
                           Full name
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                         {item.name}
+                          {item.name}
                         </dd>
                       </div>
                       <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -91,7 +91,7 @@ const DetailEmployee = () => {
                           Phone number
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                         {item.phone_number}
+                          {item.phone_number}
                         </dd>
                       </div>
                       <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -99,7 +99,7 @@ const DetailEmployee = () => {
                           Email address
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                         {item.email}
+                          {item.email}
                         </dd>
                       </div>
                       <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -107,7 +107,7 @@ const DetailEmployee = () => {
                           Place of birt
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                         {item.place_birth}
+                          {item.place_birth}
                         </dd>
                       </div>
                       <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -139,7 +139,7 @@ const DetailEmployee = () => {
                           Nik
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                         {item.nik}
+                          {item.nik}
                         </dd>
                       </div>
                       <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -147,7 +147,7 @@ const DetailEmployee = () => {
                           Address
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                         {item.address}
+                          {item.address}
                         </dd>
                       </div>
                     </dl>
@@ -155,75 +155,74 @@ const DetailEmployee = () => {
                 </div>
               </TabsContent>
               <TabsContent value="password">
-                <div className="">
-                  <div className="flex justify-between">
-                    <div className="px-4 py-5 sm:px-6">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">
-                        Employment Data
-                      </h3>
-                      <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                        Your data information related to company.
-                      </p>
+                {item.EmploymentData.map((employment) => {
+                  return (
+                    <div className="" key={employment.join_date}>
+                      <div className="flex justify-between">
+                        <div className="px-4 py-5 sm:px-6">
+                          <h3 className="text-lg leading-6 font-medium text-gray-900">
+                            Employment Data
+                          </h3>
+                          <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                            Your data information related to company.
+                          </p>
+                        </div>
+                        <div className="px-4 py-5 sm:px-6">
+                          <Link
+                            to={`/employees/employment/${item.id}`}
+                            className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                          >
+                            Edit
+                          </Link>
+                        </div>
+                      </div>
+                      <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
+                        <dl className="sm:divide-y sm:divide-gray-200">
+                          <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt className="text-sm font-medium text-gray-500">
+                              Join date
+                            </dt>
+                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                              {employment.join_date}
+                            </dd>
+                          </div>
+                          <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt className="text-sm font-medium text-gray-500">
+                              Department
+                            </dt>
+                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                              {employment.department}
+                            </dd>
+                          </div>
+                          <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt className="text-sm font-medium text-gray-500">
+                              Schedule
+                            </dt>
+                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                              {employment.schedule}
+                            </dd>
+                          </div>
+                          <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt className="text-sm font-medium text-gray-500">
+                              Job position
+                            </dt>
+                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                              {employment.job_position}
+                            </dd>
+                          </div>
+                          <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt className="text-sm font-medium text-gray-500">
+                              Job Level
+                            </dt>
+                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                              {employment.job_level}
+                            </dd>
+                          </div>
+                        </dl>
+                      </div>
                     </div>
-                    <div className="px-4 py-5 sm:px-6">
-                      <Link
-                        to="/employees/edit/employment"
-                        className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                      >
-                        Edit
-                      </Link>
-                    </div>
-                  </div>
-                  {item.EmploymentData.map((employment) => {
-                    return (
-                      <div key={employment.join_date} className="border-t border-gray-200 px-4 py-5 sm:p-0">
-                      <dl className="sm:divide-y sm:divide-gray-200">
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
-                            Join date
-                          </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {employment.join_date}
-                          </dd>
-                        </div>
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
-                            Department
-                          </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {employment.department}
-                          </dd>
-                        </div>
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
-                            Schedule
-                          </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {employment.schedule}
-                          </dd>
-                        </div>
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
-                            Job position
-                          </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {employment.job_position}
-                          </dd>
-                        </div>
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
-                            Job Level
-                          </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {employment.job_level}
-                          </dd>
-                        </div>
-                      </dl>
-                    </div>
-                    )
-                  })}
-
-                </div>
+                  )
+                })}
               </TabsContent>
             </Tabs>
           </div>

@@ -71,11 +71,11 @@ const App = () => {
               element: <DetailEmployee />,
             },
             {
-              path: "edit/personal",
+              path: "/employees/personal/:employee_id",
               element: <EditPersonal />,
             },
             {
-              path: "edit/employment",
+              path: "/employees/employment/:employee_id",
               element: <EditEmployment />,
             },
           ],
