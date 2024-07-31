@@ -30,6 +30,19 @@ export const getUserAttendance = async () => {
   }
 };
 
+export const getAttendanceById = async (id: number) => {
+  try {
+    const resp = await openAPI.get(`/attendance/${id}`);
+    return resp.data as Response<IAttendance>;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const { message } = error.response.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};
+
 export const clockIn = async (data: Partial<IAttendance>) => {
   try {
     const resp = await openAPI.post("/attendance", data);
