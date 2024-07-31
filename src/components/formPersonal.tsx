@@ -2,8 +2,9 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { PersonalSchema } from "@/utils/apis/employee/type";
 import { UseFormReturn } from "react-hook-form";
-import { CustomFormField } from "@/components/custom-form-field";
+import { CustomFormField, CustomFormSelect } from "@/components/custom-form-field";
 import { Form } from "@/components/ui/form";
+import { categoriesGender, categoriesReligion, categoriesStatus } from "@/utils/constant";
 
 type PersonalDataProps = {
   form: UseFormReturn<PersonalSchema, any, undefined>;
@@ -93,48 +94,32 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
               />
             )}
           </CustomFormField>
-          <CustomFormField control={form.control} name="gender" label="Gender">
-            {(field) => (
-              <Input
-                {...field}
-                placeholder="Male"
-                disabled={form.formState.isSubmitting}
-                aria-disabled={form.formState.isSubmitting}
-                value={field.value as string}
-              />
-            )}
-          </CustomFormField>
-          <CustomFormField control={form.control} name="status" label="Status">
-            {(field) => (
-              <Input
-                {...field}
-                placeholder="Single"
-                disabled={form.formState.isSubmitting}
-                aria-disabled={form.formState.isSubmitting}
-                value={field.value as string}
-              />
-            )}
-          </CustomFormField>
-          <CustomFormField
-            control={form.control}
-            name="religion"
-            label="Religion"
-          >
-            {(field) => (
-              <Input
-                {...field}
-                placeholder="secret"
-                disabled={form.formState.isSubmitting}
-                aria-disabled={form.formState.isSubmitting}
-                value={field.value as string}
-              />
-            )}
-          </CustomFormField>
+          <CustomFormSelect
+              control={form.control}
+              name="gender"
+              label="Gender"
+              placeholder="Select a Category"
+              options={categoriesGender}
+            />
+          <CustomFormSelect
+              control={form.control}
+              name="status"
+              label="Status"
+              placeholder="Select a Category"
+              options={categoriesStatus}
+            />
+          <CustomFormSelect
+              control={form.control}
+              name="religion"
+              label="Religion"
+              placeholder="Select a Category"
+              options={categoriesReligion}
+            />
           <CustomFormField control={form.control} name="nik" label="Nik">
             {(field) => (
               <Input
                 {...field}
-                placeholder="313122311"
+                placeholder="3510101212990008"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
                 value={field.value as string}

@@ -22,11 +22,32 @@ export const categoriesJobLevel = [
     "manager",
     "Sekertaris"
 ]
+
 export const categoriesApproval = [
     "Lukman",
     "Alif"
 ]
+
 export const categoriesPosition = [
     "Software Engineer",
     "IT Support"
 ]
+
+export const categoriesStatus = [
+    "single",
+    "married",
+    "divorced"
+]
+
+export const categoriesGender = [
+    "male",
+    "female"
+]
+
+export const categoriesReligion = [
+    "islam",
+    "kristen",
+    "hindu",
+    "buddha"
+]
+

@@ -59,7 +59,7 @@ interface Props<T extends FieldValues> {
             <FormLabel>{label}</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger >
                   <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
               </FormControl>

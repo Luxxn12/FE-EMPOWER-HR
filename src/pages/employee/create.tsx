@@ -13,11 +13,13 @@ import {
 import { FormPersonal } from "@/components/formPersonal";
 import FormEmployment from "@/components/formEmployment";
 import FormPayroll from "@/components/formPayroll";
-import { useMultistepForm } from "@/components/useMultiStepForm";
+import { useMultistepForm } from "@/utils/hooks/useMultiStepForm";
 import { createEmployee } from "@/utils/apis/employee/api";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const CreateEmployee = () => {
+  const navigate = useNavigate();
   const formPersonal = useForm<PersonalSchema>({
     resolver: zodResolver(personalSchema),
     defaultValues: {
@@ -64,9 +66,11 @@ const CreateEmployee = () => {
         ...formPayroll.getValues(),
       };
       await createEmployee(body);
-      toast.success("data Success");
+      console.log(body)
+      toast.success(`Employee created successfully`);
+      navigate("/employees")
     } catch (error: any) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 

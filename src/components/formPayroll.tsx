@@ -32,7 +32,7 @@ function FormPayroll({ form, onSubmit }: PayrollDataProps) {
               />
             )}
           </CustomFormField>
-          <h5 className="text-md font-semibold">Bank account</h5>
+          <h5 className="text-md font-semibold mt-6">Bank account</h5>
           <p className="text-gray-500">
             The employee’s bank account is used for payroll
           </p>

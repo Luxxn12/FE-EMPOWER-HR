@@ -41,14 +41,13 @@ export interface EmploymentById {
 export const updatePersonalSchema = z.object({
   profile_picture: z
     .instanceof(File)
-    .optional()
+    .refine((file) => file.name !== "", "Cover image is required")
     .refine(
-      (file) => !file || file.size <= MAX_UPLOAD_SIZE,
+      (file) => file.size <= MAX_UPLOAD_SIZE,
       `Max image size is ${MAX_MB}MB`
     )
     .refine(
-      (file) =>
-        !file || file.type === "" || ACCEPTED_IMAGE_TYPES.includes(file.type),
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
       "Only .jpg, .jpeg, and .png formats are supported"
     ),
   name: z.string().min(1, { message: "Name is required" }),
@@ -58,20 +57,17 @@ export const updatePersonalSchema = z.object({
     .email("Not a valid email"),
   phone: z
     .string()
-    .min(1, { message: "Phone number is required" })
-    .regex(/^\d{10}$/, { message: "Not a valid phone number" }),
+    .min(1, { message: "Phone is required" })
+    .regex(/^\d{10,12}$/, "Invalid phone number"),
   place_birth: z.string().min(1, { message: "Place of birth is required" }),
-  birth_date: z
-    .string()
-    .min(1, { message: "Birth date is required" })
-    .regex(/^\d{2}-\d{2}-\d{4}$/, { message: "Not a valid birth date" }),
-  status: z.string().min(1, { message: "Status is required" }),
-  gender: z.string().min(1, { message: "Gender is required" }),
-  religion: z.string().min(1, { message: "Religion is required" }),
+  birth_date: z.string().min(1, { message: "birth_date is required" }),
+  status: z.string().min(1, { message: "status is required" }),
+  gender: z.string().min(1, { message: "gender is required" }),
+  religion: z.string().min(1, { message: "religion is required" }),
   nik: z
     .string()
     .min(1, { message: "NIK is required" })
-    .regex(/^\d{16}$/, { message: "Not a valid NIK" }),
+    .regex(/^\d{16}$/, "Invalid NIK"),
   address: z.string().min(1, { message: "Address is required" }),
 });
 
@@ -89,6 +85,12 @@ export interface UpdatePersonal {
   religion: string;
   nik: string;
   address: string;
+}
+
+export interface RootDataEmployee {
+  personal: Personal;
+  employment: Employment;
+  payroll: Payroll;
 }
 
 export interface Personal {
@@ -115,12 +117,12 @@ export interface Employment {
 }
 
 export interface Payroll {
-  salary: string;
+  salary: number;
   bank_name: string;
   account_number: string;
 }
 
-export interface FormData {
+export interface FormDataCreate {
   name: string;
   email: string;
   phone: string;
@@ -149,32 +151,44 @@ export const personalSchema = z.object({
     .string()
     .min(1, { message: "Email is required" })
     .email("Not a valid email"),
-  phone: z.string().min(1, { message: "phone is required" }),
-  place_birth: z.string().min(1, { message: "place_birth is required" }),
+  phone: z
+    .string()
+    .min(1, { message: "Phone is required" })
+    .regex(/^\d{10,12}$/, "Invalid phone number"),
+  place_birth: z.string().min(1, { message: "Place of birth is required" }),
   birth_date: z.string().min(1, { message: "birth_date is required" }),
   status: z.string().min(1, { message: "status is required" }),
   gender: z.string().min(1, { message: "gender is required" }),
   religion: z.string().min(1, { message: "religion is required" }),
-  nik: z.string().min(1, { message: "nik is required" }),
-  address: z.string().min(1, { message: "address is required" }),
+  nik: z
+    .string()
+    .min(1, { message: "NIK is required" })
+    .regex(/^\d{16}$/, "Invalid NIK"),
+  address: z.string().min(1, { message: "Address is required" }),
 });
 
 export const employmentSchema = z.object({
   employment_status: z
     .string()
-    .min(1, { message: "employment_status is required" }),
-  schedule: z.string().min(1, { message: "schedule is required" }),
-  join_date: z.string().min(1, { message: "join_date is required" }),
-  job_level: z.string().min(1, { message: "job_level is required" }),
-  department: z.string().min(1, { message: "department is required" }),
-  approval_line: z.string().min(1, { message: "approval_line is required" }),
-  job_position: z.string().min(1, { message: "job_position is required" }),
+    .min(1, { message: "Please select your employment status" }),
+  schedule: z.string().min(1, { message: "Please select your work schedule" }),
+  join_date: z.string().min(1, { message: "Please enter your join date" }),
+  job_level: z.string().min(1, { message: "Please select your job level" }),
+  department: z.string().min(1, { message: "Please select your department" }),
+  approval_line: z
+    .string()
+    .min(1, { message: "Please select your approval line" }),
+  job_position: z
+    .string()
+    .min(1, { message: "Please enter your job position" }),
 });
 
 export const payrollSchema = z.object({
-  salary: z.string().min(1, { message: "salary is required" }),
-  bank_name: z.string().min(1, { message: "bank_name is required" }),
-  account_number: z.string().min(1, { message: "account_number is required" }),
+  salary: z.string().min(1, { message: "Please enter your salary" }),
+  bank_name: z.string().min(1, { message: "Please select your bank name" }),
+  account_number: z
+    .string()
+    .min(1, { message: " Please enter your account number " }),
 });
 
 export type PersonalSchema = z.infer<typeof personalSchema>;
