@@ -8,8 +8,7 @@ import {
 } from "@/components/ui/chart"
 const chartData = [
   { month: "Permanent", desktop: 60, fill: "#029BDE" },
-  { month: "Contract", desktop: 20, fail: "#F96D20" },
-  { month: "Probation", desktop: 20, fill: "#5D54D5" },
+  { month: "Contract", desktop: 40, fail: "#F96D20" },
 ]
 
 const chartConfig = {

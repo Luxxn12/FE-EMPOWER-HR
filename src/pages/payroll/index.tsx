@@ -1,6 +1,5 @@
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -15,14 +14,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, DownloadIcon, Ellipsis, SearchIcon } from "lucide-react";
+import { CalendarIcon, DownloadIcon, Ellipsis, FilePenIcon, SearchIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { DatePicker } from "@/components/date-picker";
-import { Filter } from "@/components/filter";
 import { Input } from "@/components/ui/input";
 import {
   Pagination,
@@ -36,12 +34,16 @@ import { IPayroll } from "@/utils/apis/payroll/type";
 import { getPayrolls } from "@/utils/apis/payroll/api";
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import { useAuth } from "@/utils/contexts/token";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 const Payroll = () => {
   const [date, setDate] = useState<Date>();
   const [searchPay, setSearchPay] = useState("")
   const [isPayroll, setPayroll] = useState<IPayroll[]>([])
   const [filterPayroll, setFilterPayroll] = useState<IPayroll[]>([])
+  const { role } = useAuth()
 
 
   useEffect(() => {
@@ -75,109 +77,105 @@ const Payroll = () => {
   }
 
   const generatePdf = () => {
-    const doc = new jsPDF();
-    const table: any = [];
-
     filterPayroll.forEach((payroll) => {
+      const doc = new jsPDF();
+      const table: any = [];
+  
       table.push([
         payroll.employee_name,
         new Date(payroll.date).toLocaleDateString("en-US"),
         payroll.position,
         payroll.payslip,
       ]);
+  
+      autoTable(doc, {
+        head: [['Employee Name', 'Date', 'Position', 'Payslip']],
+        body: table,
+      });
+  
+      doc.save(`payroll_${payroll.employee_name}.pdf`);
     });
-
-    autoTable( doc, {
-      head: [['Employee Name', 'Date', 'Position', 'Payslip']],
-      body: table,
-    });
-
-    doc.save('payroll_data.pdf');
   };
 
   return (
     <MainLayout title="Empower HR - Payroll" description="Empower HR - Payroll">
       <div className="flex justify-between">
-        <h5 className="text-xl text-gray-500 font-semibold">Payroll</h5>
-        <div className="flex gap-2">
-          <Link
-            to="/payroll/setting"
-            className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-          >
-            Settings
-          </Link>
-          <Dialog>
-            <DialogTrigger asChild className="w-full justify-start">
-              <Button>Payroll report</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
-              <AlertDialogHeader>
-                <DialogTitle className="items-start">
-                  Print payroll report
-                </DialogTitle>
-                <DialogDescription>
-                  Please selectdate to print payroll report
-                </DialogDescription>
-              </AlertDialogHeader>
-              <div className="grid grid-cols-2 gap-4 mb-3">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Strat date *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+        <h5 className="text-2xl font-semibold">Payroll</h5>
+        {role !== "employees" && (
+          <div className="flex gap-2">
+            <Dialog>
+              <DialogTrigger asChild className="w-full justify-start">
+                <Button>Payroll report</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
+                <AlertDialogHeader>
+                  <DialogTitle className="items-start">
+                    Print payroll report
+                  </DialogTitle>
+                  <DialogDescription>
+                    Please selectdate to print payroll report
+                  </DialogDescription>
+                </AlertDialogHeader>
+                <div className="grid grid-cols-2 gap-4 mb-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Strat date *</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={setDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="name">End date *</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={setDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="name">End date *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                <div className="flex justify-end gap-5">
+                  <Button variant={"outline"}>Cancel</Button>
+                  <Button className="pl-4 pr-4">Submit</Button>
                 </div>
-              </div>
-              <div className="flex justify-end gap-5">
-                <Button variant={"outline"}>Cancel</Button>
-                <Button className="pl-4 pr-4">Submit</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )}
       </div>
       <div className="pt-8">
         <div className="py-6  px-6 border border-[#D5D5D5] bg-white rounded-md">
@@ -216,7 +214,7 @@ const Payroll = () => {
         <div className="flex xl:flex-row  flex-col justify-between">
           <div className="flex gap-5">
             <DatePicker />
-            <Filter />
+            {/* <Filter /> */}
           </div>
           <div className="flex gap-5 mt-5 xl:mt-0">
             <div className="relative">
@@ -251,9 +249,12 @@ const Payroll = () => {
               <th scope="col" className="px-6 py-3">
                 Payslip
               </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
+              {role == "admin" ? (
+                <th scope="col" className="px-6 py-3">
+                  Action
+                </th>
+              ) : null
+              }
             </tr>
           </thead>
           <tbody>
@@ -272,14 +273,29 @@ const Payroll = () => {
                   {payroll.position}
                 </td>
                 <td className="px-6 py-4">
-                <Button variant="outline" className="gap-3" onClick={generatePdf}>
-                  <DownloadIcon className="h-5 w-5" />
-                  Download PDF
-                </Button>
+                  <Button variant="outline" className="gap-3" onClick={generatePdf}>
+                    <DownloadIcon className="h-5 w-5" />
+                    Download PDF
+                  </Button>
                 </td>
-                <td className="flex items-center px-6 py-4">
-                  <Ellipsis />
-                </td>
+                {role == "admin" ? (
+                  <td className="flex items-center px-6 py-4">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Ellipsis />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild>
+                          <Link to={`/payroll/${payroll.id}`} className="flex">
+                            <FilePenIcon className="h-4 w-4 mr-2" />
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </td>
+                ) : null
+                }
               </tr>
             ))}
           </tbody>

@@ -93,7 +93,7 @@ const App = () => {
               element: <SettingPayroll />,
             },
             {
-              path: "edit",
+              path: "/payroll/:id_payroll",
               element: <EditPayroll />,
             },
           ],

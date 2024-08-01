@@ -8,11 +8,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { AlignJustify, CircleUser, Mail } from "lucide-react";
+import { AlignJustify } from "lucide-react";
 import { Helmet } from "react-helmet";
-import { useLocation } from "react-router-dom";
-import { Button } from "../ui/button";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/utils/contexts/token";
+import { AlertDialog, AlertDialogAction } from "@radix-ui/react-alert-dialog";
+import { AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import { Avatar, AvatarImage } from "../ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -28,7 +32,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const pathname = location.pathname;
-  const { logout } = useAuth()
+  const { logout, role } = useAuth()
 
   const pathnames = pathname.replace(/^\/|\/$/g, "").split("/");
 
@@ -121,13 +125,62 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             </div>
 
             <div className="flex gap-4">
-              <a href="#" className="hover:underline">
-                <Mail className="text-gray-500" />{" "}
-              </a>
-              <label
-                onClick={logout} className="hover:underline">
-                <CircleUser className="text-gray-500" />{" "}
-              </label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer">
+                    {role == "admin" ? (
+                      <AvatarImage src="https://i.pravatar.cc/100?img=1" />
+                    ) : (
+                      <AvatarImage src="https://i.pravatar.cc/100?img=2" />
+                    )}
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <div className="flex items-center gap-3 p-2">
+                    <Avatar>
+                      {role == "admin" ? (
+                        <AvatarImage src="https://i.pravatar.cc/100?img=1" />
+                      ) : (
+                        <AvatarImage src="https://i.pravatar.cc/100?img=2" />
+                      )}
+                    </Avatar>
+                    <div className="grid gap-0.5 leading-none">
+                      <div className="font-semibold">John Doe</div>
+                      <div className="text-sm text-muted-foreground">john@example.com</div>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="#" className="flex items-center gap-2">
+                      <div className="h-4 w-4" />
+                      <text>Profile</text>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <AlertDialog >
+                      <AlertDialogTrigger asChild>
+                      <Link to="#" className="flex items-center gap-2">
+                      <div className="h-8 w-6" />
+                      <text className="text-sm text-red-700">Logout</text>
+                    </Link>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Logout</AlertDialogTitle>
+                          <AlertDialogDescription>Are you sure you want to logout?</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={logout}>
+                            <Button className="bg-red-600">Logout</Button>
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </nav>
           <div className="lg:px-5">
