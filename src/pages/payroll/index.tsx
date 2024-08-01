@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { CalendarIcon, DownloadIcon, Ellipsis, SearchIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
@@ -32,9 +32,69 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { IPayroll } from "@/utils/apis/payroll/type";
+import { getPayrolls } from "@/utils/apis/payroll/api";
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 const Payroll = () => {
   const [date, setDate] = useState<Date>();
+  const [searchPay, setSearchPay] = useState("")
+  const [isPayroll, setPayroll] = useState<IPayroll[]>([])
+  const [filterPayroll, setFilterPayroll] = useState<IPayroll[]>([])
+
+
+  useEffect(() => {
+    featchPayrolls()
+  }, [])
+
+  useEffect(() => {
+    if (searchPay.trim() === "") {
+      setFilterPayroll(isPayroll)
+    } else {
+      setFilterPayroll(
+        isPayroll.filter((payroll) =>
+          payroll.employee_name
+            .toLowerCase()
+            .includes(searchPay.toLowerCase())
+        )
+      )
+    }
+  }, [searchPay, isPayroll])
+
+
+
+  const featchPayrolls = async () => {
+    try {
+      const resp = await getPayrolls()
+      setPayroll(resp.data || [])
+    } catch (error: any) {
+      const { message } = error.respose.data
+      throw new Error(message)
+    }
+  }
+
+  const generatePdf = () => {
+    const doc = new jsPDF();
+    const table: any = [];
+
+    filterPayroll.forEach((payroll) => {
+      table.push([
+        payroll.employee_name,
+        new Date(payroll.date).toLocaleDateString("en-US"),
+        payroll.position,
+        payroll.payslip,
+      ]);
+    });
+
+    autoTable( doc, {
+      head: [['Employee Name', 'Date', 'Position', 'Payslip']],
+      body: table,
+    });
+
+    doc.save('payroll_data.pdf');
+  };
+
   return (
     <MainLayout title="Empower HR - Payroll" description="Empower HR - Payroll">
       <div className="flex justify-between">
@@ -167,22 +227,20 @@ const Payroll = () => {
               <Input
                 type="search"
                 placeholder="Search"
+                value={searchPay}
+                onChange={(e) => setSearchPay(e.target.value)}
                 className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
               />
             </div>
           </div>
         </div>
       </div>
-
       <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-sm text-gray-600 border-b border-gray-300">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Emplyee name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Emp ID
               </th>
               <th scope="col" className="px-6 py-3">
                 Date
@@ -199,25 +257,31 @@ const Payroll = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap"
-              >
-                Empower employee
-              </th>
-              <td className="px-6 py-4">A-1</td>
-              <td className="px-6 py-4">Jan 2010</td>
-              <td className="px-6 py-4">Software engineer</td>
-              <td className="px-6 py-4">
-                <Button variant="outline">
-                  <DownloadIcon className=" h-5 w-5" />
+            {filterPayroll.map((payroll) => (
+              <tr key={payroll.id} className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap"
+                >
+                  {payroll.employee_name}
+                </th>
+                <td className="px-6 py-4">
+                  {new Date(payroll.date).toLocaleDateString("en-US")}
+                </td>
+                <td className="px-6 py-4">
+                  {payroll.position}
+                </td>
+                <td className="px-6 py-4">
+                <Button variant="outline" className="gap-3" onClick={generatePdf}>
+                  <DownloadIcon className="h-5 w-5" />
+                  Download PDF
                 </Button>
-              </td>
-              <td className="flex items-center px-6 py-4">
-                <Ellipsis />
-              </td>
-            </tr>
+                </td>
+                <td className="flex items-center px-6 py-4">
+                  <Ellipsis />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
