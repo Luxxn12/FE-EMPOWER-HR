@@ -24,6 +24,7 @@ import Payroll from "@/pages/payroll";
 import SettingPayroll from "@/pages/payroll/setting";
 import EditPayroll from "@/pages/payroll/edit";
 import Attendance from "@/pages/attendance/admin";
+import UserAttendance from "@/pages/attendance/user";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -104,6 +105,10 @@ const App = () => {
         {
           path: "/attendance",
           element: <Attendance />,
+        },
+        {
+          path: "/attendance-user",
+          element: <UserAttendance />,
         },
         {
           path: "/attendance/live-attendance",

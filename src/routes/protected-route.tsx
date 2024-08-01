@@ -19,6 +19,7 @@ const ProtectedRoute = () => {
     "/payroll/setting",
     "/payroll/:payroll_id",
     "/attendance",
+    "/attendance/user",
     "/attendance/live-attendance",
     "/attendance/:attendance_id",
     "/attendance/settings",
