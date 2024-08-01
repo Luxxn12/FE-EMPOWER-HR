@@ -11,6 +11,8 @@ import {
 import { AlignJustify, CircleUser, Mail } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { useLocation } from "react-router-dom";
+import { Button } from "../ui/button";
+import { useAuth } from "@/utils/contexts/token";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -26,6 +28,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const pathname = location.pathname;
+  const { logout } = useAuth()
 
   const pathnames = pathname.replace(/^\/|\/$/g, "").split("/");
 
@@ -73,9 +76,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       />
 
       <div
-        className={` p-4 flex flex-col min-h-screen bg-gray-100 sm:ml-64 ${
-          isSidebarOpen ? "blur-sm" : ""
-        }`}
+        className={` p-4 flex flex-col min-h-screen bg-gray-100 sm:ml-64 ${isSidebarOpen ? "blur-sm" : ""
+          }`}
       >
         <div className="sticky top-0 z-10 bg-gray-100">
           <nav className="flex py-4 lg:px-5 justify-between items-center ">
@@ -122,9 +124,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({
               <a href="#" className="hover:underline">
                 <Mail className="text-gray-500" />{" "}
               </a>
-              <a href="#" className="hover:underline">
+              <label
+                onClick={logout} className="hover:underline">
                 <CircleUser className="text-gray-500" />{" "}
-              </a>
+              </label>
             </div>
           </nav>
           <div className="lg:px-5">
