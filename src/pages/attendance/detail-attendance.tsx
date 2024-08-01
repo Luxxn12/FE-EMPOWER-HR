@@ -21,8 +21,8 @@ export default function DetailAttendance() {
     Array.isArray(attendance) && attendance.length > 0 ? attendance[0] : null;
 
   const center: LatLngTuple = [
-    attendanceToUse?.long ?? 0,
-    attendanceToUse?.lat ?? 0,
+    -6.2690335997433655 ?? 0,
+    106.80731123390241 ?? 0,
   ];
   const zoom = 13;
 
@@ -34,12 +34,9 @@ export default function DetailAttendance() {
       const updatedAttendanceToUse =
         Array.isArray(resp.data) && resp.data.length > 0 ? resp.data[0] : null;
 
-        console.log(updatedAttendanceToUse)
+      console.log(updatedAttendanceToUse);
 
-      await fetchAddress(
-        updatedAttendanceToUse?.long,
-        updatedAttendanceToUse?.lat
-      );
+      await fetchAddress(-6.2690335997433655, 106.80731123390241);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -53,10 +50,15 @@ export default function DetailAttendance() {
 
   const fetchAddress = async (lat: number, lng: number) => {
     try {
-      const resp = await fetch(
+      const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
       );
-      const data = await resp.json();
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
       setAddress(data.display_name);
     } catch (error: any) {
       toast.error(error.message);

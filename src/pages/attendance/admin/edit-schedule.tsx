@@ -24,6 +24,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { updateSchedule } from "@/utils/apis/schedule/api";
 import { useAuth } from "@/utils/contexts/token";
 import { toast } from "sonner";
+import { getCompanies } from "@/utils/apis/companies/api";
 
 export default function EditSchedule() {
   const [date, setDate] = useState<Date | undefined>();
@@ -51,15 +52,17 @@ export default function EditSchedule() {
           const schedule = schedules.find(
             (schedule: ISchedule) => schedule.id === numericId
           );
+          const response = await getCompanies();
           if (schedule) {
             reset({
+              company_id: response.data.id,
               name: schedule.name,
               schedule_in: schedule.schedule_in,
               schedule_out: schedule.schedule_out,
               break_start: schedule.break_start,
               break_end: schedule.break_end,
               repeat_until: schedule.repeat_until,
-              affective_date: schedule.affective_date,
+              affective_date: schedule.effective_date,
               description: schedule.description || "",
             });
 
@@ -73,7 +76,12 @@ export default function EditSchedule() {
           }
         }
       } catch (error: any) {
-        toast.error(error);
+        console.error(error);
+        // const errorMessage =
+        //   error instanceof Error
+        //     ? error.message
+        //     : "An unexpected error occurred.";
+        // toast.error(errorMessage);
       }
     }
     fetchSchedule();
@@ -87,14 +95,21 @@ export default function EditSchedule() {
       navigate("/attendance/settings");
       toast.success(resp.message);
     } catch (error: any) {
-      toast.error(error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <MainLayout title="Empower HR - Schedule" description="Empower HR - Edit Schedule">
+    <MainLayout
+      title="Empower HR - Schedule"
+      description="Empower HR - Edit Schedule"
+    >
       <h1 className="text-2xl font-bold">Edit Schedule</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="py-5">
         <div className="w-full mb-3 space-y-2">

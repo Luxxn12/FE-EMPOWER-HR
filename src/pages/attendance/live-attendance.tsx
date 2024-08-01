@@ -15,15 +15,29 @@ export default function LiveAttendance() {
   const [notes, setNotes] = useState("");
   const [coordinates, setCoordinates] = useState({ long: "", lat: "" });
   const schedule = schedules[0];
+  const [isActive, setIsActive] = useState(() => {
+    const savedValue = localStorage.getItem("isActive");
+    return savedValue !== null ? JSON.parse(savedValue) : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("isActive", JSON.stringify(isActive));
+  }, [isActive]);
+
+  const handleActivate = () => {
+    setIsActive(true);
+  };
+
+  const handleDeactivate = () => {
+    setIsActive(false);
+  };
 
   const now = new Date();
-
   const formattedDate = [
     now.getFullYear(),
     (now.getMonth() + 1).toString().padStart(2, "0"),
     now.getDate().toString().padStart(2, "0"),
   ].join("-");
-
   const formattedTime = [
     now.getHours().toString().padStart(2, "0"),
     now.getMinutes().toString().padStart(2, "0"),
@@ -37,7 +51,6 @@ export default function LiveAttendance() {
   const fetchUserAttendance = async () => {
     try {
       const resp = await getUserAttendance();
-
       const lastIndex = resp.data.length - 1;
       if (lastIndex >= 0) {
         const lastItemId = resp.data[lastIndex].id;
@@ -75,6 +88,11 @@ export default function LiveAttendance() {
   };
 
   const handleClockIn = async () => {
+    if (!isActive) {
+      toast.error("Already clocked in or inactive.");
+      return;
+    }
+
     try {
       const resp = await clockIn({
         clock_in: formattedTime,
@@ -84,12 +102,18 @@ export default function LiveAttendance() {
         notes,
       });
       toast.success(resp.message);
+      handleDeactivate();
     } catch (error: any) {
       toast.error(error);
     }
   };
 
   const handleClockOut = async () => {
+    if (isActive) {
+      toast.error("You need to clock in first.");
+      return;
+    }
+
     try {
       if (schedule) {
         const resp = await clockOut(attendanceIdToUse!, {
@@ -100,6 +124,7 @@ export default function LiveAttendance() {
           lat: coordinates.lat,
         });
         toast.success(resp.message);
+        handleActivate();
       } else {
         toast.error("No schedule available to clock out.");
       }
@@ -139,8 +164,18 @@ export default function LiveAttendance() {
             />
           </div>
           <div className="lg:px-8 px-4 py-5 grid grid-cols-2 gap-5">
-            <Button onClick={handleClockIn}>Clock In</Button>
-            <Button onClick={handleClockOut}>Clock Out</Button>
+            <Button
+              onClick={handleClockIn}
+              disabled={!isActive}
+            >
+              Clock In
+            </Button>
+            <Button
+              onClick={handleClockOut}
+              disabled={isActive}
+            >
+              Clock Out
+            </Button>
           </div>
         </div>
       </div>

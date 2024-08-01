@@ -1,9 +1,17 @@
 import { Response } from "@/utils/types/apis";
-import { openAPI } from "../axiosWithConfig";
+import { openAPI, setAxiosConfig } from "../axiosWithConfig";
 import { IAttendance } from "./type";
+
+const token = localStorage.getItem("token");
 
 export const getAttendance = async () => {
   try {
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+
     const resp = await openAPI.get("/attendance");
 
     return resp.data as Response<IAttendance[]>;

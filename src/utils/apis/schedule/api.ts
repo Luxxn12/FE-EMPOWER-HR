@@ -1,10 +1,17 @@
 import { Response } from "@/utils/types/apis";
-import { openAPI } from "../axiosWithConfig";
+import { axiosConfig, openAPI, setAxiosConfig } from "../axiosWithConfig";
 import { ISchedule, ScheduleSchema } from "./type";
+
+const token = localStorage.getItem("token");
 
 export const getSchedule = async () => {
   try {
-    const resp = await openAPI.get("/schedule");
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+    const resp = await axiosConfig.get("/schedule");
 
     return resp.data as Response<ISchedule[]>;
   } catch (error: any) {
@@ -20,7 +27,14 @@ export const getScheduleById = async (
   id: string
 ): Promise<{ data: ScheduleSchema }> => {
   try {
-    const resp = await openAPI.get<{ data: ScheduleSchema }>(`/schedule/${id}`);
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+    const resp = await axiosConfig.get<{ data: ScheduleSchema }>(
+      `/schedule/${id}`
+    );
     return resp.data;
   } catch (error: any) {
     if (error.response && error.response.data) {
@@ -35,6 +49,11 @@ export const addSchedule = async (
   body: ScheduleSchema
 ): Promise<Response<any>> => {
   try {
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
     const resp = await openAPI.post<Response<any>>("/schedule", body);
     return resp.data;
   } catch (error: any) {
@@ -51,6 +70,11 @@ export const updateSchedule = async (
   body: ScheduleSchema
 ): Promise<Response<any>> => {
   try {
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
     const resp = await openAPI.put<Response<any>>(`/schedule/${id}`, body);
     return resp.data;
   } catch (error: any) {

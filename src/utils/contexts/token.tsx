@@ -15,6 +15,8 @@ interface AuthContextProps {
   setError: (error: string | null) => void;
   token: string | null;
   setToken: (token: string | null) => void;
+  role: string | null;
+  setRole: (role: string | null) => void;
   logout: () => void;
   fetchSchedules: () => void;
 }
@@ -27,6 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("token")
   );
+  const [role, setRole] = useState<string | null>(localStorage.getItem("role"));
 
   const saveToken = (newToken: string | null) => {
     if (newToken) {
@@ -37,14 +40,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(newToken);
   };
 
+  const saveRole = (newRole: string | null) => {
+    if (newRole) {
+      localStorage.setItem("role", newRole);
+    } else {
+      localStorage.removeItem("role");
+    }
+    setRole(newRole);
+  };
+
   const logout = () => {
     saveToken(null);
+    saveRole(null);
   };
 
   const fetchSchedules = async () => {
     try {
       const resp = await getSchedule();
-      setSchedules(resp.data);
+      if (resp.data && resp.data.length > 0) {
+        setSchedules(resp.data);
+      } else {
+        setError("No schedules available");
+        setSchedules([]);
+      }
     } catch (error: any) {
       setError(error.message || "Something went wrong");
     }
@@ -63,6 +81,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setError,
         token,
         setToken: saveToken,
+        role,
+        setRole: saveRole,
         logout,
         fetchSchedules,
       }}

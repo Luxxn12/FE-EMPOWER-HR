@@ -10,12 +10,13 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { getCompanies } from "@/utils/apis/companies/api";
 import { addSchedule } from "@/utils/apis/schedule/api";
 import { scheduleSchema, ScheduleSchema } from "@/utils/apis/schedule/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -29,6 +30,7 @@ export default function AddSchedule() {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<ScheduleSchema>({
     resolver: zodResolver(scheduleSchema),
@@ -44,10 +46,35 @@ export default function AddSchedule() {
     },
   });
 
+  const fetchData = async () => {
+    try {
+      const response = await getCompanies();
+      // Reset form values after fetching companies data
+      reset({
+        company_id: response.data.id,
+        name: "",
+        schedule_in: "",
+        schedule_out: "",
+        break_start: "",
+        break_end: "",
+        repeat_until: "",
+        affective_date: "",
+        description: "",
+      });
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   async function onSubmit(data: ScheduleSchema) {
     setIsLoading(true);
     try {
       const resp = await addSchedule(data);
+      console.log(resp);
       navigate("/attendance/settings");
       toast.success(resp.message);
     } catch (error: any) {
@@ -58,7 +85,10 @@ export default function AddSchedule() {
   }
 
   return (
-    <MainLayout title="Empower HR - Schedule" description="Empower HR - Create Schedule">
+    <MainLayout
+      title="Empower HR - Schedule"
+      description="Empower HR - Create Schedule"
+    >
       <h1 className="text-2xl font-bold">Add schedule</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="py-5">
         <div className="w-full mb-3 space-y-2">

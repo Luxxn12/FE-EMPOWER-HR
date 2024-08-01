@@ -50,9 +50,10 @@ export default function Attendance() {
   const fetchAttendance = async () => {
     try {
       const resp = await getAttendance();
-      setAttendance(resp.data);
-      setCurrentPage(resp.meta[0].currentPage);
-      setTotalPages(resp.meta[0].totalPages);
+      const attendanceData = resp.data || [];
+      setAttendance(attendanceData);
+      setCurrentPage(resp.meta?.[0]?.currentPage || 1);
+      setTotalPages(resp.meta?.[0]?.totalPages || 1);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -223,10 +224,14 @@ export default function Attendance() {
               attendance.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell className="text-gray-500 font-semibold">
-                    {item.employementData[0].name}
+                    {item.employementData && item.employementData[0]
+                      ? item.employementData[0].name
+                      : "N/A"}
                   </TableCell>
                   <TableCell className="text-gray-500">
-                    {item.employementData[0].id_personal}
+                    {item.employementData && item.employementData[0]
+                      ? item.employementData[0].id_personal
+                      : "N/A"}
                   </TableCell>
                   <TableCell className="text-gray-500">{item.date}</TableCell>
                   <TableCell className="text-gray-500">
@@ -249,7 +254,14 @@ export default function Attendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem><Button variant="ghost" onClick={() => navigate(`/attendance/${item.id}`)}>Detail</Button></DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Button
+                            variant="ghost"
+                            onClick={() => navigate(`/attendance/${item.id}`)}
+                          >
+                            Detail
+                          </Button>
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
