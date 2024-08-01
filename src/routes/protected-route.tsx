@@ -40,6 +40,18 @@ const ProtectedRoute = () => {
     if (!token) return <Navigate to="/login" />;
   }
 
+  
+  const companyProtected = [
+    "/companies",
+    "/companies/edit",
+  ];
+  
+
+  if (companyProtected.includes(pathname)) {
+    if (role == "employees") {
+      return <Navigate to="/dashboard"/>;
+    }
+  }
 
 
   return <Outlet />

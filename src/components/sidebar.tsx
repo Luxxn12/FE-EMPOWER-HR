@@ -9,6 +9,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/utils/contexts/token";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -33,6 +34,8 @@ const Sidebar: React.FC<SidebarProps> = ({
     return paths.includes(activeMenu);
   };
 
+  const { role } = useAuth()
+
   return (
     <>
       {isSidebarOpen && (
@@ -45,9 +48,8 @@ const Sidebar: React.FC<SidebarProps> = ({
       <aside
         id="default-sidebar"
         ref={sidebarRef}
-        className={`fixed top-0 left-0 z-40 w-64 shadow border h-screen transition-transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0`}
+        className={`fixed top-0 left-0 z-40 w-64 shadow border h-screen transition-transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } sm:translate-x-0`}
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800">
@@ -57,29 +59,27 @@ const Sidebar: React.FC<SidebarProps> = ({
             <li>
               <Link
                 to="/dashboard"
-                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive(["/dashboard"])
-                    ? "bg-white dark:bg-gray-700 text-blue-500"
-                    : ""
-                }`}
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${isActive(["/dashboard"])
+                  ? "bg-white dark:bg-gray-700 text-blue-500"
+                  : ""
+                  }`}
               >
                 <CircleGauge />
                 <span className="ms-3 text-sm">Dashboard</span>
               </Link>
             </li>
             <li>
-              <Link 
+              <Link
                 to="/attendance"
-                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive([
-                    "/attendance",
-                    "/attendance/live-attendance",
-                    "/attendance/settings",
-                    "/attendance/settings/schedule"
-                  ])
-                    ? "bg-white dark:bg-gray-700 text-blue-500"
-                    : ""
-                }`}
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${isActive([
+                  "/attendance",
+                  "/attendance/live-attendance",
+                  "/attendance/settings",
+                  "/attendance/settings/schedule"
+                ])
+                  ? "bg-white dark:bg-gray-700 text-blue-500"
+                  : ""
+                  }`}
               >
                 <ContactRound />
                 <span className="ms-3 text-sm">Attendance</span>
@@ -88,15 +88,13 @@ const Sidebar: React.FC<SidebarProps> = ({
             <li>
               <Link
                 to="/leaves"
-                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive(["/leaves"])
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${isActive(["/leaves"])
+                  ? "bg-white dark:bg-gray-700 text-blue-500"
+                  : ""
+                  }
+                  ${activeMenu === "/leaves/request-leaves"
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
-                }
-                  ${
-                    activeMenu === "/leaves/request-leaves"
-                      ? "bg-white dark:bg-gray-700 text-blue-500"
-                      : ""
                   }
                     `}
               >
@@ -107,11 +105,10 @@ const Sidebar: React.FC<SidebarProps> = ({
             <li>
               <Link
                 to="/payroll"
-                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive(["/payroll", "/payroll/setting"])
-                    ? "bg-white dark:bg-gray-700 text-blue-500"
-                    : ""
-                }`}
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${isActive(["/payroll", "/payroll/setting"])
+                  ? "bg-white dark:bg-gray-700 text-blue-500"
+                  : ""
+                  }`}
               >
                 <Banknote />
                 <span className="ms-3 text-sm">Payroll</span>
@@ -120,35 +117,35 @@ const Sidebar: React.FC<SidebarProps> = ({
             <li>
               <Link
                 to="/employees"
-                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive([
-                    "/employees",
-                    "/employees/create",
-                    "/employees/show",
-                    "/employees/edit/personal",
-                    "/employees/edit/employment",
-                  ])
-                    ? "bg-white dark:bg-gray-700 text-blue-500"
-                    : ""
-                }`}
+                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${isActive([
+                  "/employees",
+                  "/employees/create",
+                  "/employees/show",
+                  "/employees/edit/personal",
+                  "/employees/edit/employment",
+                ])
+                  ? "bg-white dark:bg-gray-700 text-blue-500"
+                  : ""
+                  }`}
               >
                 <UsersRound />
                 <span className="ms-3 text-sm">Employees</span>
               </Link>
             </li>
-            <li>
-              <Link
-                to="/companies"
-                className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive(["/companies", "/companies/edit"])
+            {role !== "employees" && (
+              <li>
+                <Link
+                  to="/companies"
+                  className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${isActive(["/companies", "/companies/edit"])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
-                }`}
-              >
-                <Building2 />
-                <span className="ms-3 text-sm">Companies</span>
-              </Link>
-            </li>
+                    }`}
+                >
+                  <Building2 />
+                  <span className="ms-3 text-sm">Companies</span>
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </aside>
