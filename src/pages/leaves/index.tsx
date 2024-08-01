@@ -29,16 +29,36 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { getLeaves } from "@/utils/apis/leaves/api";
+import { ILeaves } from "@/utils/apis/leaves/type";
 import { format } from "date-fns";
 import { CalendarIcon, DownloadIcon, SearchIcon } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+// import { getLeaves } from "@/api"; // Import your API function
 
 export default function Leaves() {
-  const [date, setDate] = React.useState<Date>();
+  const [date, setDate] = useState<Date | undefined>();
+  const [leaves, setLeaves] = useState<ILeaves[]>([]);
+
+  useEffect(() => {
+    const fetchLeaves = async () => {
+      try {
+        const response = await getLeaves();
+        setLeaves(response.data);
+      } catch (error) {
+        console.error("Error fetching leaves data:", error);
+      }
+    };
+
+    fetchLeaves();
+  }, []);
+
+  console.log(leaves);
+
   return (
     <MainLayout title="" description="">
-      <div className="flex  justify-between">
+      <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Leaves</h1>
         <div className="flex gap-5">
           <Link to={""}>
@@ -54,12 +74,12 @@ export default function Leaves() {
                   Print leaves report
                 </DialogTitle>
                 <DialogDescription>
-                  Please selectdate to print leaves report
+                  Please select date to print leaves report
                 </DialogDescription>
               </AlertDialogHeader>
               <div className="grid grid-cols-2 gap-4 mb-3">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Strat date *</Label>
+                  <Label htmlFor="start-date">Start date *</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -84,7 +104,7 @@ export default function Leaves() {
                   </Popover>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="name">End date *</Label>
+                  <Label htmlFor="end-date">End date *</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -118,16 +138,16 @@ export default function Leaves() {
         </div>
       </div>
       <div className="pt-8">
-        <div className="py-6  px-6 border border-[#D5D5D5] bg-white rounded-md">
+        <div className="py-6 px-6 border border-[#D5D5D5] bg-white rounded-md">
           <div className="flex md:flex-col xl:flex-row flex-col gap-8">
-            <div className="flex  flex-col">
+            <div className="flex flex-col">
               <text className="text-gray-500 text-sm">Employees</text>
               <text className="text-2xl font-bold">Time off</text>
             </div>
-            <div className="grid w-full xl:container xl:grid-cols-3 lg::grid-cols-3 grid-cols-2 gap-4 ">
+            <div className="grid w-full xl:container xl:grid-cols-3 lg:grid-cols-3 grid-cols-2 gap-4">
               <div className="flex gap-6">
                 <Separator orientation="vertical" />
-                <div className="flex flex-col  h-full justify-center">
+                <div className="flex flex-col h-full justify-center">
                   <text className="text-gray-500">On time</text>
                   <text className="text-xl font-bold text-blue-400">3</text>
                 </div>
@@ -141,7 +161,7 @@ export default function Leaves() {
               </div>
               <div className="flex gap-6">
                 <Separator orientation="vertical" />
-                <div className="flex flex-col  h-full justify-center">
+                <div className="flex flex-col h-full justify-center">
                   <text className="text-gray-500">Absent</text>
                   <text className="text-xl font-bold text-blue-400">40</text>
                 </div>
@@ -151,14 +171,14 @@ export default function Leaves() {
         </div>
       </div>
       <div className="py-8">
-        <div className="flex xl:flex-row  flex-col justify-between">
+        <div className="flex xl:flex-row flex-col justify-between">
           <div className="flex gap-5">
             <DatePicker />
             <Filter />
           </div>
           <div className="flex gap-5 mt-5 xl:mt-0">
             <Button variant="outline">
-              <DownloadIcon className=" h-5 w-5" />
+              <DownloadIcon className="h-5 w-5" />
             </Button>
             <div className="relative">
               <SearchIcon
@@ -180,9 +200,6 @@ export default function Leaves() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[32px]">
-                    <Checkbox id="select-all" />
-                  </TableHead>
                   <TableHead className="text-black">Employee Name</TableHead>
                   <TableHead className="text-black">Employee ID</TableHead>
                   <TableHead className="text-black">Position</TableHead>
@@ -193,61 +210,25 @@ export default function Leaves() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox id="select-1" />
-                  </TableCell>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>A-3</TableCell>
-                  <TableCell>Software Engineer</TableCell>
-                  <TableCell>Leave</TableCell>
-                  <TableCell>1 Aug 2024</TableCell>
-                  <TableCell>14 Aug 2024</TableCell>
-                  <TableCell>
-                    <Link to={"/leaves/1"}>
-                      <text className="text-green-600">Approved</text>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox id="select-1" />
-                  </TableCell>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>A-3</TableCell>
-                  <TableCell>Software Engineer</TableCell>
-                  <TableCell>Leave</TableCell>
-                  <TableCell>1 Aug 2024</TableCell>
-                  <TableCell>14 Aug 2024</TableCell>
-                  <TableCell>
-                    <Link to={"/leaves/1"}>
-                      <text className="text-red-600">reject</text>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox id="select-1" />
-                  </TableCell>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>A-3</TableCell>
-                  <TableCell>Software Engineer</TableCell>
-                  <TableCell>Leave</TableCell>
-                  <TableCell>1 Aug 2024</TableCell>
-                  <TableCell>14 Aug 2024</TableCell>
-                  <TableCell>
-                    <Link to={"/leaves/1"}>
-                      <text className="text-yellow-600">Waiting Approve</text>
-                    </Link>
-                  </TableCell>
-                </TableRow>
+                {leaves.map((leave) => (
+                  <TableRow key={leave.leave_id}>
+                    <TableCell className="font-medium">{leave.name}</TableCell>
+                    <TableCell>{leave.personal_id}</TableCell>
+                    <TableCell>{leave.job_position}</TableCell>
+                    <TableCell>{leave.reason}</TableCell>
+                    <TableCell>{leave.start_date}</TableCell>
+                    <TableCell>{leave.end_date}</TableCell>
+                    <TableCell>
+                      <Link to={`/leaves/${leave.leave_id}`}>
+                        <label className="text-yellow-600">{leave.status}</label>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </div>
         </div>
-      </div>
-      <div className="text-xs text-muted-foreground mt-3">
-        Showing <strong>1-5</strong> of <strong>20</strong> records
       </div>
     </MainLayout>
   );
