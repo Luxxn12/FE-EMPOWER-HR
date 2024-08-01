@@ -1,10 +1,10 @@
 import { Response } from "@/utils/types/apis";
-import { openAPI } from "../axiosWithConfig";
+import { axiosConfig } from "../axiosWithConfig";
 import { ILogin, LoginSchema, RegisterSchema } from "./type";
 
 export const userLogin = async (body: LoginSchema): Promise<Response<any>> => {
   try {
-    const resp = await openAPI.post("/auth", body);
+    const resp = await axiosConfig.post("/login", body);
     return resp.data as Response<ILogin>;
   } catch (error: any) {
     if (error.resp && error.resp.data) {
@@ -19,7 +19,7 @@ export const userRegister = async (
   body: RegisterSchema
 ): Promise<Response<any>> => {
   try {
-    const resp = await openAPI.post<Response<any>>("/admin", body);
+    const resp = await axiosConfig.post<Response<any>>("/admin", body);
     return resp.data;
   } catch (error: any) {
     if (error.resp && error.resp.data) {

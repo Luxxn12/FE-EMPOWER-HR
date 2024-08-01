@@ -2,7 +2,7 @@ import axios from "axios";
 
 //deployment API
 const axiosConfig = axios.create({
-  baseURL: "",
+  baseURL: "https://empower-hr.site/",
 });
 
 //open API

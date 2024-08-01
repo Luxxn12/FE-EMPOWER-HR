@@ -1,32 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // Custom hook
 const useCurrentTime = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const formattedTimeRef = useRef<string>("");
+  const formattedDateRef = useRef<string>("");
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+    const updateFormattedTime = () => {
+      const date = new Date();
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const seconds = date.getSeconds().toString().padStart(2, "0");
+      formattedTimeRef.current = `${hours}:${minutes}:${seconds}`;
+
+      const options: Intl.DateTimeFormatOptions = {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      };
+      formattedDateRef.current = date.toLocaleDateString("en-US", options);
+
+      setCurrentTime(date);
+    };
+
+    updateFormattedTime();
+    const intervalId = setInterval(updateFormattedTime, 1000);
 
     return () => clearInterval(intervalId);
   }, []);
 
-  const formatTime = (date: any) => {
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const seconds = date.getSeconds().toString().padStart(2, "0");
-    return `${hours}:${minutes}:${seconds}`;
-  };
-
-  const formatDate = (date: any) => {
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    return date.toLocaleDateString("en-US", options);
-  };
+  const formatTime = () => formattedTimeRef.current;
+  const formatDate = () => formattedDateRef.current;
 
   return {
-    formatTime: () => formatTime(currentTime),
-    formatDate: () => formatDate(currentTime),
+    formatTime,
+    formatDate,
   };
 };
 

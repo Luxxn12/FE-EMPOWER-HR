@@ -249,7 +249,7 @@ export default function Attendance() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Detail</DropdownMenuItem>
+                        <DropdownMenuItem><Button variant="ghost" onClick={() => navigate(`/attendance/${item.id}`)}>Detail</Button></DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
