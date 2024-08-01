@@ -35,6 +35,8 @@ import { useNavigate } from "react-router-dom";
 import { IAttendance } from "@/utils/apis/attendance/type";
 import { useAuth } from "@/utils/contexts/token";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export default function Attendance() {
   const { schedules } = useAuth();
@@ -120,6 +122,29 @@ export default function Attendance() {
     schedules
   );
 
+  const generateAllAttendancePdf = () => {
+    const doc = new jsPDF();
+
+    const tableBody = attendance.map((item) => [
+      item.employementData && item.employementData[0]
+        ? item.employementData[0].name
+        : "N/A",
+      item.employementData && item.employementData[0]
+        ? item.employementData[0].id_personal
+        : "N/A",
+      item.date,
+      item.clock_in || "N/A",
+      item.clock_out || "N/A",
+    ]);
+
+    autoTable(doc, {
+      head: [["Employee Name", "Employee ID", "Date", "Clock In", "Clock Out"]],
+      body: tableBody,
+    });
+
+    doc.save("all_attendance_data.pdf");
+  };
+
   return (
     <MainLayout
       title="Attendance Management"
@@ -183,7 +208,7 @@ export default function Attendance() {
             {/* <Filter /> */}
           </div>
           <div className="flex gap-5 mt-5 xl:mt-0">
-            <Button variant="outline">
+            <Button variant="outline" onClick={generateAllAttendancePdf}>
               <DownloadIcon className="h-5 w-5" />
             </Button>
             <div className="relative">
