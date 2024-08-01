@@ -13,14 +13,6 @@ const EditPayroll = () => {
         <div>
           <Label htmlFor="fullName">Fullname*</Label>
           <div className="mt-1">
-            <Input
-              id="fullName"
-              type="text"
-              data-testid="fullName"
-              defaultValue=""
-              placeholder="John doe"
-              disabled
-            />
           </div>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
