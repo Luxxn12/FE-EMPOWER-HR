@@ -1,6 +1,6 @@
 import { Response } from "@/utils/types/apis";
 import { openAPI } from "../axiosWithConfig";
-import { FormDataCreate, IEmployeeById, IEmployeeGetAll, UpdatePersonal, UpdatePersonalSchema } from "./type";
+import { EmploymentById, EmploymentIdSchema, FormDataCreate, IEmployeeById, IEmployeeGetAll, UpdatePersonal, UpdatePersonalSchema } from "./type";
 import { checkProperty, valueFormatData } from "@/utils/functions";
 
 export const getAllEmployee = async () => {
@@ -27,6 +27,16 @@ export const getPersonalById = async (employee_id: any) => {
   try {
     const response = await openAPI.get(`/employee/${employee_id}`);
     return response.data as Response<UpdatePersonal>;
+
+  } catch (error: any) {
+    const { message } = error.response.data.message;
+    throw Error(message);
+  }
+};
+export const getEmploymentById = async (employee_id: any) => {
+  try {
+    const response = await openAPI.get(`/employment/${employee_id}`);
+    return response.data as Response<EmploymentById>;
 
   } catch (error: any) {
     const { message } = error.response.data.message;
@@ -72,3 +82,29 @@ export const updatePersonalEmployee = async ( body: UpdatePersonalSchema, employ
     throw error;
   }
 };
+export const updateEmploymenId = async ( body: EmploymentIdSchema, employee_id: any) => {
+  try {
+    const formData = new FormData();
+    let key: keyof typeof body;
+
+    for (key in body) {
+      if (checkProperty(body[key])) {
+        formData.append(key, valueFormatData(body[key]));
+      }
+    }
+
+    const resp = await openAPI.put<EmploymentById>(`/employment/${employee_id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return resp.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const { message } = error.response.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};
+

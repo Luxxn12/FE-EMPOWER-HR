@@ -191,6 +191,23 @@ export const payrollSchema = z.object({
     .min(1, { message: " Please enter your account number " }),
 });
 
+export const employmentIdSchema = z.object({
+  manager: z
+    .string()
+    .min(1, { message: "Please select your employment status" }),
+  schedule: z.string().min(1, { message: "Please select your work schedule" }),
+  join_date: z.string().min(1, { message: "Please enter your join date" }),
+  job_level: z.string().min(1, { message: "Please select your job level" }),
+  department: z.string().min(1, { message: "Please select your department" }),
+  approval_line: z
+    .string()
+    .min(1, { message: "Please select your approval line" }),
+  job_position: z
+    .string()
+    .min(1, { message: "Please enter your job position" }),
+});
+
 export type PersonalSchema = z.infer<typeof personalSchema>;
 export type EmploymentSchema = z.infer<typeof employmentSchema>;
+export type EmploymentIdSchema = z.infer<typeof employmentIdSchema>;
 export type PayrollSchema = z.infer<typeof payrollSchema>;

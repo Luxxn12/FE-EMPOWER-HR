@@ -67,7 +67,6 @@ const EditPersonal = () => {
       title="Empower HR - Employees"
       description="Empower HR - Employees"
     >
-      {JSON.stringify(employeeData)}
       <h5 className="text-xl text-gray-500 font-semibold">Edit Personal</h5>
       <p className="text-gray-500">
         Fill all employee personal basic information data
