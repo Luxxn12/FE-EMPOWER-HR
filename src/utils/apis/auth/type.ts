@@ -2,6 +2,7 @@ import * as z from "zod";
 
 export interface ILogin {
   token: string;
+  role: string;
 }
 
 export const loginSchema = z.object({

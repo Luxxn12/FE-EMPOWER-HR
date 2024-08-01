@@ -36,7 +36,10 @@ export default function SettingAttendance() {
   }
 
   return (
-    <MainLayout title="Empower HR - Setting Attendance" description="Empower HR - Setting Attendance">
+    <MainLayout
+      title="Empower HR - Setting Attendance"
+      description="Empower HR - Setting Attendance"
+    >
       <h1 className="text-2xl font-bold">Settings Attendance</h1>
 
       <div className="flex xl:flex-row xl:items-center flex-col justify-between mt-8">
@@ -53,11 +56,9 @@ export default function SettingAttendance() {
               className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
             />
           </div>
-          {schedules.length === 0 && (
-            <Link to="/attendance/settings/schedule">
-              <Button>Create new schedule</Button>
-            </Link>
-          )}
+          <Link to="/attendance/settings/schedule">
+            <Button>Create new schedule</Button>
+          </Link>
         </div>
       </div>
 
@@ -87,7 +88,7 @@ export default function SettingAttendance() {
                       {item.name}
                     </TableCell>
                     <TableCell className="text-gray-500">
-                      {item.affective_date}
+                      {item.effective_date}
                     </TableCell>
                     <TableCell className="text-gray-500">
                       {item.schedule_in}
@@ -133,7 +134,7 @@ export default function SettingAttendance() {
                               </DialogHeader>
                               {Object.entries({
                                 "Schedule name": item.name,
-                                "Effective date": item.affective_date,
+                                "Effective date": item.effective_date,
                                 "Shift pattern": item.repeat_until,
                                 "Schedule in": item.schedule_in,
                                 "Schedule out": item.schedule_out,

@@ -15,7 +15,7 @@ import { toast } from "sonner";
 const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { setToken } = useAuth();
+  const { setToken, setRole } = useAuth();
 
   const {
     register,
@@ -34,6 +34,7 @@ const Login = () => {
     try {
       const resp = await userLogin(data);
       setToken(resp.data.token);
+      setRole(resp.data.role); // Assuming role is included in the response
       navigate("/dashboard");
       toast.success(resp.message);
     } catch (error: any) {
@@ -42,6 +43,7 @@ const Login = () => {
       setIsLoading(false);
     }
   }
+
   return (
     <AuthLayout title="Empower HR - Login" description="Login Empower HR">
       <div className="flex min-h-[80vh] flex-col justify-center py-12 sm:px-6 lg:px-8">
