@@ -1,5 +1,5 @@
 import { Response } from "@/utils/types/apis";
-import { openAPI, setAxiosConfig } from "../axiosWithConfig";
+import { axiosConfig, openAPI, setAxiosConfig } from "../axiosWithConfig";
 import { IAttendance } from "./type";
 
 const token = localStorage.getItem("token");
@@ -26,6 +26,11 @@ export const getAttendance = async () => {
 
 export const getUserAttendance = async () => {
   try {
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
     const resp = await openAPI.get("/attendance/user");
 
     return resp.data as Response<IAttendance[]>;
@@ -40,6 +45,11 @@ export const getUserAttendance = async () => {
 
 export const getAttendanceById = async (id: number) => {
   try {
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
     const resp = await openAPI.get(`/attendance/${id}`);
     return resp.data as Response<IAttendance>;
   } catch (error: any) {

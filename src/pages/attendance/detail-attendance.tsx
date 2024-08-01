@@ -15,7 +15,8 @@ export default function DetailAttendance() {
   const [address, setAddress] = useState<string | null>(null);
 
   const { schedules } = useAuth();
-  const { id } = useParams();
+  const { attendance_id } = useParams<{ attendance_id: string }>();
+  const numberId = attendance_id ? parseInt(attendance_id, 10) : null;
 
   const attendanceToUse =
     Array.isArray(attendance) && attendance.length > 0 ? attendance[0] : null;
@@ -29,12 +30,8 @@ export default function DetailAttendance() {
   const fetchAttendance = async () => {
     try {
       setLoading(true);
-      const resp = await getAttendanceById(Number(id!));
+      const resp = await getAttendanceById(numberId!);
       setAttendance(resp.data);
-      const updatedAttendanceToUse =
-        Array.isArray(resp.data) && resp.data.length > 0 ? resp.data[0] : null;
-
-      console.log(updatedAttendanceToUse);
 
       await fetchAddress(-6.2690335997433655, 106.80731123390241);
     } catch (error: any) {
@@ -46,7 +43,7 @@ export default function DetailAttendance() {
 
   useEffect(() => {
     fetchAttendance();
-  }, [id]);
+  }, [numberId]);
 
   const fetchAddress = async (lat: number, lng: number) => {
     try {
@@ -101,12 +98,8 @@ export default function DetailAttendance() {
               </p>
             </div>
             <div className="flex flex-col mb-4">
-              <p className="font-bold">Address</p>
-              <p className="mt-1">{address || "Fetching address..."}</p>
-            </div>
-            <div className="flex flex-col mb-4">
               <p className="font-bold">Location GPS name</p>
-              <p className="mt-1">PT Mekar Sentosa</p>
+              <p className="mt-1">{address || "Fetching address..."}</p>
             </div>
             <div className="flex flex-col mb-4">
               <p className="font-bold">Note</p>
@@ -114,7 +107,12 @@ export default function DetailAttendance() {
             </div>
           </>
         ) : (
-          <>Not found data</>
+          <div
+            className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+          >
+            <span className="font-medium">Warning!</span> Cannot find data!
+          </div>
         )}
       </div>
     </MainLayout>
