@@ -1,7 +1,6 @@
 import { Response } from "@/utils/types/apis";
 import { openAPI } from "../axiosWithConfig";
-import { EditPayroll, EditPayrollSchemaById, IPayroll } from "./type";
-import { checkProperty, valueFormatData } from "@/utils/functions";
+import { EditPayrollSchemaById, IPayroll } from "./type";
 
 export const getPayrolls = async () => {
     try {
