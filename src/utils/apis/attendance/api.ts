@@ -1,5 +1,5 @@
 import { Response } from "@/utils/types/apis";
-import { axiosConfig, openAPI, setAxiosConfig } from "../axiosWithConfig";
+import { openAPI, setAxiosConfig } from "../axiosWithConfig";
 import { IAttendance } from "./type";
 
 const token = localStorage.getItem("token");
