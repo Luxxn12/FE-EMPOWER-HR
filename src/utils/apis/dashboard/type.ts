@@ -1,6 +1,7 @@
 export interface DashboardAdminType {
     current_date: string
     name: string
+    total_users: number
     male: number
     female: number
     contract: number
