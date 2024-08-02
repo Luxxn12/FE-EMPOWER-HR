@@ -1,63 +1,93 @@
+import { CustomFormField, CustomFormSelect } from "@/components/custom-form-field";
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createPayroll } from "@/utils/apis/payroll/api";
+import { editPayrollSchema, EditPayrollSchemaById } from "@/utils/apis/payroll/type";
+import { categorisBank } from "@/utils/constant";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const EditPayroll = () => {
+  const navigate = useNavigate();
+  const form = useForm<EditPayrollSchemaById>({
+    resolver: zodResolver(editPayrollSchema),
+    defaultValues: {
+      bank_name: "",
+      acoount_num: "",
+      salary: "",
+    },
+  })
+
+  async function onSubmit(data: EditPayrollSchemaById) {
+    try {
+      const response = await createPayroll(data)
+      toast.success(response.message);
+      navigate("/payroll");
+    } catch (error: any) {
+      toast.error(error);
+    }
+  }
   return (
     <MainLayout
       title="Empower HR - Payroll"
       description="Empower HR - Edit Payroll"
     >
-      <form action="" className="lg:w-3/4">
-        <div>
-          <Label htmlFor="fullName">Fullname*</Label>
-          <div className="mt-1">
-          </div>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="mt-3">
-            <Label htmlFor="bankName">Bank name*</Label>
-            <div className="mt-1">
-              <Input
-                id="bankName"
-                type="text"
-                data-testid="bankName"
-                defaultValue=""
-                placeholder="BCA"
+      <Form {...form}>
+        <form action="" className="lg:w-3/4" onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="mt-3">
+              <CustomFormSelect
+                control={form.control}
+                name="bank_name"
+                label="Bank Name"
+                placeholder="Select a Category"
+                options={categorisBank}
               />
+            </div>
+            <div className="mt-3">
+              <CustomFormField
+                control={form.control}
+                name="acoount_num"
+                label="Bank Account"
+              >
+                {(field) => (
+                  <Input
+                    {...field}
+                    placeholder="123xxxxxxxxx"
+                    disabled={form.formState.isSubmitting}
+                    aria-disabled={form.formState.isSubmitting}
+                    value={field.value as string}
+                  />
+                )}
+              </CustomFormField>
             </div>
           </div>
           <div className="mt-3">
-            <Label htmlFor="bankAccount">Bank Account*</Label>
-            <div className="mt-1">
-              <Input
-                id="bankAccount"
-                type="text"
-                data-testid="bankAccount"
-                defaultValue=""
-                placeholder="1234xxxxxxxx"
-              />
-            </div>
+            <CustomFormField control={form.control} name="salary" label="Salary">
+              {(field) => (
+                <Input
+                  {...field}
+                  placeholder="Rp. 5.000.000"
+                  disabled={form.formState.isSubmitting}
+                  aria-disabled={form.formState.isSubmitting}
+                  value={field.value as string}
+                />
+              )}
+            </CustomFormField>
           </div>
-        </div>
-        <div className="mt-3">
-          <Label htmlFor="basicSalary">Basic salary*</Label>
-          <div className="mt-1">
-            <Input
-              id="basicSalary"
-              type="text"
-              data-testid="basicSalary"
-              defaultValue=""
-              placeholder="1234xxxxxxxx"
-            />
+          <div className="flex justify-start gap-2 my-3">
+            <Button>Submit</Button>
+            <Link to={"/payroll"}>
+              <Button variant="outline">Cancel</Button>
+            </Link>
           </div>
-        </div>
-        <div className="flex justify-start gap-2 my-3">
-          <Button>Submit</Button>
-          <Button variant="outline">Cancel</Button>
-        </div>
-      </form>
+        </form>
+      </Form>
     </MainLayout>
   );
 };
