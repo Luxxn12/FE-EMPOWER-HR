@@ -1,6 +1,6 @@
 import { Response } from "@/utils/types/apis";
-import { axiosConfig, openAPI, setAxiosConfig } from "../axiosWithConfig";
-import { ILeaves } from "./type";
+import { axiosConfig, setAxiosConfig } from "../axiosWithConfig";
+import { ILeaves, LeavesSchema } from "./type";
 
 const token = localStorage.getItem("token");
 
@@ -11,10 +11,9 @@ export const getLeaves = async () => {
     }
 
     setAxiosConfig(token);
+    const response = await axiosConfig.get("/leaves");
 
-    const resp = await axiosConfig.get("/leaves");
-
-    return resp.data as Response<ILeaves[]>;
+    return response.data as Response<ILeaves[]>;
   } catch (error: any) {
     if (error.response && error.response.data) {
       const { message } = error.response.data;
@@ -31,13 +30,27 @@ export const getUserLeaves = async () => {
     }
 
     setAxiosConfig(token);
+    const response = await axiosConfig.get("/leaves/employee");
 
-    const resp = await axiosConfig.get("/leaves/employee");
-
-    return resp.data as Response<ILeaves[]>;
+    return response.data as Response<ILeaves[]>;
   } catch (error: any) {
     if (error.response && error.response.data) {
       const { message } = error.response.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};
+
+export const requestLeaves = async (
+  body: LeavesSchema
+): Promise<Response<any>> => {
+  try {
+    const resp = await axiosConfig.post<Response<any>>("/leaves", body);
+    return resp.data;
+  } catch (error: any) {
+    if (error.resp && error.resp.data) {
+      const { message } = error.resp.data;
       throw new Error(message);
     }
     throw error;
@@ -51,8 +64,8 @@ export const getLeavesById = async (id: number) => {
     }
 
     setAxiosConfig(token);
-    const resp = await axiosConfig.get(`/leaves/${id}`);
-    return resp.data as Response<ILeaves>;
+    const response = await axiosConfig.get(`/leaves/${id}`);
+    return response.data as Response<ILeaves>;
   } catch (error: any) {
     if (error.response && error.response.data) {
       const { message } = error.response.data;
@@ -68,7 +81,7 @@ export const updateLeaveStatus = async (
   reason: string
 ): Promise<Response<any>> => {
   try {
-    const response = await openAPI.put(`/leaves/${id}`, {
+    const response = await axiosConfig.put(`/leaves/${id}`, {
       status,
       reason,
     });

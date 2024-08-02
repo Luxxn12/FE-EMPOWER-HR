@@ -37,6 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const { role } = useAuth();
 
   const attendanceLink = role === "admin" ? "/attendance" : "/attendance-user";
+  const leavesLink = role === "admin" ? "/leaves" : "/leaves-user";
 
   return (
     <>
@@ -81,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     "/attendance/live-attendance",
                     "/attendance/settings",
                     "/attendance/settings/schedule",
-                    "/attendance-user"
+                    "/attendance-user",
                   ])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
@@ -93,9 +94,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             </li>
             <li>
               <Link
-                to="/leaves"
+                to={leavesLink}
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive(["/leaves"])
+                  isActive(["/leaves", "/leaves-user"])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
                 }

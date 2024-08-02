@@ -178,19 +178,19 @@ export default function Leaves() {
                   </TableCell>
                   <TableCell className="text-gray-500">
                     <Link to={`/leaves/${item.leave_id}`}>
-                      <label
+                      <p
                         className={
-                          item.status === "pending"
-                            ? "text-orange-500"
-                            : item.status === "approved"
-                            ? "text-green-500"
-                            : item.status === "rejected"
-                            ? "text-red-500"
-                            : "text-gray-500"
+                          item.status === "approved"
+                            ? "text-emerald-400"
+                            : item.status === "pending"
+                            ? "text-orange-400"
+                            : item.status === "reject"
+                            ? "text-rose-400"
+                            : ""
                         }
                       >
                         {item.status}
-                      </label>
+                      </p>
                     </Link>
                   </TableCell>
                 </TableRow>
