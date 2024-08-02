@@ -1,22 +1,7 @@
 import MainLayout from "@/components/layouts/main-layout";
-import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -26,177 +11,245 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import React from "react";
+import { getLeavesById, updateLeaveStatus } from "@/utils/apis/leaves/api";
+import { ILeaves } from "@/utils/apis/leaves/type";
+import autoTable from "jspdf-autotable";
+import jsPDF from "jspdf";
+import { useParams } from "react-router-dom";
+import { useAuth } from "@/utils/contexts/token";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function DetailLeave() {
-  const [date, setDate] = React.useState<Date>();
+  const [leave, setLeave] = useState<ILeaves | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [rejectReason, setRejectReason] = useState<string>("");
+  const [rejectError, setRejectError] = useState<string | null>(null);
+  const { leave_id } = useParams<{ leave_id: string }>();
+  const numberId = leave_id ? parseInt(leave_id, 10) : null;
+  const { role } = useAuth();
+
+  const fetchLeave = async () => {
+    try {
+      const data = await getLeavesById(numberId!);
+      setLeave(data.data);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeave();
+  }, [numberId]);
+
+  const generateLeavePdf = () => {
+    const doc = new jsPDF();
+    const margin = 14;
+    const pageWidth = doc.internal.pageSize.getWidth() - 2 * margin;
+    const pageHeight = doc.internal.pageSize.height;
+    const lineHeight = 10;
+
+    doc.setFontSize(14);
+    doc.setFont("Helvetica", "bold");
+    doc.text("Empower HR", margin, 20);
+    doc.setFontSize(12);
+    doc.text("Pondok indah plaza II, Jakarta Selatan", margin, 30);
+    doc.text("Telepon: +123456789", margin, 40);
+    doc.text("Email: contact@empowerhr.com", margin, 50);
+    doc.text("Tanggal: " + new Date().toLocaleDateString(), margin, 60);
+
+    doc.setFontSize(16);
+    doc.text("SURAT IZIN CUTI", margin, 80);
+
+    doc.setFontSize(12);
+    doc.text(`Kepada Yth: ${leave?.name}`, margin, 100);
+    doc.text(`HR Department ${leave?.job_position}`, margin, 110);
+    doc.text("PT. Empowe HR", margin, 120);
+
+    doc.text(" ", margin, 140);
+
+    doc.setFontSize(12);
+    const longText = `Demikian surat izin cuti ini kami buat, mohon agar dapat dipertimbangkan dan diproses sesuai dengan ketentuan yang berlaku. Terima kasih atas perhatian dan kerja samanya.`;
+    const textLines = doc.splitTextToSize(longText, pageWidth);
+
+    let yPosition = 150;
+
+    textLines.forEach((line: string) => {
+      if (yPosition + lineHeight > pageHeight - margin) {
+        doc.addPage();
+        yPosition = margin;
+      }
+      doc.text(line, margin, yPosition);
+      yPosition += lineHeight;
+    });
+
+    doc.text(" ", 14, 40);
+
+    const tableBody = [
+      [
+        leave?.name || "N/A",
+        "AA-1",
+        leave?.job_position || "N/A",
+        leave?.reason || "N/A",
+        leave?.start_date || "N/A",
+        leave?.end_date || "N/A",
+        leave?.status || "N/A",
+      ],
+    ];
+
+    autoTable(doc, {
+      startY: yPosition + 10,
+      head: [
+        [
+          "Employee Name",
+          "Employee ID",
+          "Position",
+          "Reason",
+          "Start Date",
+          "End Date",
+          "Status",
+        ],
+      ],
+      body: tableBody,
+    });
+
+    const finalY = (doc as any).autoTable.previous.finalY;
+
+    doc.text("Hormat kami,", margin, finalY + 20);
+    doc.text("______________________", margin, finalY + 50);
+    doc.text("Nama Penandatangan", margin, finalY + 60);
+    doc.text("Jabatan", margin, finalY + 70);
+
+    doc.save("leave_data.pdf");
+  };
+
+  const handleApprove = async () => {
+    try {
+      await updateLeaveStatus(numberId!, "approved", "cuti diterima");
+      setLeave({ ...leave!, status: "approved" });
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleReject = async () => {
+    if (!rejectReason.trim()) {
+      setRejectError("Please enter a reason for rejection.");
+      return;
+    }
+    try {
+      await updateLeaveStatus(numberId!, "rejected", rejectReason);
+      setLeave({ ...leave!, status: "rejected" });
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <MainLayout title="" description="">
-      <div className="flex  justify-between">
-        <h1 className="text-2xl font-bold">Comfirmation</h1>
-        <div>
-          <Dialog>
-            <DialogTrigger asChild className="w-full justify-start">
-              <Button>Leaves report</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
-              <AlertDialogHeader>
-                <DialogTitle className="items-start">
-                  Print leaves report
-                </DialogTitle>
-                <DialogDescription>
-                  Please selectdate to print leaves report
-                </DialogDescription>
-              </AlertDialogHeader>
-              <div className="grid grid-cols-2 gap-4 mb-3">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Strat date *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="name">End date *</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
-              <div className="flex justify-end gap-5">
-                <Button variant={"outline"}>Cancel</Button>
-                <Button className="pl-4 pr-4">Submit</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold">Leave Details</h1>
+
+        {(leave?.status === "approved" || leave?.status === "rejected") && (
+          <Button onClick={generateLeavePdf}>Leave report</Button>
+        )}
       </div>
-      <div className="pt-8">
-        <div className="py-6  px-6 border border-[#D5D5D5] bg-white rounded-md">
-          <div className="flex md:flex-col xl:flex-row flex-col gap-8">
-            <div className="flex  flex-col">
-              <text className="text-gray-500 text-sm">Leaves request</text>
-              <text className="text-2xl font-bold">Username</text>
-            </div>
-            <div className="grid w-full xl:container xl:grid-cols-3 lg::grid-cols-3 grid-cols-2 gap-8 ">
-              <div className="flex gap-6">
-                <Separator orientation="vertical" />
-                <div className="flex flex-col  h-full justify-center">
-                  <text className="text-gray-500">Quota</text>
-                  <text className="text-xl font-bold text-blue-400">0</text>
-                </div>
-              </div>
-              <div className="flex gap-6">
-                <Separator orientation="vertical" />
-                <div className="flex flex-col h-full justify-center">
-                  <text className="text-gray-500">Used</text>
-                  <text className="text-xl font-bold text-blue-400">0</text>
-                </div>
-              </div>
+
+      <div className="relative mt-3 w-full overflow-auto bg-white rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {[
+                "Employee Name",
+                "Employee ID",
+                "Position",
+                "Reason",
+                "Start date",
+                "End date",
+                "Status",
+              ].map((header, index) => (
+                <TableHead key={index} className="text-gray-600">
+                  {header}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-medium">{leave?.name}</TableCell>
+              <TableCell>EMPHR - {leave?.personal_id}</TableCell>
+              <TableCell>{leave?.job_position}</TableCell>
+              <TableCell>{leave?.reason}</TableCell>
+              <TableCell>{leave?.start_date}</TableCell>
+              <TableCell>{leave?.end_date}</TableCell>
+              <TableCell>
+                <p
+                  className={`text-${
+                    leave?.status === "approved" ? "green" : "yellow"
+                  }-600`}
+                >
+                  {leave?.status}
+                </p>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      {role === "admin" && leave?.status === "pending" && (
+        <>
+          <div className="pt-8 flex flex-col">
+            <text className="text-xl font-bold">Approve</text>
+            <text className="text-sm text-gray-500 mt-1">
+              Submit to send a leave approval request
+            </text>
+            <div className="mt-3">
+              <Button size="sm" onClick={handleApprove}>
+                Submit
+              </Button>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="pt-8">
-        <div className="border rounded-lg w-full">
-          <div className="relative w-full overflow-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[32px]">
-                    <Checkbox id="select-all" />
-                  </TableHead>
-                  <TableHead className="text-black">Employee Name</TableHead>
-                  <TableHead className="text-black">Employee ID</TableHead>
-                  <TableHead className="text-black">Position</TableHead>
-                  <TableHead className="text-black">Reason</TableHead>
-                  <TableHead className="text-black">Start date</TableHead>
-                  <TableHead className="text-black">End date</TableHead>
-                  <TableHead className="text-black">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox id="select-1" />
-                  </TableCell>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>A-3</TableCell>
-                  <TableCell>Software Engineer</TableCell>
-                  <TableCell>Leave</TableCell>
-                  <TableCell>1 Aug 2024</TableCell>
-                  <TableCell>14 Aug 2024</TableCell>
-                  <TableCell>
-                    <text className="text-yellow-600">Waiting Approve</text>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+          <Separator className="my-8 bg-gray-300" />
+          <div className="flex flex-col">
+            <text className="text-xl font-bold">Reject</text>
+            <div className="grid xl:grid-cols-2 grid-cols-1">
+              <div className="space-y-2">
+                <Label htmlFor="reject-reason">Reject Reason</Label>
+                <Input
+                  id="reject-reason"
+                  type="text"
+                  placeholder="Enter reason for rejection"
+                  className="border border-gray-300 p-2"
+                  value={rejectReason}
+                  onChange={(e) => {
+                    setRejectReason(e.target.value);
+                    setRejectError(null);
+                  }}
+                />
+                {rejectError && (
+                  <p className="text-red-500 text-sm">{rejectError}</p>
+                )}
+              </div>
+            </div>
+            <div className="mt-2">
+              <Button
+                variant={"destructive"}
+                size="sm"
+                className="pl-4 pr-4"
+                onClick={handleReject}
+              >
+                Reject
+              </Button>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="pt-8 flex flex-col">
-        <text className="text-xl font-bold">Approve</text>
-        <text className="text-sm  text-gray-500 mt-1">
-          submit to send a leave approval request
-        </text>
-        <div className="mt-3">
-          <Button>Submit</Button>
-        </div>
-      </div>
-      <Separator className="my-8 bg-gray-300" />
-      <div className="flex flex-col">
-        <text className="text-xl font-bold">Reject</text>
-        <div className="grid xl:grid-cols-2 grid-cols-1">
-          <div className="space-y-2">
-            <Label htmlFor="reason">Reason</Label>
-            <Input type="text" id="reason" placeholder="reason" />
-          </div>
-        </div>
-        <div className="mt-3">
-          <Button className="bg-red-500">Reject</Button>
-        </div>
-      </div>
+        </>
+      )}
     </MainLayout>
   );
 }
