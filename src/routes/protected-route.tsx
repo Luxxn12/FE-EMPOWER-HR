@@ -28,6 +28,7 @@ const ProtectedRoute = () => {
     "/companies",
     "/companies/edit",
     "/leaves",
+    "/leaves-user",
     "/leaves/request-leaves",
     "/leaves/:leave_id",
     "/dashboard",

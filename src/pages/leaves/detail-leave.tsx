@@ -190,9 +190,15 @@ export default function DetailLeave() {
               <TableCell>{leave?.end_date}</TableCell>
               <TableCell>
                 <p
-                  className={`text-${
-                    leave?.status === "approved" ? "green" : "yellow"
-                  }-600`}
+                  className={
+                    leave?.status === "approved"
+                      ? "text-emerald-400"
+                      : leave?.status === "pending"
+                      ? "text-orange-400"
+                      : leave?.status === "reject"
+                      ? "text-rose-400"
+                      : ""
+                  }
                 >
                   {leave?.status}
                 </p>

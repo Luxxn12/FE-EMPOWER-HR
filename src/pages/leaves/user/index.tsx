@@ -152,7 +152,19 @@ export default function LeavesUser() {
                   </TableCell>
                   <TableCell className="text-gray-500">
                     <Link to={`/leaves/${item.leave_id}`}>
-                      <label className="text-yellow-600">{item.status}</label>
+                      <p
+                        className={
+                          item.status === "approved"
+                            ? "text-emerald-400"
+                            : item.status === "pending"
+                            ? "text-orange-400"
+                            : item.status === "rejected"
+                            ? "text-rose-400"
+                            : ""
+                        }
+                      >
+                        {item.status}
+                      </p>
                     </Link>
                   </TableCell>
                 </TableRow>

@@ -28,9 +28,9 @@ export const scheduleSchema = z.object({
   break_end: z
     .string()
     .regex(/^\d{2}:\d{2}$/, { message: "Break end must be in HH:MM format" }),
-  repeat_until: z.string().regex(/^\d+\s(?:day|days)$/, {
-    message: "Repeat until must be in 'X day(s)' format",
-  }),
+  // repeat_until: z.string().regex(/^\d+\s(?:day|days)$/, {
+  //   message: "Repeat until must be in 'X day(s)' format",
+  // }),
   affective_date: z.string({message: "Affective date must be in DD-MM-YYYY format"}),
   description: z.string().optional(),
 });
