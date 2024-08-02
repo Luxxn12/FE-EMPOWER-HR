@@ -1,4 +1,5 @@
 import MainLayout from "@/components/layouts/main-layout";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -9,26 +10,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getLeaves } from "@/utils/apis/leaves/api";
+import { getUserLeaves } from "@/utils/apis/leaves/api";
 import { ILeaves } from "@/utils/apis/leaves/type";
 import { SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Leaves() {
+export default function LeavesUser() {
   const [leaves, setLeaves] = useState<ILeaves[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    const fetchLeaves = async () => {
-      try {
-        const response = await getLeaves();
-        setLeaves(response.data);
-      } catch (error) {
-        console.error("Error fetching leaves data:", error);
-      }
-    };
+  const fetchLeaves = async () => {
+    try {
+      const resp = await getUserLeaves();
+      setLeaves(resp.data);
+    } catch (error) {
+      console.error("Error fetching leaves data:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchLeaves();
   }, []);
 
@@ -48,29 +49,20 @@ export default function Leaves() {
     );
   });
 
-  const uniqueEmployees = new Set(
-    filteredLeaves.map((leave) => leave.personal_id)
-  ).size;
-
-  const pendingLeaves = filteredLeaves.filter(
-    (leave) => leave.status === "pending"
-  ).length;
-
-  const approvedLeaves = filteredLeaves.filter(
-    (leave) => leave.status === "approved"
-  ).length;
-
-  const rejectedLeaves = filteredLeaves.filter(
-    (leave) => leave.status === "rejected"
-  ).length;
+  const navigate = useNavigate();
 
   return (
     <MainLayout
       title="Empower HR - Leaves"
-      description="Empower HR - Admin Leaves"
+      description="Empower HR - Employee Leaves"
     >
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Leaves</h1>
+        <div>
+          <Button onClick={() => navigate("/leaves/request-leaves")}>
+            Request leave
+          </Button>
+        </div>
       </div>
 
       <div className="bg-white p-6 mt-3 border border-gray-200 rounded-md overflow-hidden">
@@ -86,38 +78,20 @@ export default function Leaves() {
           </div>
           <div className="w-7/10 p-4">
             <div className="grid w-full xl:grid-cols-5 lg:grid-cols-3 grid-cols-2 gap-4">
-              {[
-                {
-                  label: "Employees",
-                  count: uniqueEmployees,
-                  color: "text-gray-700",
-                },
-                {
-                  label: "Pending",
-                  count: pendingLeaves,
-                  color: "text-orange-300",
-                },
-                {
-                  label: "Rejected",
-                  count: rejectedLeaves,
-                  color: "text-rose-300",
-                },
-                {
-                  label: "Approved",
-                  count: approvedLeaves,
-                  color: "text-emerald-300",
-                },
-              ].map((item, index) => (
-                <div key={index} className="flex gap-6">
-                  <Separator orientation="vertical" />
-                  <div className="flex flex-col h-full justify-center">
-                    <h5 className="text-gray-500 text-sm">{item.label}</h5>
-                    <p className={`text-lg font-bold ${item.color}`}>
-                      {item.count}
-                    </p>
-                  </div>
+              <div className="flex gap-6">
+                <Separator orientation="vertical" />
+                <div className="flex flex-col h-full justify-center">
+                  <h5 className="text-gray-500 text-sm">Quota</h5>
+                  <p className="text-lg font-bold text-green-500">12 Days</p>
                 </div>
-              ))}
+              </div>
+              <div className="flex gap-6">
+                <Separator orientation="vertical" />
+                <div className="flex flex-col h-full justify-center">
+                  <h5 className="text-gray-500 text-sm">Used</h5>
+                  <p className="text-lg font-bold text-orange-400">0 Days</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -178,19 +152,7 @@ export default function Leaves() {
                   </TableCell>
                   <TableCell className="text-gray-500">
                     <Link to={`/leaves/${item.leave_id}`}>
-                      <label
-                        className={
-                          item.status === "pending"
-                            ? "text-orange-500"
-                            : item.status === "approved"
-                            ? "text-green-500"
-                            : item.status === "rejected"
-                            ? "text-red-500"
-                            : "text-gray-500"
-                        }
-                      >
-                        {item.status}
-                      </label>
+                      <label className="text-yellow-600">{item.status}</label>
                     </Link>
                   </TableCell>
                 </TableRow>

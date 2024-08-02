@@ -25,6 +25,7 @@ import SettingPayroll from "@/pages/payroll/setting";
 import EditPayroll from "@/pages/payroll/edit";
 import Attendance from "@/pages/attendance/admin";
 import UserAttendance from "@/pages/attendance/user";
+import LeavesUser from "@/pages/leaves/user";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -141,6 +142,10 @@ const App = () => {
         {
           path: "/leaves",
           element: <Leaves />,
+        },
+        {
+          path: "/leaves-user",
+          element: <LeavesUser />,
         },
         {
           path: "/leaves/request-leaves",
