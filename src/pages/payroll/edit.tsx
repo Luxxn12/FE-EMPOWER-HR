@@ -3,7 +3,6 @@ import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { createPayroll } from "@/utils/apis/payroll/api";
 import { editPayrollSchema, EditPayrollSchemaById } from "@/utils/apis/payroll/type";
 import { categorisBank } from "@/utils/constant";
