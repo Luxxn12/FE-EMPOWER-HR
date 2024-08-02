@@ -8,10 +8,11 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Squircle } from "lucide-react"
-const chartData = [
-  { browser: "Male", visitors: 60, fill: "#5D54D5" },
-  { browser: "Female", visitors: 40, fill: "#029BDE" },
-]
+
+interface EmploymentStatusProps {
+  dataMaleAdmin: string | undefined;
+  dataFemaleAdmin: string | undefined;
+}
 
 const chartConfig = {
   chrome: {
@@ -24,7 +25,20 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function PaiChart() {
+export function PaiChart({
+  dataMaleAdmin,
+  dataFemaleAdmin,
+}: EmploymentStatusProps) {
+  // Convert props to numbers, using 0 as a fallback if they are undefined or not numeric
+  const maleVisitors = isNaN(Number(dataMaleAdmin)) ? 0 : Number(dataMaleAdmin);
+  const femaleVisitors = isNaN(Number(dataFemaleAdmin)) ? 0 : Number(dataFemaleAdmin);
+
+  // Dynamically create chartData using the props
+  const chartData = [
+    { browser: "Male", visitors: maleVisitors, fill: "#5D54D5" },
+    { browser: "Female", visitors: femaleVisitors, fill: "#029BDE" },
+  ];
+
   return (
     <div>
       <ChartContainer
@@ -46,7 +60,7 @@ export function PaiChart() {
             <text>Male</text>
           </div>
           <div>
-            <text>60</text>
+            <text>{maleVisitors}</text>
           </div>
         </div>
         <div className="flex justify-between">
@@ -55,11 +69,10 @@ export function PaiChart() {
             <text>Female</text>
           </div>
           <div>
-            <text>40</text>
+            <text>{femaleVisitors}</text>
           </div>
         </div>
       </div>
     </div>
   )
 }
-

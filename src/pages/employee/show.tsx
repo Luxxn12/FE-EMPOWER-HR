@@ -3,13 +3,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getEmployeeById } from "@/utils/apis/employee/api";
 import { IEmployeeById } from "@/utils/apis/employee/type";
+import { useAuth } from "@/utils/contexts/token";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const DetailEmployee = () => {
   const [isDataDetail, setDataDetail] = useState<IEmployeeById[]>([]);
-
+  const {role} = useAuth()
   const { employee_id } = useParams();
 
   async function fetchEmployee() {
@@ -66,6 +67,7 @@ const DetailEmployee = () => {
                         to log in.
                       </p>
                     </div>
+                    {role == "admin" ? (
                     <div className="px-4 py-5 sm:px-6">
                       <Link
                         to={`/employees/personal/${item.id}`}
@@ -74,6 +76,7 @@ const DetailEmployee = () => {
                         Edit
                       </Link>
                     </div>
+                    ) : null}
                   </div>
 
                   <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
@@ -167,14 +170,17 @@ const DetailEmployee = () => {
                             Your data information related to company.
                           </p>
                         </div>
-                        <div className="px-4 py-5 sm:px-6">
-                          <Link
-                            to={`/employees/employment/${item.id}`}
-                            className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                          >
-                            Edit
-                          </Link>
-                        </div>
+                        {role == "admin" ? (
+
+                          <div className="px-4 py-5 sm:px-6">
+                            <Link
+                              to={`/employees/employment/${item.id}`}
+                              className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                            >
+                              Edit
+                            </Link>
+                          </div>
+                        ) : null}
                       </div>
                       <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
                         <dl className="sm:divide-y sm:divide-gray-200">

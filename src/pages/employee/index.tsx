@@ -1,12 +1,5 @@
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ArrowDownToLine, Ellipsis, Search } from "lucide-react";
 import {
   Pagination,
@@ -22,9 +15,35 @@ import { IEmployeeGetAll } from "@/utils/apis/employee/type";
 import { getAllEmployee } from "@/utils/apis/employee/api";
 import { toast } from "sonner";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/utils/contexts/token";
+import { Input } from "@/components/ui/input";
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 const Employees = () => {
+  const [searchEmp, setSearchEmp] = useState("")
   const [isData, setData] = useState<IEmployeeGetAll[]>([]);
+  const [filterEmp, setFilterEmp] = useState<IEmployeeGetAll[]>([])
+  const { role } = useAuth()
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (searchEmp.trim() === "") {
+      setFilterEmp(isData)
+    } else {
+      setFilterEmp(
+        isData.filter((employee) =>
+          employee.name
+            .toLowerCase()
+            .includes(searchEmp.toLowerCase())
+        )
+      )
+    }
+  }, [searchEmp, isData])
+
 
   async function fetchData() {
     try {
@@ -35,39 +54,49 @@ const Employees = () => {
     }
   }
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const generatePdf = () => {
+    const doc = new jsPDF();
+    const table: any = [];
+
+    filterEmp.forEach((employee) => {
+      table.push([
+        employee.name,
+        employee.job_position,
+        employee.employment_status,
+        employee.job_level,
+        new Date(employee.join_date).toLocaleDateString("en-US"),
+      ]);
+    });
+
+    autoTable(doc, {
+      head: [['Employee Name', 'Date', 'Position', 'Payslip']],
+      body: table,
+    });
+
+    doc.save('Employees_data.pdf');
+  };
+
+
 
   return (
     <MainLayout
       title="Empower HR - Employees"
       description="Empower HR - Employees"
     >
-      <div className="flex justify-between">
-        <h5 className="text-2xl font-semibold">Employees</h5>
-        <Link
-          to="/employees/create"
-          className="bg-skyBlue text-[#EEEEEE] hover:bg-skyBlue/90  h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-        >
-          Add Employee
-        </Link>
-      </div>
-      <div className="flex justify-between my-8">
-        <div>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+      {role == "admin" ? (
+        <div className="flex justify-between">
+          <h5 className="text-2xl font-semibold">Employees</h5>
+          <Link
+            to="/employees/create"
+            className="bg-skyBlue text-[#EEEEEE] hover:bg-skyBlue/90  h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          >
+            Add Employee
+          </Link>
         </div>
-        <div className="flex justify-between gap-2">
-          <Button variant="outline">
+      ) : null}
+      <div className="flex justify-end my-8">
+        <div className="flex justify-between gap-5">
+          <Button variant="outline" onClick={generatePdf}>
             <ArrowDownToLine className="text-gray-600" />
           </Button>
           <div className="flex items-center max-w-sm mx-auto">
@@ -78,11 +107,12 @@ const Employees = () => {
               <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <Search className="w-4 h-4 text-gray-600" />
               </div>
-              <input
-                type="text"
-                id="simple-search"
-                className="bg-white border border-gray-200 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 placeholder:text-gray-500"
-                placeholder="Search branch name..."
+              <Input
+                type="search"
+                placeholder="Search"
+                onChange={(e) => setSearchEmp(e.target.value)}
+                value={searchEmp}
+                className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
               />
             </div>
           </div>
@@ -93,18 +123,6 @@ const Employees = () => {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-sm text-gray-600 border-b border-gray-300">
             <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label htmlFor="checkbox-all-search" className="sr-only">
-                    checkbox
-                  </label>
-                </div>
-              </th>
               <th scope="col" className="px-6 py-3">
                 Emplyee name
               </th>
@@ -126,26 +144,11 @@ const Employees = () => {
             </tr>
           </thead>
           <tbody>
-            {isData?.map((item) => (
+            {filterEmp?.map((item) => (
               <tr
                 key={item.id}
                 className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                <td className="w-4 p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-table-search-1"
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      htmlFor="checkbox-table-search-1"
-                      className="sr-only"
-                    >
-                      checkbox
-                    </label>
-                  </div>
-                </td>
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap"
@@ -168,7 +171,7 @@ const Employees = () => {
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
                         <Link to={`/employees/${item.id}`}>
-                        Detail
+                          Detail
                         </Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>

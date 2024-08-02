@@ -14,7 +14,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const EditPersonal = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const { employee_id } = useParams<{ employee_id: string }>();
   const navigate = useNavigate();
 
@@ -222,8 +221,8 @@ const EditPersonal = () => {
           </div>
           <div className="flex justify-start gap-2">
             <Button variant="outline">Cancel</Button>
-            <Button className="pl-4 pr-4" type="submit" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Personal"}
+            <Button className="pl-4 pr-4" type="submit">
+              Save Personal
             </Button>
           </div>
         </form>

@@ -1,25 +1,40 @@
-
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-const chartData = [
-  { month: "Permanent", desktop: 60, fill: "#029BDE" },
-  { month: "Contract", desktop: 20, fail: "#F96D20" },
-  { month: "Probation", desktop: 20, fill: "#5D54D5" },
-]
+} from "@/components/ui/chart";
+
+interface EmploymentStatusProps {
+  dataPermanentAdmin: string | undefined;
+  dataContractAdmin: string | undefined;
+}
 
 const chartConfig = {
   desktop: {
     label: "Employment Status",
     color: "hsl(var(--chart-1))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
-export function EmploymentStatus() {
+export function EmploymentStatus({
+  dataPermanentAdmin,
+  dataContractAdmin,
+}: EmploymentStatusProps) {
+  const chartData = [
+    {
+      month: "Permanent",
+      desktop: parseInt(dataPermanentAdmin || "0", 10),
+      fill: "#029BDE",
+    },
+    {
+      month: "Contract",
+      desktop: parseInt(dataContractAdmin || "0", 10),
+      fill: "#F96D20",
+    },
+  ];
+
   return (
     <div className="pt-10">
       <ChartContainer config={chartConfig}>
@@ -53,5 +68,5 @@ export function EmploymentStatus() {
         </BarChart>
       </ChartContainer>
     </div>
-  )
+  );
 }
