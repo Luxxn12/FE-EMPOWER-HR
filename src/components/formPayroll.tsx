@@ -6,7 +6,7 @@ import { CustomFormField, CustomFormSelect } from "./custom-form-field";
 import { categorisBank } from "@/utils/constant";
 
 type PayrollDataProps = {
-  form: UseFormReturn<PayrollSchema, any, undefined>;
+  form: UseFormReturn<PayrollSchema, undefined>;
   onSubmit: () => void;
 };
 
@@ -25,10 +25,11 @@ function FormPayroll({ form, onSubmit }: PayrollDataProps) {
             {(field) => (
               <Input
                 {...field}
+                type="number"
                 placeholder="Rp. 5.000.000"
                 disabled={form.formState.isSubmitting}
                 aria-disabled={form.formState.isSubmitting}
-                value={field.value as string}
+                value={field.value as number}
               />
             )}
           </CustomFormField>
@@ -52,10 +53,11 @@ function FormPayroll({ form, onSubmit }: PayrollDataProps) {
               {(field) => (
                 <Input
                   {...field}
+                  type="number"
                   placeholder="123xxxxxxxxx"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
-                  value={field.value as string}
+                  value={field.value as number}
                 />
               )}
             </CustomFormField>

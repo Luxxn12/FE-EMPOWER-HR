@@ -1,6 +1,6 @@
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
-import { ArrowDownToLine, Ellipsis, Search } from "lucide-react";
+import { ArrowDownToLine, Ellipsis, FilePenIcon, Search, TrashIcon } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -12,9 +12,9 @@ import {
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IEmployeeGetAll } from "@/utils/apis/employee/type";
-import { getAllEmployee } from "@/utils/apis/employee/api";
+import { deleteEmployee, getAllEmployee } from "@/utils/apis/employee/api";
 import { toast } from "sonner";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/utils/contexts/token";
 import { Input } from "@/components/ui/input";
 import jsPDF from 'jspdf'
@@ -76,7 +76,15 @@ const Employees = () => {
     doc.save('Employees_data.pdf');
   };
 
-
+  async function handleDeleteEmployee(employee_id: number) {
+    try {
+      await deleteEmployee(employee_id);
+      fetchData()
+      toast.success('Employee deleted successfully');
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  }
 
   return (
     <MainLayout
@@ -167,12 +175,17 @@ const Employees = () => {
                         <span className="sr-only">Toggle menu</span>
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem asChild>
-                        <Link to={`/employees/${item.id}`}>
-                          Detail
+                    <DropdownMenuContent align="end" className="w-[200px]">
+                      <DropdownMenuItem>
+                        <Link to={`/employees/${item.id}`} className="flex items-center gap-2">
+                          <FilePenIcon className="h-4 w-4" />
+                          <span>Detail</span>
                         </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteEmployee(item.id)}>
+                          <TrashIcon className="h-4 w-4" />
+                          <span>Delete</span>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

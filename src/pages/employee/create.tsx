@@ -33,6 +33,7 @@ const CreateEmployee = () => {
       religion: "",
       nik: "",
       address: "",
+      password: ""
     },
   });
   const formEmployment = useForm<EmploymentSchema>({
@@ -50,20 +51,32 @@ const CreateEmployee = () => {
   const formPayroll = useForm<PayrollSchema>({
     resolver: zodResolver(payrollSchema),
     defaultValues: {
-      salary: "",
+      salary: Number(""),
       bank_name: "",
-      account_number: "",
+      account_number: Number(""),
     },
   });
 
   const onSubmit = async () => {
+    const payrollValues = formPayroll.getValues();
+    const parsedPayrollValues = {
+      ...payrollValues,
+      salary: Number(payrollValues.salary),
+      account_number: Number(payrollValues.account_number),
+    };
+  
+    console.log({
+      personal: formPersonal.getValues(),
+      employment: formEmployment.getValues(),
+      payroll: parsedPayrollValues,
+    });
     if (!isLastStep) return next();
 
     try {
       const body = {
-        ...formPersonal.getValues(),
-        ...formEmployment.getValues(),
-        ...formPayroll.getValues(),
+        personal: formPersonal.getValues(),
+        employment: formEmployment.getValues(),
+        payroll: parsedPayrollValues,
       };
       await createEmployee(body);
       console.log(body)

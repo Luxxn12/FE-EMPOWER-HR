@@ -126,6 +126,17 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
               />
             )}
           </CustomFormField>
+          <CustomFormField control={form.control} name="password" label="Password">
+            {(field) => (
+              <Input
+                {...field}
+                placeholder="Create Password"
+                disabled={form.formState.isSubmitting}
+                aria-disabled={form.formState.isSubmitting}
+                value={field.value as string}
+              />
+            )}
+          </CustomFormField>
           <CustomFormField
             control={form.control}
             name="address"

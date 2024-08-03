@@ -1,11 +1,18 @@
 import { Response } from "@/utils/types/apis";
-import { openAPI } from "../axiosWithConfig";
-import { EmploymentById, EmploymentIdSchema, FormDataCreate, IEmployeeById, IEmployeeGetAll, UpdatePersonal, UpdatePersonalSchema } from "./type";
+import { axiosConfig, openAPI, setAxiosConfig } from "../axiosWithConfig";
+import { EmploymentById, EmploymentIdSchema, IEmployeeById, IEmployeeGetAll, RootDataEmployee, UpdatePersonal, UpdatePersonalSchema } from "./type";
 import { checkProperty, valueFormatData } from "@/utils/functions";
+
+const token = localStorage.getItem("token");
 
 export const getAllEmployee = async () => {
   try {
-    const response = await openAPI.get("/employee");
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+    const response = await axiosConfig.get("/employee");
     return response.data as Response<IEmployeeGetAll[]>;
   } catch (error: any) {
     const message = error.response?.data?.message || "An error occurrend";
@@ -44,9 +51,14 @@ export const getEmploymentById = async (employee_id: any) => {
   }
 };
 
-export const createEmployee = async (body: FormDataCreate) => {
+export const createEmployee = async (body: RootDataEmployee) => {
   try {
-    const resp = await openAPI.post<Response<any>>("/employee", body);
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+    const resp = await axiosConfig.post<Response<any>>("/employee", body);
     return resp.data;
   } catch (error: any) {
     if (error.response && error.response.data) {
@@ -107,4 +119,14 @@ export const updateEmploymenId = async ( body: EmploymentIdSchema, employee_id: 
     throw error;
   }
 };
+
+export const deleteEmployee = async (employee_id: number) => {
+  try {
+    const resp = await axiosConfig.delete(`/employee/${employee_id}`);
+    return resp.data as Response<IEmployeeGetAll>
+  } catch (error: any) {
+    const { message } = error.response.data;
+    throw Error(message);
+  }
+}
 
