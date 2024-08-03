@@ -91,17 +91,17 @@ const Employees = () => {
       title="Empower HR - Employees"
       description="Empower HR - Employees"
     >
-      {role == "admin" ? (
         <div className="flex justify-between">
           <h5 className="text-2xl font-semibold">Employees</h5>
+      {role == "admin" ? (
           <Link
             to="/employees/create"
             className="bg-skyBlue text-[#EEEEEE] hover:bg-skyBlue/90  h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
           >
             Add Employee
           </Link>
-        </div>
       ) : null}
+        </div>
       <div className="flex justify-end my-8">
         <div className="flex justify-between gap-5">
           <Button variant="outline" onClick={generatePdf}>
@@ -182,23 +182,23 @@ const Employees = () => {
                           <span>Detail</span>
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link to={`/employees/edit-employee/${item.id}`} className="flex items-center gap-2">
-                          <FilePenIcon className="h-4 w-4" />
-                          <span>Edit Personal</span>
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link to={`/employees/edit-employment/${item.id}`} className="flex items-center gap-2">
-                          <FilePenIcon className="h-4 w-4" />
-                          <span>Edit Employment</span>
-                        </Link>
-                      </DropdownMenuItem>
 
                       {role == "admin" ? (
                         <>
+                        <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Link to={`/employees/edit-employee/${item.id}`} className="flex items-center gap-2">
+                              <FilePenIcon className="h-4 w-4" />
+                              <span>Edit Personal</span>
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Link to={`/employees/edit-employment/${item.id}`} className="flex items-center gap-2">
+                              <FilePenIcon className="h-4 w-4" />
+                              <span>Edit Employment</span>
+                            </Link>
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteEmployee(item.id)}>
                             <div className="flex items-center gap-2">
