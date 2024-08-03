@@ -104,6 +104,7 @@ export interface Personal {
   religion: string;
   nik: string;
   address: string;
+  password: string
 }
 
 export interface Employment {
@@ -119,7 +120,7 @@ export interface Employment {
 export interface Payroll {
   salary: number;
   bank_name: string;
-  account_number: string;
+  account_number: number;
 }
 
 export interface FormDataCreate {
@@ -140,9 +141,9 @@ export interface FormDataCreate {
   department: string;
   approval_line: string;
   job_position: string;
-  salary: string;
+  salary: number;
   bank_name: string;
-  account_number: string;
+  account_number: number;
 }
 
 export const personalSchema = z.object({
@@ -165,6 +166,11 @@ export const personalSchema = z.object({
     .min(1, { message: "NIK is required" })
     .regex(/^\d{16}$/, "Invalid NIK"),
   address: z.string().min(1, { message: "Address is required" }),
+  password: z
+    .string()
+    .min(8, { message: "Password harus minimal 8 karakter" })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial"),
 });
 
 export const employmentSchema = z.object({
@@ -184,11 +190,9 @@ export const employmentSchema = z.object({
 });
 
 export const payrollSchema = z.object({
-  salary: z.string().min(1, { message: "Please enter your salary" }),
-  bank_name: z.string().min(1, { message: "Please select your bank name" }),
-  account_number: z
-    .string()
-    .min(1, { message: " Please enter your account number " }),
+  salary: z.coerce.number().min(1, { message: "Salary hadiah wajib diisi" }),
+  bank_name: z.string().min(1, { message: "Pilih nama bank Anda" }),
+  account_number: z.coerce.number().min(1, { message: "Account hadiah wajib diisi" }),
 });
 
 export const employmentIdSchema = z.object({
