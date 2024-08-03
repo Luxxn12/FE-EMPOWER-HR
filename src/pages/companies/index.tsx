@@ -58,14 +58,10 @@ export default function Companies() {
               </div>
               <div className="flex flex-col mb-4">
                 <text className="font-bold">Signature</text>
-                <img src={isData?.signature} alt={isData?.signature} />
+                <img className="mt-1" src={isData?.signature} alt={isData?.signature} width={"50%"} height={"auto"} />
               </div>
             </div>
             <div className="flex flex-col xl:py-4 py-0">
-              <div className="flex flex-col mb-4">
-                <text className="font-bold">Address</text>
-                <text className="mt-1">{isData?.address}</text>
-              </div>
               <div className="flex flex-col mb-4">
                 <text className="font-bold">Npwp</text>
                 <text className="mt-1">{isData?.npwp}</text>

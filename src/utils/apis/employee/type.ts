@@ -25,17 +25,25 @@ export interface IEmployeeById {
   religion: string;
   nik: number;
   address: string;
-  EmploymentData: EmploymentById[];
+  employmentData: {
+    employment_status: string;
+    join_date: string;
+    department: string;
+    job_position: string;
+    job_level: string;
+    schedule: string;
+    approval_line: string;
+  }[];
 }
 
 export interface EmploymentById {
+  employment_status: string;
   join_date: string;
   department: string;
   job_position: string;
   job_level: string;
   schedule: string;
   approval_line: string;
-  manager: string;
 }
 
 export const updatePersonalSchema = z.object({
@@ -166,11 +174,6 @@ export const personalSchema = z.object({
     .min(1, { message: "NIK is required" })
     .regex(/^\d{16}$/, "Invalid NIK"),
   address: z.string().min(1, { message: "Address is required" }),
-  password: z
-    .string()
-    .min(8, { message: "Password harus minimal 8 karakter" })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "Password harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial"),
 });
 
 export const employmentSchema = z.object({
@@ -196,19 +199,17 @@ export const payrollSchema = z.object({
 });
 
 export const employmentIdSchema = z.object({
-  manager: z
-    .string()
-    .min(1, { message: "Please select your employment status" }),
-  schedule: z.string().min(1, { message: "Please select your work schedule" }),
+  employment_status: z.string().min(1, { message: "Please select your work schedule" }),
   join_date: z.string().min(1, { message: "Please enter your join date" }),
-  job_level: z.string().min(1, { message: "Please select your job level" }),
   department: z.string().min(1, { message: "Please select your department" }),
+  job_position: z
+  .string()
+  .min(1, { message: "Please enter your job position" }),
+  job_level: z.string().min(1, { message: "Please select your job level" }),
+  schedule: z.string().min(1, { message: "Please select your work schedule" }),
   approval_line: z
     .string()
     .min(1, { message: "Please select your approval line" }),
-  job_position: z
-    .string()
-    .min(1, { message: "Please enter your job position" }),
 });
 
 export type PersonalSchema = z.infer<typeof personalSchema>;

@@ -33,7 +33,6 @@ const CreateEmployee = () => {
       religion: "",
       nik: "",
       address: "",
-      password: ""
     },
   });
   const formEmployment = useForm<EmploymentSchema>({
@@ -64,7 +63,7 @@ const CreateEmployee = () => {
       salary: Number(payrollValues.salary),
       account_number: Number(payrollValues.account_number),
     };
-  
+
     console.log({
       personal: formPersonal.getValues(),
       employment: formEmployment.getValues(),
@@ -74,7 +73,11 @@ const CreateEmployee = () => {
 
     try {
       const body = {
-        personal: formPersonal.getValues(),
+        // personal: formPersonal.getValues(),
+        personal: {
+          ...formPersonal.getValues(),
+          password: 'default-password',
+        },
         employment: formEmployment.getValues(),
         payroll: parsedPayrollValues,
       };

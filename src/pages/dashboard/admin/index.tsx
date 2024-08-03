@@ -96,25 +96,25 @@ function DashboardAdmin() {
       </div>
       <div className='grid lg:grid-cols-4 grid-cols-2 gap-5 mt-8'>
         <div className='py-2 px-5 bg-[#E4E9F7] border border-gray[#D5D5D5] rounded-sm'>
-          <text>Attendace</text>
+          <p>Attendace</p>
           <div className='flex justify-center py-3'>
             <h1 className='font-bold text-5xl'>{dataDashboardAdmin?.attendance.toFixed()}</h1>
           </div>
         </div>
         <div className='py-2 px-5 bg-[#E3FBE4] border border-gray[#D5D5D5] rounded-sm'>
-          <text>Leaves</text>
+          <p>Leaves</p>
           <div className='flex justify-center py-3'>
             <h1 className='font-bold text-5xl'>{dataDashboardAdmin?.leaves.toFixed()}</h1>
           </div>
         </div>
         <div className='py-2 px-5 bg-[#E8F3F3] border border-gray[#D5D5D5] rounded-sm'>
-          <text>Payroll</text>
+          <p>Payroll</p>
           <div className='flex justify-center py-3'>
             <h1 className='font-bold text-5xl'>{dataDashboardAdmin?.payroll.toFixed()}</h1>
           </div>
         </div>
         <div className='py-2 px-5 bg-[#F9F6D2] border border-gray[#D5D5D5] rounded-sm'>
-          <text>Employees</text>
+          <p>Employees</p>
           <div className='flex justify-center py-3'>
             <h1 className='font-bold text-5xl'>{dataDashboardAdmin?.total_users}</h1>
           </div>
@@ -176,19 +176,19 @@ function DashboardAdmin() {
               <div className="flex justify-between">
                 <div className="flex gap-3">
                   <Squircle className="bg-[#5D54D5] text-[#5D54D5] rounded-md" />
-                  <text>Male</text>
+                  <p>Male</p>
                 </div>
                 <div>
-                  <text>{maleVisitors}</text>
+                  <p>{maleVisitors}</p>
                 </div>
               </div>
               <div className="flex justify-between">
                 <div className="flex gap-3">
                   <Squircle className="bg-[#029BDE] text-[#029BDE] rounded-md" />
-                  <text>Female</text>
+                  <p>Female</p>
                 </div>
                 <div>
-                  <text>{femaleVisitors}</text>
+                  <p>{femaleVisitors}</p>
                 </div>
               </div>
             </div>

@@ -23,7 +23,6 @@ export const editCompaniesSchema = z.object({
     .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
       message: "NPWP must be a valid number",
     }),
-  address: z.string().min(1, { message: "Address is required" }),
   email: z
     .string()
     .min(1, { message: "Email is required" })
@@ -55,7 +54,6 @@ export interface ICompanies {
   company_picture: string;
   company_name: string;
   npwp: number;
-  address: string;
   email: string;
   phone: string;
   company_address: string;

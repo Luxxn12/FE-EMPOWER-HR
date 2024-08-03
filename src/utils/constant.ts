@@ -20,7 +20,7 @@ export const categorisSchedule = [
 
 export const categoriesJobLevel = [
     "manager",
-    "Sekertaris"
+    "staff"
 ]
 
 export const categoriesApproval = [
