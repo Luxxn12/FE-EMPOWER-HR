@@ -45,6 +45,8 @@ export default function DetailLeave() {
     fetchLeave();
   }, [numberId]);
 
+  console.log(leave)
+
   const generateLeavePdf = () => {
     const doc = new jsPDF();
     const margin = 14;
@@ -128,7 +130,7 @@ export default function DetailLeave() {
 
   const handleApprove = async () => {
     try {
-      await updateLeaveStatus(numberId!, "approved", "cuti diterima");
+      await updateLeaveStatus(128!, "approved", "cuti diterima");
       setLeave({ ...leave!, status: "approved" });
     } catch (error: any) {
       toast.error(error.message);
@@ -141,7 +143,7 @@ export default function DetailLeave() {
       return;
     }
     try {
-      await updateLeaveStatus(numberId!, "rejected", rejectReason);
+      await updateLeaveStatus(128!, "rejected", rejectReason);
       setLeave({ ...leave!, status: "rejected" });
     } catch (error: any) {
       toast.error(error.message);

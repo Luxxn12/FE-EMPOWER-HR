@@ -41,7 +41,7 @@ export default function AddSchedule() {
       break_start: "",
       break_end: "",
       repeat_until: "",
-      affective_date: "",
+      effective_date: "",
       description: "",
     },
   });
@@ -49,7 +49,6 @@ export default function AddSchedule() {
   const fetchData = async () => {
     try {
       const response = await getCompanies();
-      // Reset form values after fetching companies data
       reset({
         company_id: response.data.id,
         name: "",
@@ -58,7 +57,7 @@ export default function AddSchedule() {
         break_start: "",
         break_end: "",
         repeat_until: "",
-        affective_date: "",
+        effective_date: "",
         description: "",
       });
     } catch (error) {
@@ -74,9 +73,9 @@ export default function AddSchedule() {
     setIsLoading(true);
     try {
       const resp = await addSchedule(data);
-      console.log(resp);
       navigate("/attendance/settings");
       toast.success(resp.message);
+      window.location.reload();
     } catch (error: any) {
       toast.error(error);
     } finally {
@@ -124,15 +123,15 @@ export default function AddSchedule() {
                 selected={date}
                 onSelect={(d) => {
                   setDate(d as Date);
-                  setValue("affective_date", d ? format(d, "dd-MM-yyyy") : "");
+                  setValue("effective_date", d ? format(d, "dd-MM-yyyy") : "");
                 }}
                 initialFocus
               />
             </PopoverContent>
           </Popover>
-          {errors.affective_date && (
+          {errors.effective_date && (
             <p className="text-red-500 text-sm">
-              {errors.affective_date.message}
+              {errors.effective_date.message}
             </p>
           )}
         </div>

@@ -36,6 +36,8 @@ export default function Leaves() {
     setSearchQuery(event.target.value);
   };
 
+  console.log(leaves)
+
   const filteredLeaves = leaves.filter((item) => {
     const query = searchQuery.toLowerCase();
     return (

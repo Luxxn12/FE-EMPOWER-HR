@@ -33,6 +33,8 @@ export default function LeavesUser() {
     fetchLeaves();
   }, []);
 
+  console.log(leaves)
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
@@ -57,7 +59,7 @@ export default function LeavesUser() {
       description="Empower HR - Employee Leaves"
     >
       <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Leaves</h1>
+        <h1 className="text-2xl font-bold">Leaves user</h1>
         <div>
           <Button onClick={() => navigate("/leaves/request-leaves")}>
             Request leave

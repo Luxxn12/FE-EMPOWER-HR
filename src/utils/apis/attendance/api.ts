@@ -1,5 +1,5 @@
 import { Response } from "@/utils/types/apis";
-import { openAPI, setAxiosConfig } from "../axiosWithConfig";
+import { axiosConfig, setAxiosConfig } from "../axiosWithConfig";
 import { IAttendance } from "./type";
 
 const token = localStorage.getItem("token");
@@ -12,7 +12,7 @@ export const getAttendance = async () => {
 
     setAxiosConfig(token);
 
-    const resp = await openAPI.get("/attendance");
+    const resp = await axiosConfig.get("/attendance");
 
     return resp.data as Response<IAttendance[]>;
   } catch (error: any) {
@@ -31,7 +31,7 @@ export const getUserAttendance = async () => {
     }
 
     setAxiosConfig(token);
-    const resp = await openAPI.get("/attendance/user");
+    const resp = await axiosConfig.get("/attendance/user");
 
     return resp.data as Response<IAttendance[]>;
   } catch (error: any) {
@@ -50,7 +50,7 @@ export const getAttendanceById = async (id: number) => {
     }
 
     setAxiosConfig(token);
-    const resp = await openAPI.get(`/attendance/${id}`);
+    const resp = await axiosConfig.get(`/attendance/${id}`);
     return resp.data as Response<IAttendance>;
   } catch (error: any) {
     if (error.response && error.response.data) {
@@ -63,7 +63,7 @@ export const getAttendanceById = async (id: number) => {
 
 export const clockIn = async (data: Partial<IAttendance>) => {
   try {
-    const resp = await openAPI.post("/attendance", data);
+    const resp = await axiosConfig.post("/attendance", data);
     return resp.data as Response<IAttendance>;
   } catch (error: any) {
     if (error.response && error.response.data) {
@@ -76,7 +76,7 @@ export const clockIn = async (data: Partial<IAttendance>) => {
 
 export const clockOut = async (id: number, data: Partial<IAttendance>) => {
   try {
-    const resp = await openAPI.put(`/attendance/${id}`, data);
+    const resp = await axiosConfig.put(`/attendance/${id}`, data);
     return resp.data as Response<IAttendance>;
   } catch (error: any) {
     if (error.response && error.response.data) {

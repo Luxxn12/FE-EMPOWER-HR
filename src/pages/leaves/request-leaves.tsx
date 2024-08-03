@@ -1,7 +1,6 @@
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
@@ -19,6 +18,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { id } from "date-fns/locale";
 
 export default function RequestLeaves() {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
@@ -43,7 +43,22 @@ export default function RequestLeaves() {
   const onSubmit = async (data: LeavesSchema) => {
     setIsLoading(true);
     try {
-      const resp = await requestLeaves(data);
+      const formattedData = {
+        start_date: startDate
+          ? format(startDate, "d MMMM yyyy", { locale: id })
+          : "",
+        end_date: endDate ? format(endDate, "d MMMM yyyy", { locale: id }) : "",
+        reason: data.reason || "",
+      };
+
+      console.log(formattedData)
+
+      if (!formattedData.start_date || !formattedData.end_date) {
+        toast.error("Please select both start and end dates.");
+        return;
+      }
+
+      const resp = await requestLeaves(formattedData);
       navigate("/leaves-user");
       toast.success(resp.message);
     } catch (error: any) {
@@ -72,7 +87,7 @@ export default function RequestLeaves() {
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {startDate ? (
-                      format(startDate, "PPP")
+                      format(startDate, "d MMMM yyyy", { locale: id })
                     ) : (
                       <span>Pick a date</span>
                     )}
@@ -106,7 +121,7 @@ export default function RequestLeaves() {
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {endDate ? (
-                      format(endDate, "PPP")
+                      format(endDate, "d MMMM yyyy", { locale: id })
                     ) : (
                       <span>Pick a date</span>
                     )}

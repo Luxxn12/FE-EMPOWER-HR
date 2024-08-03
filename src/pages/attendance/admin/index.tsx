@@ -205,7 +205,6 @@ export default function Attendance() {
         <div className="flex xl:flex-row flex-col justify-between">
           <div className="flex gap-5">
             <DatePicker onDateChange={handleDateChange} />
-            {/* <Filter /> */}
           </div>
           <div className="flex gap-5 mt-5 xl:mt-0">
             <Button variant="outline" onClick={generateAllAttendancePdf}>
@@ -306,7 +305,7 @@ export default function Attendance() {
         </Table>
       </div>
 
-      <div className="flex justify-start">
+      <div className="flex mt-2 justify-start">
         <div className="text-xs text-gray-400 mb-2">
           Showing <strong>{(currentPage - 1) * itemsPerPage + 1}</strong> to{" "}
           <strong>{currentPage * itemsPerPage}</strong> of{" "}

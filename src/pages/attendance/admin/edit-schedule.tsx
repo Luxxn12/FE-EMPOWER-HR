@@ -25,14 +25,28 @@ import { updateSchedule } from "@/utils/apis/schedule/api";
 import { useAuth } from "@/utils/contexts/token";
 import { toast } from "sonner";
 import { getCompanies } from "@/utils/apis/companies/api";
+import { ICompanies } from "@/utils/apis/companies/type";
 
 export default function EditSchedule() {
   const [date, setDate] = useState<Date | undefined>();
+  const [company, setCompany] = useState<ICompanies>();
   const [isLoading, setIsLoading] = useState(false);
+  const { schedules, fetchSchedules } = useAuth();
   const { schedule_id } = useParams();
   const navigate = useNavigate();
 
-  const { schedules, fetchSchedules } = useAuth();
+  const fetchData = async () => {
+    try {
+      const response = await getCompanies();
+      setCompany(response.data);
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const {
     register,
@@ -42,6 +56,17 @@ export default function EditSchedule() {
     reset,
   } = useForm<ScheduleSchema>({
     resolver: zodResolver(scheduleSchema),
+    defaultValues: {
+      company_id: company?.id,
+      name: "",
+      schedule_in: "",
+      schedule_out: "",
+      break_start: "",
+      break_end: "",
+      repeat_until: "",
+      effective_date: "",
+      description: "",
+    },
   });
 
   useEffect(() => {
@@ -62,26 +87,30 @@ export default function EditSchedule() {
               break_start: schedule.break_start,
               break_end: schedule.break_end,
               repeat_until: schedule.repeat_until,
-              affective_date: schedule.effective_date,
+              effective_date: schedule.effective_date,
               description: schedule.description || "",
             });
 
             const effectiveDate = parse(
-              schedule.affective_date,
+              schedule.effective_date,
               "dd-MM-yyyy",
               new Date()
             );
+
+            if (isNaN(effectiveDate.getTime())) {
+              console.error(
+                "Invalid effective date format:",
+                schedule.effective_date
+              );
+              return;
+            }
+
             setDate(effectiveDate);
-            setValue("affective_date", format(effectiveDate, "dd-MM-yyyy"));
+            setValue("effective_date", format(effectiveDate, "dd-MM-yyyy"));
           }
         }
       } catch (error: any) {
-        console.error(error);
-        // const errorMessage =
-        //   error instanceof Error
-        //     ? error.message
-        //     : "An unexpected error occurred.";
-        // toast.error(errorMessage);
+        console.error("Error fetching schedule:", error);
       }
     }
     fetchSchedule();
@@ -145,15 +174,15 @@ export default function EditSchedule() {
                 selected={date}
                 onSelect={(d) => {
                   setDate(d as Date);
-                  setValue("affective_date", d ? format(d, "dd-MM-yyyy") : "");
+                  setValue("effective_date", d ? format(d, "dd-MM-yyyy") : "");
                 }}
                 initialFocus
               />
             </PopoverContent>
           </Popover>
-          {errors.affective_date && (
+          {errors.effective_date && (
             <p className="text-red-500 text-sm">
-              {errors.affective_date.message}
+              {errors.effective_date.message}
             </p>
           )}
         </div>
