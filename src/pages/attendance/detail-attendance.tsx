@@ -18,22 +18,35 @@ export default function DetailAttendance() {
   const { attendance_id } = useParams<{ attendance_id: string }>();
   const numberId = attendance_id ? parseInt(attendance_id, 10) : null;
 
-  const attendanceToUse =
-    Array.isArray(attendance) && attendance.length > 0 ? attendance[0] : null;
-
-  const center: LatLngTuple = [
-    -6.2690335997433655 ?? 0,
-    106.80731123390241 ?? 0,
-  ];
+  const center: LatLngTuple = [-6.25997 ?? 0, 106.778944 ?? 0];
   const zoom = 13;
 
   const fetchAttendance = async () => {
     try {
       setLoading(true);
-      const resp = await getAttendanceById(numberId!);
-      setAttendance(resp.data);
 
-      await fetchAddress(-6.2690335997433655, 106.80731123390241);
+      const response = await getAttendanceById(numberId!);
+
+      const data = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+
+      if (data.length > 0) {
+        const attendance = data[0];
+
+        setAttendance(attendance);
+
+        const lat = parseFloat(attendance.lat || "0");
+        const long = parseFloat(attendance.long || "0");
+
+        if (isNaN(lat) || isNaN(long)) {
+          throw new Error("Invalid latitude or longitude");
+        }
+
+        await fetchAddress(lat, long);
+      } else {
+        throw new Error("No attendance data found");
+      }
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -63,58 +76,63 @@ export default function DetailAttendance() {
   };
 
   return (
-    <MainLayout title="" description="">
+    <MainLayout title="Empower HR - Attendance" description="Empower HR - Detail Attendance">
       <h1 className="text-2xl font-bold mb-4">Detail Attendance</h1>
-      {loading && <>Loading</>}
-      <MapContainer
-        center={center}
-        zoom={zoom}
-        style={{ height: "50vh", width: "100%" }}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker position={center}>
-          <Popup>{address ? address : "Fetching address..."}</Popup>
-        </Marker>
-      </MapContainer>
-
-      <div className="flex flex-col xl:py-4 py-2">
-        {attendance ? (
-          <>
-            <div className="flex flex-col mb-4">
-              <p className="font-bold">Clock in time</p>
-              <p className="mt-1">{attendanceToUse.clock_in}</p>
-            </div>
-            <div className="flex flex-col mb-4">
-              <p className="font-bold">Clock out time</p>
-              <p className="mt-1">{attendanceToUse.clock_out}</p>
-            </div>
-            <div className="flex flex-col mb-4">
-              <p className="font-bold">Shift</p>
-              <p className="mt-1">
-                {schedules[0]?.schedule_in} - {schedules[0]?.schedule_out}
-              </p>
-            </div>
-            <div className="flex flex-col mb-4">
-              <p className="font-bold">Location GPS name</p>
-              <p className="mt-1">{address || "Fetching address..."}</p>
-            </div>
-            <div className="flex flex-col mb-4">
-              <p className="font-bold">Note</p>
-              <p className="mt-1 xl:w-7/12">{attendanceToUse.notes}</p>
-            </div>
-          </>
-        ) : (
-          <div
-            className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-            role="alert"
+      {loading ? (
+        <p>Please wait...</p>
+      ) : (
+        <>
+          <MapContainer
+            center={center}
+            zoom={zoom}
+            style={{ height: "50vh", width: "100%" }}
           >
-            <span className="font-medium">Warning!</span> Cannot find data!
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={center}>
+              <Popup>{address ? address : "Fetching address..."}</Popup>
+            </Marker>
+          </MapContainer>
+
+          <div className="flex flex-col xl:py-4 py-2">
+            {attendance ? (
+              <>
+                <div className="flex flex-col mb-4">
+                  <p className="font-bold">Clock in time</p>
+                  <p className="mt-1">{attendance.clock_in}</p>
+                </div>
+                <div className="flex flex-col mb-4">
+                  <p className="font-bold">Clock out time</p>
+                  <p className="mt-1">{attendance.clock_out}</p>
+                </div>
+                <div className="flex flex-col mb-4">
+                  <p className="font-bold">Shift</p>
+                  <p className="mt-1">
+                    {schedules[0]?.schedule_in} - {schedules[0]?.schedule_out}
+                  </p>
+                </div>
+                <div className="flex flex-col mb-4">
+                  <p className="font-bold">Location GPS name</p>
+                  <p className="mt-1">{address || "Fetching address..."}</p>
+                </div>
+                <div className="flex flex-col mb-4">
+                  <p className="font-bold">Note</p>
+                  <p className="mt-1 xl:w-7/12">{attendance.notes}</p>
+                </div>
+              </>
+            ) : (
+              <div
+                className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert"
+              >
+                <span className="font-medium">Warning!</span> Cannot find data!
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </MainLayout>
   );
 }

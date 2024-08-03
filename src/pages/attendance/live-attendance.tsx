@@ -15,59 +15,46 @@ export default function LiveAttendance() {
   const [notes, setNotes] = useState("");
   const [coordinates, setCoordinates] = useState({ long: "", lat: "" });
   const schedule = schedules[0];
-  const [isActive, setIsActive] = useState(() => {
-    const savedValue = localStorage.getItem("isActive");
-    return savedValue !== null ? JSON.parse(savedValue) : true;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("isActive", JSON.stringify(isActive));
-  }, [isActive]);
-
-  const handleActivate = () => {
-    setIsActive(true);
-  };
-
-  const handleDeactivate = () => {
-    setIsActive(false);
-  };
-
-  const now = new Date();
-  const formattedDate = [
-    now.getFullYear(),
-    (now.getMonth() + 1).toString().padStart(2, "0"),
-    now.getDate().toString().padStart(2, "0"),
-  ].join("-");
-  const formattedTime = [
-    now.getHours().toString().padStart(2, "0"),
-    now.getMinutes().toString().padStart(2, "0"),
-    now.getSeconds().toString().padStart(2, "0"),
-  ].join(":");
-
   const [attendanceIdToUse, setAttendanceIdToUse] = useState<number | null>(
     null
   );
 
+  const formattedDate = new Date()
+    .toLocaleDateString("en-GB")
+    .split("/")
+    .join("-");
+
+  const formattedTime = new Date()
+    .toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+    .split(":")
+    .join(":");
+
   const fetchUserAttendance = async () => {
     try {
       const resp = await getUserAttendance();
-      const lastIndex = resp.data.length - 1;
-      if (lastIndex >= 0) {
-        const lastItemId = resp.data[lastIndex].id;
-        setAttendanceIdToUse(lastItemId);
+      console.log(resp);
+
+      const today = new Date().toISOString().split("T")[0];
+      console.log(today);
+
+      const lastTodayRecord = resp.data
+        .filter((record: any) => {
+          return record.date.startsWith(today) && !record.clock_out;
+        })
+        .slice(-1)[0];
+
+      if (lastTodayRecord) {
+        setAttendanceIdToUse(lastTodayRecord.id);
       } else {
         setAttendanceIdToUse(null);
-        toast.error("Empty id to use");
       }
     } catch (error: any) {
       toast.error(error.message);
     }
   };
-
-  useEffect(() => {
-    fetchUserAttendance();
-    getLocation();
-  }, []);
 
   const getLocation = () => {
     if (navigator.geolocation) {
@@ -79,7 +66,7 @@ export default function LiveAttendance() {
           });
         },
         (error: any) => {
-          toast.error(error);
+          toast.error(error.message);
         }
       );
     } else {
@@ -87,9 +74,16 @@ export default function LiveAttendance() {
     }
   };
 
+  useEffect(() => {
+    fetchUserAttendance();
+    getLocation();
+  }, []);
+
+  console.log(coordinates)
+
   const handleClockIn = async () => {
-    if (!isActive) {
-      toast.error("Already clocked in or inactive.");
+    if (attendanceIdToUse !== null) {
+      toast.error("Already clocked in.");
       return;
     }
 
@@ -102,14 +96,14 @@ export default function LiveAttendance() {
         notes,
       });
       toast.success(resp.message);
-      handleDeactivate();
+      fetchUserAttendance();
     } catch (error: any) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
   const handleClockOut = async () => {
-    if (isActive) {
+    if (attendanceIdToUse === null) {
       toast.error("You need to clock in first.");
       return;
     }
@@ -118,18 +112,18 @@ export default function LiveAttendance() {
       if (schedule) {
         const resp = await clockOut(attendanceIdToUse!, {
           clock_out: formattedTime,
-          status: "on-time",
+          status: "success",
           date: formattedDate,
           long: coordinates.long,
           lat: coordinates.lat,
         });
         toast.success(resp.message);
-        handleActivate();
+        setAttendanceIdToUse(null);
       } else {
         toast.error("No schedule available to clock out.");
       }
     } catch (error: any) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -166,13 +160,13 @@ export default function LiveAttendance() {
           <div className="lg:px-8 px-4 py-5 grid grid-cols-2 gap-5">
             <Button
               onClick={handleClockIn}
-              disabled={!isActive}
+              disabled={attendanceIdToUse !== null}
             >
               Clock In
             </Button>
             <Button
               onClick={handleClockOut}
-              disabled={isActive}
+              disabled={attendanceIdToUse === null}
             >
               Clock Out
             </Button>

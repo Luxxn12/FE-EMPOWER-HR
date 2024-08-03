@@ -1,5 +1,5 @@
 import { Response } from "@/utils/types/apis";
-import { axiosConfig, openAPI, setAxiosConfig } from "../axiosWithConfig";
+import { axiosConfig, setAxiosConfig } from "../axiosWithConfig";
 import { ISchedule, ScheduleSchema } from "./type";
 
 const token = localStorage.getItem("token");
@@ -54,7 +54,7 @@ export const addSchedule = async (
     }
 
     setAxiosConfig(token);
-    const resp = await openAPI.post<Response<any>>("/schedule", body);
+    const resp = await axiosConfig.post<Response<any>>("/schedule", body);
     return resp.data;
   } catch (error: any) {
     if (error.resp && error.resp.data) {
@@ -75,7 +75,25 @@ export const updateSchedule = async (
     }
 
     setAxiosConfig(token);
-    const resp = await openAPI.put<Response<any>>(`/schedule/${id}`, body);
+    const resp = await axiosConfig.put<Response<any>>(`/schedule/${id}`, body);
+    return resp.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const { message } = error.response.data;
+      throw new Error(message);
+    }
+    throw error;
+  }
+};
+
+export const deleteSchedule = async (id: number): Promise<Response<any>> => {
+  try {
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+    const resp = await axiosConfig.delete<Response<any>>(`/schedule/${id}`);
     return resp.data;
   } catch (error: any) {
     if (error.response && error.response.data) {

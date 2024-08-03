@@ -52,6 +52,7 @@ export default function UserAttendance() {
   const fetchAttendance = async () => {
     try {
       const resp = await getUserAttendance();
+      console.log(resp);
       const attendanceData = resp.data || [];
       setAttendance(attendanceData);
       setCurrentPage(resp.meta?.[0]?.currentPage || 1);
@@ -65,7 +66,9 @@ export default function UserAttendance() {
     fetchAttendance();
   }, []);
 
-  const handleDateChange = (date: Date | undefined) => setSelectedDate(date);
+  console.log(attendance)
+
+  // const handleDateChange = (date: Date | undefined) => setSelectedDate(date);
   const handlePageChange = (page: number) => setCurrentPage(page);
 
   const categorizeAttendance = (
@@ -125,6 +128,28 @@ export default function UserAttendance() {
   const generateAllAttendancePdf = () => {
     const doc = new jsPDF();
 
+    const title = "Attendance Report";
+    const description =
+      "This document contains the attendance data for the month.";
+    const currentDate = new Date();
+    const monthYear = currentDate.toLocaleString("default", {
+      month: "long",
+      year: "numeric",
+    });
+
+    // Add title
+    doc.setFontSize(16);
+    doc.text(title, 14, 20);
+
+    // Add description
+    doc.setFontSize(12);
+    doc.text(description, 14, 30);
+
+    // Add month and year
+    doc.setFontSize(12);
+    doc.text(monthYear, 14, 40);
+
+    // Prepare table body
     const tableBody = attendance.map((item) => [
       item.employementData && item.employementData[0]
         ? item.employementData[0].name
@@ -138,9 +163,13 @@ export default function UserAttendance() {
     ]);
 
     autoTable(doc, {
+      startY: 50,
       head: [["Employee Name", "Employee ID", "Date", "Clock In", "Clock Out"]],
       body: tableBody,
     });
+
+    const finalY = (doc as any).autoTable.previous.finalY;
+    doc.text("Signature: ____________________", 14, finalY + 20);
 
     doc.save("all_attendance_data.pdf");
   };
@@ -150,15 +179,7 @@ export default function UserAttendance() {
       title="Attendance Management"
       description="Manage and view attendance records."
     >
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Attendance user</h1>
-        <Button
-          variant="outline"
-          onClick={() => navigate("/attendance/settings")}
-        >
-          Settings
-        </Button>
-      </div>
+      <h1 className="text-2xl font-bold">Attendance user</h1>
 
       <div className="bg-white p-6 mt-3 border border-gray-200 rounded-md overflow-hidden">
         <div className="flex flex-wrap justify-between">
@@ -201,27 +222,21 @@ export default function UserAttendance() {
         </div>
       </div>
 
-      <div className="py-4">
-        <div className="flex xl:flex-row flex-col justify-between">
-          <div className="flex gap-5">
-            <DatePicker onDateChange={handleDateChange} />
-            {/* <Filter /> */}
-          </div>
-          <div className="flex gap-5 mt-5 xl:mt-0">
-            <Button variant="outline" onClick={generateAllAttendancePdf}>
-              <DownloadIcon className="h-5 w-5" />
-            </Button>
-            <div className="relative">
-              <SearchIcon
-                size={20}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-              />
-              <Input
-                type="search"
-                placeholder="Search"
-                className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
-              />
-            </div>
+      <div className="flex py-3 xl:flex-row flex-col justify-end">
+        <div className="flex gap-5 mt-5 xl:mt-0">
+          <Button variant="outline" onClick={generateAllAttendancePdf}>
+            <DownloadIcon className="h-5 w-5" />
+          </Button>
+          <div className="relative">
+            <SearchIcon
+              size={20}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
+            <Input
+              type="search"
+              placeholder="Search"
+              className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
+            />
           </div>
         </div>
       </div>
@@ -306,7 +321,7 @@ export default function UserAttendance() {
         </Table>
       </div>
 
-      <div className="flex justify-start">
+      <div className="flex justify-start mt-2">
         <div className="text-xs text-gray-400 mb-2">
           Showing <strong>{(currentPage - 1) * itemsPerPage + 1}</strong> to{" "}
           <strong>{currentPage * itemsPerPage}</strong> of{" "}
