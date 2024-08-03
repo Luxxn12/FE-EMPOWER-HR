@@ -1,4 +1,3 @@
-import { DatePicker } from "@/components/date-picker";
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +29,6 @@ import { getUserAttendance } from "@/utils/apis/attendance/api";
 import { ISchedule } from "@/utils/apis/schedule/type";
 import { DownloadIcon, Ellipsis, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { IAttendance } from "@/utils/apis/attendance/type";
 import { useAuth } from "@/utils/contexts/token";
@@ -44,9 +42,7 @@ export default function UserAttendance() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
-  );
+
   const navigate = useNavigate();
 
   const fetchAttendance = async () => {
@@ -66,9 +62,13 @@ export default function UserAttendance() {
     fetchAttendance();
   }, []);
 
-  console.log(attendance)
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
 
-  // const handleDateChange = (date: Date | undefined) => setSelectedDate(date);
   const handlePageChange = (page: number) => setCurrentPage(page);
 
   const categorizeAttendance = (
@@ -187,9 +187,7 @@ export default function UserAttendance() {
             <p className="text-gray-500 text-xs">
               This shows daily data in real-time.
             </p>
-            <h5 className="font-semibold text-lg">
-              {selectedDate ? format(selectedDate, "EEE, dd-MM-yyyy") : "None"}
-            </h5>
+            <h5 className="font-semibold text-lg">{today}</h5>
           </div>
           <div className="w-7/10 p-4">
             <div className="grid w-full xl:grid-cols-5 lg:grid-cols-3 grid-cols-2 gap-4">
