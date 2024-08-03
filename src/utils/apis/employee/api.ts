@@ -1,7 +1,6 @@
 import { Response } from "@/utils/types/apis";
 import { axiosConfig, openAPI, setAxiosConfig } from "../axiosWithConfig";
-import { EmploymentIdSchema, IEmployeeById, IEmployeeGetAll, RootDataEmployee, UpdatePersonal, UpdatePersonalSchema } from "./type";
-import { checkProperty, valueFormatData } from "@/utils/functions";
+import { EmploymentIdSchema, IEmployeeById, IEmployeeGetAll, RootDataEmployee, UpdatePersonal } from "./type";
 
 const token = localStorage.getItem("token");
 
@@ -94,24 +93,24 @@ export const createEmployee = async (body: RootDataEmployee) => {
   }
 };
 
-export const updatePersonalEmployee = async (body: UpdatePersonalSchema, employee_id: any) => {
+export const updatePersonalEmployee = async ( employee_id: number, formData: FormData) => {
   try {
-    const formData = new FormData();
-    let key: keyof typeof body;
-
-    for (key in body) {
-      if (checkProperty(body[key])) {
-        formData.append(key, valueFormatData(body[key]));
-      }
+    if (!token) {
+      throw new Error("Token not found in localStorage");
     }
 
-    const resp = await openAPI.put<UpdatePersonal>(`/employee/${employee_id}`, formData, {
+    setAxiosConfig(token);
+    console.log('Sending request to:', `/employee/${employee_id}`);
+    console.log('With data:', formData);
+    const resp = await axiosConfig.put<IEmployeeById>(`/employee/${employee_id}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log('Response:', resp);
     return resp.data;
   } catch (error: any) {
+    console.error('Error:', error);
     if (error.response && error.response.data) {
       const { message } = error.response.data;
       throw new Error(message);

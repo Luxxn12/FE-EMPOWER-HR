@@ -23,7 +23,7 @@ export interface IEmployeeById {
   birth_date: string;
   gender: string;
   religion: string;
-  nik: number;
+  nik: string;
   address: string;
   employmentData: {
     employment_status: string;
@@ -48,28 +48,28 @@ export interface EmploymentById {
 
 export const updatePersonalSchema = z.object({
   profile_picture: z
-    .instanceof(File)
-    .refine((file) => file.name !== "", "Cover image is required")
-    .refine(
-      (file) => file.size <= MAX_UPLOAD_SIZE,
-      `Max image size is ${MAX_MB}MB`
-    )
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-      "Only .jpg, .jpeg, and .png formats are supported"
-    ),
+  .instanceof(File)
+  .refine(
+    (file) => !file || file.size <= MAX_UPLOAD_SIZE,
+    `Max image size is ${MAX_MB}MB`
+  )
+  .refine(
+    (file) =>
+      !file || file.type === "" || ACCEPTED_IMAGE_TYPES.includes(file.type),
+    "Only .jpg, .jpeg, and .png formats are supported"
+  ),
   name: z.string().min(1, { message: "Name is required" }),
   email: z
     .string()
     .min(1, { message: "Email is required" })
     .email("Not a valid email"),
-  phone: z
+    phone_number: z
     .string()
     .min(1, { message: "Phone is required" })
     .regex(/^\d{10,12}$/, "Invalid phone number"),
   place_birth: z.string().min(1, { message: "Place of birth is required" }),
   birth_date: z.string().min(1, { message: "birth_date is required" }),
-  status: z.string().min(1, { message: "status is required" }),
+  // status: z.string().min(1, { message: "status is required" }),
   gender: z.string().min(1, { message: "gender is required" }),
   religion: z.string().min(1, { message: "religion is required" }),
   nik: z
@@ -114,6 +114,18 @@ export interface Personal {
   address: string;
   password: string
 }
+export interface UpdatePersonalId {
+  profile_picture: string;
+  name: string;
+  email: string;
+  phone: string;
+  place_birth: string;
+  birth_date: string;
+  gender: string;
+  religion: string;
+  nik: string;
+  address: string;
+}
 
 export interface Employment {
   employment_status: string;
@@ -123,6 +135,19 @@ export interface Employment {
   department: string;
   approval_line: string;
   job_position: string;
+}
+
+export interface PersonalID {
+  profile_picture: string;
+  name: string;
+  email: string;
+  phone_number: string;
+  place_birth: string;
+  birth_date: string;
+  gender: string;
+  religion: string;
+  nik: string;
+  address: string;
 }
 
 export interface Payroll {

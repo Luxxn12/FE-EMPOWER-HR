@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { getPersonalById, updatePersonalEmployee } from "@/utils/apis/employee/api";
-import { Personal, updatePersonalSchema, UpdatePersonalSchema } from "@/utils/apis/employee/type";
-import { categoriesGender, categoriesReligion, categoriesStatus } from "@/utils/constant";
+import { getEmploymentById, updatePersonalEmployee } from "@/utils/apis/employee/api";
+import { IEmployeeById, PersonalID, UpdatePersonalId, updatePersonalSchema, UpdatePersonalSchema } from "@/utils/apis/employee/type";
+import { categoriesGender, categoriesReligion } from "@/utils/constant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,48 +16,71 @@ import { toast } from "sonner";
 const EditPersonal = () => {
   const { employee_id } = useParams<{ employee_id: string }>();
   const navigate = useNavigate();
+  const [dataEdit, setDataEdit] = useState<PersonalID | null>(null)
 
   const form = useForm<UpdatePersonalSchema>({
     resolver: zodResolver(updatePersonalSchema),
+    defaultValues: {
+      profile_picture: new File([], ""),
+      name: "",
+      email: "",
+      phone_number: "",
+      place_birth: "",
+      birth_date: "",
+      gender: "",
+      religion: "",
+      nik: "",
+      address: "",
+    }
   })
 
 
-  const [employeeData, setEmployeeData] = useState<Personal>();
-
   useEffect(() => {
-    const getIdEmployee = async () => {
-      try {
-        const resp = await getPersonalById(employee_id);
-        setEmployeeData(resp.data);
-      } catch (error) {
-        toast.error((error as Error).message);
-      }
-    };
-    getIdEmployee();
-  }, []);
+    fetchEmployeeData()
+  }, [employee_id])
 
-  useEffect(() => {
-    if (employeeData) {
-      form.setValue('name', employeeData.name);
-      form.setValue('email', employeeData.email);
-      form.setValue('phone', employeeData.phone);
-      form.setValue('place_birth', employeeData.place_birth);
-      form. setValue('birth_date', employeeData.birth_date);
-      form.setValue('status', employeeData.status);
-      form.setValue('gender', employeeData.gender);
-      form.setValue('religion', employeeData.religion);
-      form.setValue('nik', employeeData.nik);
-      form.setValue('address', employeeData.address);
-    }
-  }, [employeeData]);
-
-  async function onSubmit(data: UpdatePersonalSchema,) {
+  const fetchEmployeeData = async () => {
     try {
-      const resp = await updatePersonalEmployee(data, employee_id);
-      toast.success(resp.status);
-      navigate("/employees");
+      const response = await getEmploymentById(Number(employee_id))
+      setDataEdit(response.data)
+      form.reset({
+        profile_picture: new File([], ""),
+        name: response.data.name,
+        email: response.data.email,
+        phone_number: response.data.phone_number,
+        place_birth: response.data.place_birth,
+        birth_date: response.data.birth_date,
+        gender: response.data.gender,
+        religion: response.data.religion,
+        nik: response.data.nik,
+        address: response.data.address,
+      })
+
     } catch (error) {
-      toast.error((error as Error).message);
+      console.error(error)
+    }
+  }
+
+
+  async function onSubmit() {
+    const formData = new FormData();
+    formData.append("profile_picture", form.watch("profile_picture"));
+    formData.append("name", form.watch("name"));
+    formData.append("email", form.watch("email"));
+    formData.append("phone_number", form.watch("phone_number"));
+    formData.append("place_birth", form.watch("place_birth"));
+    formData.append("birth_date", form.watch("birth_date"));
+    formData.append("gender", form.watch("gender"));
+    formData.append("religion", form.watch("religion"));
+    formData.append("nik", form.watch("nik"));
+    formData.append("address", form.watch("address"));
+    try {
+      await updatePersonalEmployee(Number(employee_id), formData);
+      toast.success("Employment data updated successfully");
+      // navigate("/employees");
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Error updating employment data");
     }
   }
 
@@ -121,7 +144,7 @@ const EditPersonal = () => {
             </CustomFormField>
           </div>
           <div>
-            <CustomFormField control={form.control} name="phone" label="Phone">
+            <CustomFormField control={form.control} name="phone_number" label="Phone">
               {(field) => (
                 <Input
                   {...field}
@@ -161,24 +184,15 @@ const EditPersonal = () => {
                 )}
               </CustomFormField>
             </div>
-            <div>
-              <CustomFormSelect
-                control={form.control}
-                name="gender"
-                label="Gender"
-                placeholder="Select a Category"
-                options={categoriesGender}
-              />
-            </div>
-            <div>
-              <CustomFormSelect
-                control={form.control}
-                name="status"
-                label="Status"
-                placeholder="Select a Category"
-                options={categoriesStatus}
-              />
-            </div>
+          </div>
+          <div>
+            <CustomFormSelect
+              control={form.control}
+              name="gender"
+              label="Gender"
+              placeholder="Select a Category"
+              options={categoriesGender}
+            />
           </div>
           <div>
             <CustomFormSelect
