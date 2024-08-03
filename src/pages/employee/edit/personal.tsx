@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getEmploymentById, updatePersonalEmployee } from "@/utils/apis/employee/api";
-import { IEmployeeById, PersonalID, UpdatePersonalId, updatePersonalSchema, UpdatePersonalSchema } from "@/utils/apis/employee/type";
+import { PersonalID, updatePersonalSchema, UpdatePersonalSchema } from "@/utils/apis/employee/type";
 import { categoriesGender, categoriesReligion } from "@/utils/constant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -77,7 +77,7 @@ const EditPersonal = () => {
     try {
       await updatePersonalEmployee(Number(employee_id), formData);
       toast.success("Employment data updated successfully");
-      // navigate("/employees");
+      navigate("/employees");
     } catch (error) {
       console.error('Error:', error);
       toast.error("Error updating employment data");
@@ -190,7 +190,9 @@ const EditPersonal = () => {
               control={form.control}
               name="gender"
               label="Gender"
-              placeholder="Select a Category"
+              placeholder={
+                dataEdit?.gender ? dataEdit.gender : ""
+              }
               options={categoriesGender}
             />
           </div>
@@ -199,7 +201,9 @@ const EditPersonal = () => {
               control={form.control}
               name="religion"
               label="Religion"
-              placeholder="Select a Category"
+              placeholder={
+                dataEdit?.religion ? dataEdit.religion : ""
+              }
               options={categoriesReligion}
             />
           </div>
@@ -208,7 +212,9 @@ const EditPersonal = () => {
               {(field) => (
                 <Input
                   {...field}
-                  placeholder="3510101212990008"
+                  placeholder={
+                    dataEdit?.nik ? dataEdit.nik : ""
+                  }
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
                   value={field.value as string}
