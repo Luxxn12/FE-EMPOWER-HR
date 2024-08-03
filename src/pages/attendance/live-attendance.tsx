@@ -35,10 +35,14 @@ export default function LiveAttendance() {
   const fetchUserAttendance = async () => {
     try {
       const resp = await getUserAttendance();
-      console.log(resp);
 
-      const today = new Date().toISOString().split("T")[0];
-      console.log(today);
+      const today = new Date()
+        .toLocaleDateString("en-GB", {
+          timeZone: "Asia/Jakarta",
+        })
+        .split("/")
+        .reverse()
+        .join("-");
 
       const lastTodayRecord = resp.data
         .filter((record: any) => {
@@ -78,8 +82,6 @@ export default function LiveAttendance() {
     fetchUserAttendance();
     getLocation();
   }, []);
-
-  console.log(coordinates)
 
   const handleClockIn = async () => {
     if (attendanceIdToUse !== null) {

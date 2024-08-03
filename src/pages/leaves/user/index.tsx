@@ -33,7 +33,6 @@ export default function LeavesUser() {
     fetchLeaves();
   }, []);
 
-  console.log(leaves)
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
