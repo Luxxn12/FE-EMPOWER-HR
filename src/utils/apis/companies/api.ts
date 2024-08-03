@@ -1,10 +1,17 @@
 import { Response } from "@/utils/types/apis";
-import { openAPI } from "../axiosWithConfig";
+import { axiosConfig,  setAxiosConfig } from "../axiosWithConfig";
 import { ICompanies } from "./type";
+
+const token = localStorage.getItem("token");
 
 export const getCompanies = async () => {
   try {
-    const response = await openAPI.get("/companies");
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+    const response = await axiosConfig.get("/companies");
     return response.data as Response<ICompanies>;
   } catch (error: any) {
     const message = error.response?.data?.message || "An error occurrend";
@@ -14,7 +21,12 @@ export const getCompanies = async () => {
 
 export const getDetailCompenies = async () => {
   try {
-    const response = await openAPI.get("/companies");
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+    const response = await axiosConfig.get("/companies");
     return response.data as Response<ICompanies>;
   } catch (error: any) {
     const message = error.response?.data?.message || "An error occurrend";
@@ -24,7 +36,12 @@ export const getDetailCompenies = async () => {
 
 export const updateCompanies = async (formData: FormData) => {
   try {
-    const response = await openAPI.put(`/companies`, formData, {
+    if (!token) {
+      throw new Error("Token not found in localStorage");
+    }
+
+    setAxiosConfig(token);
+    const response = await axiosConfig.put(`/companies`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

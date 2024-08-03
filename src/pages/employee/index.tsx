@@ -1,6 +1,6 @@
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
-import { ArrowDownToLine, Ellipsis, FilePenIcon, Search, TrashIcon } from "lucide-react";
+import { ArrowDownToLine, BookUser, Ellipsis, FilePenIcon, Search, TrashIcon } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -176,17 +176,38 @@ const Employees = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-[200px]">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem asChild>
                         <Link to={`/employees/${item.id}`} className="flex items-center gap-2">
-                          <FilePenIcon className="h-4 w-4" />
+                          <BookUser className="h-4 w-4" />
                           <span>Detail</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteEmployee(item.id)}>
-                          <TrashIcon className="h-4 w-4" />
-                          <span>Delete</span>
+                      <DropdownMenuItem asChild>
+                        <Link to={`/employees/edit-employee/${item.id}`} className="flex items-center gap-2">
+                          <FilePenIcon className="h-4 w-4" />
+                          <span>Edit Personal</span>
+                        </Link>
                       </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to={`/employees/edit-employment/${item.id}`} className="flex items-center gap-2">
+                          <FilePenIcon className="h-4 w-4" />
+                          <span>Edit Employment</span>
+                        </Link>
+                      </DropdownMenuItem>
+
+                      {role == "admin" ? (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteEmployee(item.id)}>
+                            <div className="flex items-center gap-2">
+                              <TrashIcon className="h-4 w-4" />
+                              <span>Delete</span>
+                            </div>
+                          </DropdownMenuItem>
+                        </>
+                      ) : null}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </td>

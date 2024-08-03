@@ -9,11 +9,11 @@ import { toast } from "sonner";
 
 export default function EditCompanies() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [company, setCompany] = useState({
     company_picture: null as File | null,
     company_name: "",
     npwp: 0,
-    address: "",
     email: "",
     phone: "",
     company_address: "",
@@ -28,10 +28,9 @@ export default function EditCompanies() {
     try {
       const resp = await getDetailCompenies();
       setCompany({
-        company_picture:new File([], ""),
+        company_picture: new File([], ""),
         company_name: resp.data?.company_name,
         npwp: resp.data?.npwp,
-        address: resp.data?.address,
         email: resp.data?.email,
         phone: resp.data?.phone,
         company_address: resp.data?.company_address,
@@ -63,13 +62,13 @@ export default function EditCompanies() {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const formData = new FormData();
     if (company.company_picture) {
       formData.append("company_picture", company.company_picture);
     }
     formData.append("company_name", company.company_name);
     formData.append("npwp", String(company.npwp));
-    formData.append("address", company.address);
     formData.append("email", company.email);
     formData.append("phone", company.phone);
     formData.append("company_address", company.company_address);
@@ -83,6 +82,8 @@ export default function EditCompanies() {
       navigate("/companies");
     } catch (error: any) {
       toast.error(error.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,14 +108,8 @@ export default function EditCompanies() {
           <Input type="text" id="npwp" placeholder="12172919729179" value={company.npwp} onChange={handleInputChange} />
         </div>
         <div className="w-full mb-3 space-y-2">
-          <Label htmlFor="address">Address *</Label>
-          <Input
-            type="text"
-            id="address"
-            placeholder="Jalan Gunung Antena 1 No 11A, Padangan sambian kelod, denpasar barat, bali"
-            value={company.address}
-            onChange={handleInputChange}
-          />
+          <Label htmlFor="phone">Phone *</Label>
+          <Input type="text" id="phone" placeholder="12172919729179" value={company.phone} onChange={handleInputChange} />
         </div>
         <div className="w-full mb-3 space-y-2">
           <Label htmlFor="company_address">Company Address *</Label>
@@ -133,9 +128,12 @@ export default function EditCompanies() {
         </div>
         <div className="flex justify-end gap-5 mt-6">
           <Link to={'/companies'}>
-          <Button variant={"outline"}>Cancel</Button>
+            <Button variant={"outline"}>Cancel</Button>
           </Link>
-          <Button className="pl-4 pr-4" onClick={handleSubmit}>Save Companies</Button>
+          <Button className="pl-4 pr-4" onClick={handleSubmit} disabled={isLoading}
+          >
+            {isLoading ? 'Loading...' : 'Save Companies'}
+          </Button>
         </div>
       </div>
     </MainLayout>

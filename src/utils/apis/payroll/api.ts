@@ -1,10 +1,16 @@
 import { Response } from "@/utils/types/apis";
-import { openAPI } from "../axiosWithConfig";
+import { axiosConfig,  setAxiosConfig } from "../axiosWithConfig";
 import { EditPayrollSchemaById, IPayroll } from "./type";
+
+const token = localStorage.getItem("token");
 
 export const getPayrolls = async () => {
     try {
-        const resp = await openAPI.get("/payroll");
+        if (!token) {
+            throw new Error("Token not found in localStorage");
+          }
+          setAxiosConfig(token);
+        const resp = await axiosConfig.get("/payroll");
         return resp.data as Response<IPayroll[]>
     } catch (error: any) {
         const { message } = error.respose.data
@@ -14,7 +20,7 @@ export const getPayrolls = async () => {
 
 export const createPayroll = async (body: EditPayrollSchemaById) => {
     try {
-        const resp = await openAPI.post<Response<any>>("/payroll", body);
+        const resp = await axiosConfig.post<Response<any>>("/payroll", body);
         return resp.data;
     } catch (error: any) {
         if (error.response && error.response.data) {
@@ -24,21 +30,3 @@ export const createPayroll = async (body: EditPayrollSchemaById) => {
         throw error;
     }
 };
-
-// export const updatePayroll = async (body: EditPayrollSchemaById) => {
-//     try {
-//         const formData = new FormData();
-//         let key: keyof typeof body;
-
-//         for (key in body) {
-//             if (checkProperty(body[key])) {
-//                 formData.append(key, valueFormatData(body[key]));
-//             }
-//         }
-//         const response = await openAPI.post(`/payroll`, formData);
-//         return response.data as Response<EditPayroll>;
-//     } catch (error: any) {
-//         const { message } = error.response.data;
-//         throw Error(message);
-//     }
-// };

@@ -1,6 +1,5 @@
 import { useAuth } from "@/utils/contexts/token";
 import { Outlet, useLocation, Navigate } from "react-router-dom";
-
 const ProtectedRoute = () => {
   const { token, role } = useAuth()
   const { pathname } = useLocation()
@@ -40,7 +39,6 @@ const ProtectedRoute = () => {
   if (protectedByToken.includes(pathname)) {
     if (!token) return <Navigate to="/login" />;
   }
-
   
   const companyProtected = [
     "/companies",

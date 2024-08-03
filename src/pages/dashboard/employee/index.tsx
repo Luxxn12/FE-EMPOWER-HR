@@ -147,19 +147,19 @@ function DashboardEmployee() {
               <div className="flex justify-between">
                 <div className="flex gap-3">
                   <Squircle className="bg-[#5D54D5] text-[#5D54D5] rounded-md" />
-                  <text>Male</text>
+                  <p>Male</p>
                 </div>
                 <div>
-                  <text>{maleVisitors}</text>
+                  <p>{maleVisitors}</p>
                 </div>
               </div>
               <div className="flex justify-between">
                 <div className="flex gap-3">
                   <Squircle className="bg-[#029BDE] text-[#029BDE] rounded-md" />
-                  <text>Female</text>
+                  <p>Female</p>
                 </div>
                 <div>
-                  <text>{femaleVisitors}</text>
+                  <p>{femaleVisitors}</p>
                 </div>
               </div>
             </div>
