@@ -76,25 +76,27 @@ const Payroll = () => {
     }
   }
 
-  const generatePdf = () => {
-    filterPayroll.forEach((payroll) => {
-      const doc = new jsPDF();
-      const table: any = [];
+  const generatePdf = (payrollId: number) => {
+    const payrollData = filterPayroll.find((payroll) => payroll.id === payrollId);
   
-      table.push([
-        payroll.employee_name,
-        new Date(payroll.date).toLocaleDateString("en-US"),
-        payroll.position,
-        payroll.payslip,
-      ]);
+    if (!payrollData) return;
   
-      autoTable(doc, {
-        head: [['Employee Name', 'Date', 'Position', 'Payslip']],
-        body: table,
-      });
+    const doc = new jsPDF();
+    const table: any = [];
   
-      doc.save(`payroll_${payroll.employee_name}.pdf`);
+    table.push([
+      payrollData.employee_name,
+      new Date(payrollData.date).toLocaleDateString("en-US"),
+      payrollData.position,
+      payrollData.payslip,
+    ]);
+  
+    autoTable(doc, {
+      head: [['Employee Name', 'Date', 'Position', 'Payslip']],
+      body: table,
     });
+  
+    doc.save(`payroll_${payrollData.employee_name}.pdf`);
   };
 
   return (
@@ -273,7 +275,7 @@ const Payroll = () => {
                   {payroll.position}
                 </td>
                 <td className="px-6 py-4">
-                  <Button variant="outline" className="gap-3" onClick={generatePdf}>
+                  <Button variant="outline" className="gap-3" onClick={() => generatePdf(payroll.id)}>
                     <DownloadIcon className="h-5 w-5" />
                     Download PDF
                   </Button>
