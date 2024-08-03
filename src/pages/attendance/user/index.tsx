@@ -48,7 +48,6 @@ export default function UserAttendance() {
   const fetchAttendance = async () => {
     try {
       const resp = await getUserAttendance();
-      console.log(resp);
       const attendanceData = resp.data || [];
       setAttendance(attendanceData);
       setCurrentPage(resp.meta?.[0]?.currentPage || 1);

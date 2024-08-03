@@ -51,8 +51,6 @@ export default function RequestLeaves() {
         reason: data.reason || "",
       };
 
-      console.log(formattedData)
-
       if (!formattedData.start_date || !formattedData.end_date) {
         toast.error("Please select both start and end dates.");
         return;
