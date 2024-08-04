@@ -19,7 +19,7 @@ export default function EditCompanies() {
     npwp: 0,
     email: "",
     phone: "",
-    company_address: "",
+    address: "",
     signature: null as File | null,
   });
 
@@ -36,7 +36,7 @@ export default function EditCompanies() {
         npwp: resp.data?.npwp,
         email: resp.data?.email,
         phone: resp.data?.phone,
-        company_address: resp.data?.company_address,
+        address: resp.data?.company_address,
         signature: new File([], ""),
       });
     } catch (error) {
@@ -74,7 +74,7 @@ export default function EditCompanies() {
     formData.append("npwp", String(company.npwp));
     formData.append("email", company.email);
     formData.append("phone", company.phone);
-    formData.append("company_address", company.company_address);
+    formData.append("address", company.address);
     if (company.signature) {
       formData.append("signature", company.signature);
     }
@@ -148,13 +148,13 @@ export default function EditCompanies() {
           />
         </div>
         <div className="w-full mb-3 space-y-2">
-          <Label htmlFor="company_address">Company Address *</Label>
+          <Label htmlFor="address">Company Address *</Label>
           <Input
             type="text"
-            id="company_address"
-            data-testid="company_address"
+            id="address"
+            data-testid="address"
             placeholder="Jalan Gunung Antena 1 No 11A, Padangan sambian kelod, denpasar barat, bali"
-            value={company.company_address}
+            value={company.address}
             onChange={handleInputChange}
           />
         </div>

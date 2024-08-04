@@ -25,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState("");
-  const { attendance_id, leave_id, schedule_id } = useParams();
+  const { attendance_id, leave_id, schedule_id, employee_id, id_payroll } = useParams();
 
   useEffect(() => {
     setActiveMenu(location.pathname);
@@ -99,12 +99,13 @@ const Sidebar: React.FC<SidebarProps> = ({
               <Link
                 to={leavesLink}
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive(["/leaves", "/leaves-user", `/leaves/${leave_id}`])
+                  isActive(["/leaves", "/leaves-user", `/leaves/${leave_id}`,])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
                 }
                   ${
-                    activeMenu === "/leaves/request-leaves"
+                  activeMenu ===
+                    "/leaves/request-leaves"
                       ? "bg-white dark:bg-gray-700 text-blue-500"
                       : ""
                   }
@@ -118,7 +119,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <Link
                 to="/payroll"
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive(["/payroll", "/payroll/setting"])
+                  isActive(["/payroll", "/payroll/setting", `/payroll/${id_payroll}`])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
                 }`}
@@ -134,9 +135,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                   isActive([
                     "/employees",
                     "/employees/create",
-                    "/employees/show",
-                    "/employees/edit/personal",
-                    "/employees/edit/employment",
+                    `/employees/${employee_id}`,
+                    `/employees/edit-employee/${employee_id}`,
+                    `/employees/edit-employment/${employee_id}`,
                   ])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
