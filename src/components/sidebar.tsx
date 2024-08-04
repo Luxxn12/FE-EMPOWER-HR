@@ -8,7 +8,7 @@ import {
   ContactRound,
   UsersRound,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useAuth } from "@/utils/contexts/token";
 
 interface SidebarProps {
@@ -25,6 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState("");
+  const { attendance_id, leave_id, schedule_id } = useParams();
 
   useEffect(() => {
     setActiveMenu(location.pathname);
@@ -83,6 +84,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                     "/attendance/settings",
                     "/attendance/settings/schedule",
                     "/attendance-user",
+                    `/attendance/${attendance_id}`,
+                    `/attendance/settings/schedule/${schedule_id}/edit`,
                   ])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
@@ -96,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <Link
                 to={leavesLink}
                 className={`flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  isActive(["/leaves", "/leaves-user"])
+                  isActive(["/leaves", "/leaves-user", `/leaves/${leave_id}`])
                     ? "bg-white dark:bg-gray-700 text-blue-500"
                     : ""
                 }
