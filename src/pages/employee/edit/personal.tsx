@@ -1,11 +1,21 @@
-import { CustomFormField, CustomFormSelect } from "@/components/custom-form-field";
+import {
+  CustomFormField,
+  CustomFormSelect,
+} from "@/components/custom-form-field";
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { getEmploymentById, updatePersonalEmployee } from "@/utils/apis/employee/api";
-import { PersonalID, updatePersonalSchema, UpdatePersonalSchema } from "@/utils/apis/employee/type";
+import {
+  getEmploymentById,
+  updatePersonalEmployee,
+} from "@/utils/apis/employee/api";
+import {
+  PersonalID,
+  updatePersonalSchema,
+  UpdatePersonalSchema,
+} from "@/utils/apis/employee/type";
 import { categoriesGender, categoriesReligion } from "@/utils/constant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -16,7 +26,7 @@ import { toast } from "sonner";
 const EditPersonal = () => {
   const { employee_id } = useParams<{ employee_id: string }>();
   const navigate = useNavigate();
-  const [dataEdit, setDataEdit] = useState<PersonalID | null>(null)
+  const [dataEdit, setDataEdit] = useState<PersonalID | null>(null);
 
   const form = useForm<UpdatePersonalSchema>({
     resolver: zodResolver(updatePersonalSchema),
@@ -31,18 +41,17 @@ const EditPersonal = () => {
       religion: "",
       nik: "",
       address: "",
-    }
-  })
-
+    },
+  });
 
   useEffect(() => {
-    fetchEmployeeData()
-  }, [employee_id])
+    fetchEmployeeData();
+  }, [employee_id]);
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await getEmploymentById(Number(employee_id))
-      setDataEdit(response.data)
+      const response = await getEmploymentById(Number(employee_id));
+      setDataEdit(response.data);
       form.reset({
         profile_picture: new File([], ""),
         name: response.data.name,
@@ -54,13 +63,11 @@ const EditPersonal = () => {
         religion: response.data.religion,
         nik: response.data.nik,
         address: response.data.address,
-      })
-
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
-
+  };
 
   async function onSubmit() {
     const formData = new FormData();
@@ -79,7 +86,7 @@ const EditPersonal = () => {
       toast.success("Employment data updated successfully");
       navigate("/employees");
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       toast.error("Error updating employment data");
     }
   }
@@ -94,11 +101,15 @@ const EditPersonal = () => {
         Fill all employee personal basic information data
       </p>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 my-4 lg:w-3/4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-3 my-4 lg:w-3/4"
+        >
           <div>
             <CustomFormField
               control={form.control}
               name="profile_picture"
+              data-testid="profile_picture"
               label="Profile picture"
             >
               {(field) => (
@@ -116,21 +127,30 @@ const EditPersonal = () => {
             </CustomFormField>
           </div>
           <div>
-            <CustomFormField control={form.control} name="name" label="Fullname">
+            <CustomFormField
+              control={form.control}
+              name="name"
+              data-testid="name"
+              label="Fullname"
+            >
               {(field) => (
                 <Input
                   {...field}
                   placeholder="John doe"
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
-                  value={
-                    field.value as string}
+                  value={field.value as string}
                 />
               )}
             </CustomFormField>
           </div>
           <div>
-            <CustomFormField control={form.control} name="email" label="Email">
+            <CustomFormField
+              control={form.control}
+              name="email"
+              data-testid="email"
+              label="Email"
+            >
               {(field) => (
                 <Input
                   {...field}
@@ -144,7 +164,12 @@ const EditPersonal = () => {
             </CustomFormField>
           </div>
           <div>
-            <CustomFormField control={form.control} name="phone_number" label="Phone">
+            <CustomFormField
+              control={form.control}
+              name="phone_number"
+              data-testid="phone_number"
+              label="Phone"
+            >
               {(field) => (
                 <Input
                   {...field}
@@ -159,7 +184,12 @@ const EditPersonal = () => {
           </div>
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
-              <CustomFormField control={form.control} name="place_birth" label="Place birth">
+              <CustomFormField
+                control={form.control}
+                name="place_birth"
+                data-testid="place_birth"
+                label="Place birth"
+              >
                 {(field) => (
                   <Input
                     {...field}
@@ -172,7 +202,12 @@ const EditPersonal = () => {
               </CustomFormField>
             </div>
             <div>
-              <CustomFormField control={form.control} name="birth_date" label="Birth date">
+              <CustomFormField
+                control={form.control}
+                name="birth_date"
+                data-testid="birth_date"
+                label="Birth date"
+              >
                 {(field) => (
                   <Input
                     {...field}
@@ -189,10 +224,9 @@ const EditPersonal = () => {
             <CustomFormSelect
               control={form.control}
               name="gender"
+              data-testid="gender"
               label="Gender"
-              placeholder={
-                dataEdit?.gender ? dataEdit.gender : ""
-              }
+              placeholder={dataEdit?.gender ? dataEdit.gender : ""}
               options={categoriesGender}
             />
           </div>
@@ -200,21 +234,23 @@ const EditPersonal = () => {
             <CustomFormSelect
               control={form.control}
               name="religion"
+              data-testid="religion"
               label="Religion"
-              placeholder={
-                dataEdit?.religion ? dataEdit.religion : ""
-              }
+              placeholder={dataEdit?.religion ? dataEdit.religion : ""}
               options={categoriesReligion}
             />
           </div>
           <div>
-            <CustomFormField control={form.control} name="nik" label="Nik">
+            <CustomFormField
+              control={form.control}
+              name="nik"
+              data-testid="nik"
+              label="Nik"
+            >
               {(field) => (
                 <Input
                   {...field}
-                  placeholder={
-                    dataEdit?.nik ? dataEdit.nik : ""
-                  }
+                  placeholder={dataEdit?.nik ? dataEdit.nik : ""}
                   disabled={form.formState.isSubmitting}
                   aria-disabled={form.formState.isSubmitting}
                   value={field.value as string}
@@ -227,6 +263,7 @@ const EditPersonal = () => {
               control={form.control}
               name="address"
               label="Address"
+              data-testid="address"
             >
               {(field) => (
                 <Textarea
@@ -240,8 +277,14 @@ const EditPersonal = () => {
             </CustomFormField>
           </div>
           <div className="flex justify-start gap-2">
-            <Button variant="outline">Cancel</Button>
-            <Button className="pl-4 pr-4" type="submit">
+            <Button variant="outline" data-testid="button-cancel">
+              Cancel
+            </Button>
+            <Button
+              className="pl-4 pr-4"
+              type="submit"
+              data-testid="button-submit"
+            >
               Save Personal
             </Button>
           </div>

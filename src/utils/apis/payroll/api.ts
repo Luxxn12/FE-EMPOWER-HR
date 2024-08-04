@@ -1,5 +1,5 @@
 import { Response } from "@/utils/types/apis";
-import { axiosConfig,  setAxiosConfig } from "../axiosWithConfig";
+import { axiosConfig,  openAPI,  setAxiosConfig } from "../axiosWithConfig";
 import { EditPayrollSchemaById, IPayroll } from "./type";
 
 const token = localStorage.getItem("token");
@@ -20,7 +20,7 @@ export const getPayrolls = async () => {
 
 export const createPayroll = async (body: EditPayrollSchemaById) => {
     try {
-        const resp = await axiosConfig.post<Response<any>>("/payroll", body);
+        const resp = await openAPI.post<Response<any>>("/payroll", body);
         return resp.data;
     } catch (error: any) {
         if (error.response && error.response.data) {

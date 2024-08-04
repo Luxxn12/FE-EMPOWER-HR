@@ -13,53 +13,55 @@ import {
 } from "@/components/ui/pagination";
 import { IPayroll } from "@/utils/apis/payroll/type";
 import { getPayrolls } from "@/utils/apis/payroll/api";
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { useAuth } from "@/utils/contexts/token";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
 const Payroll = () => {
-  const [searchPay, setSearchPay] = useState("")
-  const [isPayroll, setPayroll] = useState<IPayroll[]>([])
-  const [filterPayroll, setFilterPayroll] = useState<IPayroll[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [perPage] = useState(10)
-  const { role } = useAuth()
-
+  const [searchPay, setSearchPay] = useState("");
+  const [isPayroll, setPayroll] = useState<IPayroll[]>([]);
+  const [filterPayroll, setFilterPayroll] = useState<IPayroll[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10);
+  const { role } = useAuth();
 
   useEffect(() => {
-    featchPayrolls()
-  }, [])
+    featchPayrolls();
+  }, []);
 
   useEffect(() => {
     if (searchPay.trim() === "") {
-      setFilterPayroll(isPayroll)
+      setFilterPayroll(isPayroll);
     } else {
       setFilterPayroll(
         isPayroll.filter((payroll) =>
-          payroll.employee_name
-            .toLowerCase()
-            .includes(searchPay.toLowerCase())
+          payroll.employee_name.toLowerCase().includes(searchPay.toLowerCase())
         )
-      )
+      );
     }
-  }, [searchPay, isPayroll])
-
-
+  }, [searchPay, isPayroll]);
 
   const featchPayrolls = async () => {
     try {
-      const resp = await getPayrolls()
-      setPayroll(resp.data || [])
+      const resp = await getPayrolls();
+      setPayroll(resp.data || []);
     } catch (error: any) {
-      const { message } = error.respose.data
-      throw new Error(message)
+      const { message } = error.respose.data;
+      throw new Error(message);
     }
-  }
+  };
 
   const generatePdf = (payrollId: number) => {
-    const payrollData = filterPayroll.find((payroll) => payroll.id === payrollId);
+    const payrollData = filterPayroll.find(
+      (payroll) => payroll.id === payrollId
+    );
 
     if (!payrollData) return;
 
@@ -79,7 +81,6 @@ const Payroll = () => {
     const table: any = [];
     const yPosition: number = 80;
 
-
     table.push([
       payrollData.employee_name,
       new Date(payrollData.date).toLocaleDateString("en-US"),
@@ -89,7 +90,7 @@ const Payroll = () => {
 
     autoTable(doc, {
       startY: yPosition,
-      head: [['Employee Name', 'Date', 'Position', 'Payslip']],
+      head: [["Employee Name", "Date", "Position", "Payslip"]],
       body: table,
     });
 
@@ -105,25 +106,23 @@ const Payroll = () => {
 
   const currentDate: Date = new Date();
 
-  const formattedDate = currentDate.toLocaleString('en-GB', {
-    month: 'long',
-    year: 'numeric',
+  const formattedDate = currentDate.toLocaleString("en-GB", {
+    month: "long",
+    year: "numeric",
   });
 
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber)
-  }
+    setCurrentPage(pageNumber);
+  };
 
-
-  const startIndex = (currentPage - 1) * perPage
-  const endIndex = startIndex + perPage
-  const paginatedPayroll = filterPayroll.slice(startIndex, endIndex)
+  const startIndex = (currentPage - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  const paginatedPayroll = filterPayroll.slice(startIndex, endIndex);
 
   return (
     <MainLayout title="Empower HR - Payroll" description="Empower HR - Payroll">
       <div className="flex justify-between">
         <h5 className="text-2xl font-semibold">Payroll</h5>
-
       </div>
       <div className="pt-8 flex justify-between">
         <div className="flex  flex-col">
@@ -138,6 +137,7 @@ const Payroll = () => {
             />
             <Input
               type="search"
+              data-testid="search"
               placeholder="Search"
               value={searchPay}
               onChange={(e) => setSearchPay(e.target.value)}
@@ -166,13 +166,15 @@ const Payroll = () => {
                 <th scope="col" className="px-6 py-3">
                   Action
                 </th>
-              ) : null
-              }
+              ) : null}
             </tr>
           </thead>
           <tbody>
             {paginatedPayroll.map((payroll) => (
-              <tr key={payroll.id} className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+              <tr
+                key={payroll.id}
+                className="border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              >
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap"
@@ -182,11 +184,14 @@ const Payroll = () => {
                 <td className="px-6 py-4">
                   {new Date(payroll.date).toLocaleDateString("en-US")}
                 </td>
+                <td className="px-6 py-4">{payroll.position}</td>
                 <td className="px-6 py-4">
-                  {payroll.position}
-                </td>
-                <td className="px-6 py-4">
-                  <Button variant="outline" className="gap-3" onClick={() => generatePdf(payroll.id)}>
+                  <Button
+                    variant="outline"
+                    className="gap-3"
+                    data-testid="download-pdf"
+                    onClick={() => generatePdf(payroll.id)}
+                  >
                     <DownloadIcon className="h-5 w-5" />
                     Download PDF
                   </Button>
@@ -207,8 +212,7 @@ const Payroll = () => {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </td>
-                ) : null
-                }
+                ) : null}
               </tr>
             ))}
           </tbody>
@@ -216,7 +220,7 @@ const Payroll = () => {
       </div>
 
       <div className="flex justify-center mt-5">
-       <Pagination>
+        <Pagination>
           <PaginationContent className="flex justify-center gap-2">
             <PaginationItem>
               <PaginationPrevious
@@ -228,18 +232,26 @@ const Payroll = () => {
                 Sebelumnya
               </PaginationPrevious>
             </PaginationItem>
-            {Array.from({ length: 5 }, (_, i) => ( // assuming 5 pages
-              <PaginationItem key={i + 1}>
-                <PaginationLink
-                  href="#"
-                  onClick={() => handlePageChange(i + 1)}
-                  aria-current={currentPage === i + 1 ? 'page' : undefined}
-                  className={`text-gray-500 hover:text-gray-700 ${currentPage === i + 1 ? 'bg-gray-200' : ''}`}
-                >
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
+            {Array.from(
+              { length: 5 },
+              (
+                _,
+                i // assuming 5 pages
+              ) => (
+                <PaginationItem key={i + 1}>
+                  <PaginationLink
+                    href="#"
+                    onClick={() => handlePageChange(i + 1)}
+                    aria-current={currentPage === i + 1 ? "page" : undefined}
+                    className={`text-gray-500 hover:text-gray-700 ${
+                      currentPage === i + 1 ? "bg-gray-200" : ""
+                    }`}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )
+            )}
             <PaginationItem>
               <PaginationNext
                 href="#"

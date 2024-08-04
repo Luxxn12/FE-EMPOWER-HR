@@ -1,15 +1,30 @@
-
 import { Input } from "@/components/ui/input";
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
-import { Employment, employmentIdSchema, EmploymentIdSchema, } from "@/utils/apis/employee/type";
+import {
+  Employment,
+  employmentIdSchema,
+  EmploymentIdSchema,
+} from "@/utils/apis/employee/type";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getEmploymentById, updateEmploymenId } from "@/utils/apis/employee/api";
+import {
+  getEmploymentById,
+  updateEmploymenId,
+} from "@/utils/apis/employee/api";
 import { toast } from "sonner";
-import { CustomFormField, CustomFormSelect } from "@/components/custom-form-field";
-import { categoriesApproval, categoriesJobLevel, categoriesPosition, categorisSchedule, categorisStatus } from "@/utils/constant";
+import {
+  CustomFormField,
+  CustomFormSelect,
+} from "@/components/custom-form-field";
+import {
+  categoriesApproval,
+  categoriesJobLevel,
+  categoriesPosition,
+  categorisSchedule,
+  categorisStatus,
+} from "@/utils/constant";
 import { Form } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 
@@ -28,8 +43,8 @@ const EditEmployment = () => {
       department: "",
       approval_line: "",
       job_position: "",
-    }
-  })
+    },
+  });
 
   const fetchEmployeeData = async () => {
     try {
@@ -55,7 +70,6 @@ const EditEmployment = () => {
     }
   };
 
-
   return (
     <MainLayout
       title="Empower HR - Employees"
@@ -75,6 +89,7 @@ const EditEmployment = () => {
             <CustomFormSelect
               control={form.control}
               name="employment_status"
+              data-testid="employment_status"
               label="Employment status "
               placeholder={
                 dataEdit?.employment_status ? dataEdit.employment_status : ""
@@ -85,9 +100,8 @@ const EditEmployment = () => {
               control={form.control}
               name="schedule"
               label="schedule "
-              placeholder={
-                dataEdit?.schedule ? dataEdit.schedule : ""
-              }
+              data-testid="schedule"
+              placeholder={dataEdit?.schedule ? dataEdit.schedule : ""}
               options={categorisSchedule}
             />
 
@@ -96,13 +110,12 @@ const EditEmployment = () => {
                 control={form.control}
                 name="join_date"
                 label="Join date"
+                data-testid="join_date"
               >
                 {(field) => (
                   <Input
                     {...field}
-                    placeholder={
-                      dataEdit?.join_date ? dataEdit.join_date : ""
-                    }
+                    placeholder={dataEdit?.join_date ? dataEdit.join_date : ""}
                     type="date"
                     disabled={form.formState.isSubmitting}
                     aria-disabled={form.formState.isSubmitting}
@@ -116,9 +129,8 @@ const EditEmployment = () => {
                 control={form.control}
                 name="job_level"
                 label="Job level "
-                placeholder={
-                  dataEdit?.job_level ? dataEdit.job_level : ""
-                }
+                data-testid="job_level"
+                placeholder={dataEdit?.job_level ? dataEdit.job_level : ""}
                 options={categoriesJobLevel}
               />
             </div>
@@ -127,6 +139,7 @@ const EditEmployment = () => {
                 control={form.control}
                 name="department"
                 label="Department"
+                data-testid="department"
               >
                 {(field) => (
                   <Input
@@ -146,6 +159,7 @@ const EditEmployment = () => {
                 control={form.control}
                 name="approval_line"
                 label="Approval line "
+                data-testid="approval_line"
                 placeholder={
                   dataEdit?.approval_line ? dataEdit.approval_line : ""
                 }
@@ -157,6 +171,7 @@ const EditEmployment = () => {
                 control={form.control}
                 name="job_position"
                 label="Job positionroval "
+                data-testid="job_position"
                 placeholder={
                   dataEdit?.job_position ? dataEdit.job_position : ""
                 }
@@ -166,11 +181,17 @@ const EditEmployment = () => {
           </div>
           <div className="flex justify-start gap-2">
             <Link to={"/employees"}>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" data-testid="button-cancel">
+                Cancel
+              </Button>
             </Link>
-            <Button className="pl-4 pr-4" type="submit"
-              disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? 'Saving...' : 'Save Employment'}
+            <Button
+              className="pl-4 pr-4"
+              type="submit"
+              data-testid="button-submit"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "Saving..." : "Save Employment"}
             </Button>
           </div>
         </form>

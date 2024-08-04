@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getEmployeeById } from "@/utils/apis/employee/api";
 import { IEmployeeById } from "@/utils/apis/employee/type";
 import { useEffect, useState } from "react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const DetailEmployee = () => {
@@ -15,13 +15,13 @@ const DetailEmployee = () => {
     try {
       const response = await getEmployeeById(employee_id);
       if (response.data) {
-        setDataDetail(response.data)
+        setDataDetail(response.data);
       } else {
         setDataDetail(null);
       }
     } catch (error: any) {
       console.error(error);
-      toast.error('Error fetching data');
+      toast.error("Error fetching data");
     }
   };
 
@@ -30,7 +30,6 @@ const DetailEmployee = () => {
       fetchEmployee(Number(employee_id));
     }
   }, [employee_id]);
-
 
   return (
     <MainLayout
@@ -67,8 +66,8 @@ const DetailEmployee = () => {
                     Personal Data
                   </h3>
                   <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                    Your email address is your identity on Talenta is used
-                    to log in.
+                    Your email address is your identity on Talenta is used to
+                    log in.
                   </p>
                 </div>
               </div>
@@ -132,9 +131,7 @@ const DetailEmployee = () => {
                     </dd>
                   </div>
                   <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500">
-                      Nik
-                    </dt>
+                    <dt className="text-sm font-medium text-gray-500">Nik</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {isDataDetail?.nik}
                     </dd>

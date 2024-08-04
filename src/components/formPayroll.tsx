@@ -21,7 +21,12 @@ function FormPayroll({ form, onSubmit }: PayrollDataProps) {
           className="my-4 lg:w-3/4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <CustomFormField control={form.control} name="salary" label="Salary">
+          <CustomFormField
+            control={form.control}
+            data-testid="salary"
+            name="salary"
+            label="Salary"
+          >
             {(field) => (
               <Input
                 {...field}
@@ -41,6 +46,7 @@ function FormPayroll({ form, onSubmit }: PayrollDataProps) {
             <CustomFormSelect
               control={form.control}
               name="bank_name"
+              data-testid="bank_name"
               label="Bank Name"
               placeholder="Select a Category"
               options={categorisBank}
@@ -48,6 +54,7 @@ function FormPayroll({ form, onSubmit }: PayrollDataProps) {
             <CustomFormField
               control={form.control}
               name="account_number"
+              data-testid="account_number"
               label="Account number"
             >
               {(field) => (
