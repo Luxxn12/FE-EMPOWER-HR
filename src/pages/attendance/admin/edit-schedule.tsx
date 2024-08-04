@@ -25,11 +25,11 @@ import { updateSchedule } from "@/utils/apis/schedule/api";
 import { useAuth } from "@/utils/contexts/token";
 import { toast } from "sonner";
 import { getCompanies } from "@/utils/apis/companies/api";
-import { ICompanies } from "@/utils/apis/companies/type";
+import { ICompaniesIndex } from "@/utils/apis/companies/type";
 
 export default function EditSchedule() {
   const [date, setDate] = useState<Date | undefined>();
-  const [company, setCompany] = useState<ICompanies>();
+  const [company, setCompany] = useState<ICompaniesIndex>();
   const [isLoading, setIsLoading] = useState(false);
   const { schedules, fetchSchedules } = useAuth();
   const { schedule_id } = useParams();
