@@ -28,7 +28,7 @@ Empower HR is an innovative startup in the field of HR software providers
 - Zod
 - TailwindCSS
 - Shadcn/ui
-- Zustand, 
+- Zustand
 - Axios
 - React leaflet 
 - Context
