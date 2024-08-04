@@ -87,7 +87,7 @@ Start the server
 
 Link to demo Empower HR
 
-https://fe-empower-hr.vercel.app/
+[https://empower-hr.vercel.app/](https://empower-hr.vercel.app/)
 ## Support
 
 **For support:** 
