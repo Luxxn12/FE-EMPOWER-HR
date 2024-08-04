@@ -171,8 +171,8 @@ export default function UserAttendance() {
 
   return (
     <MainLayout
-      title="Attendance Management"
-      description="Manage and view attendance records."
+      title="Empower HR - Attendance Management"
+      description="Empower HR - Manage and view attendance records."
     >
       <h1 className="text-2xl font-bold">Attendance user</h1>
 
@@ -217,7 +217,7 @@ export default function UserAttendance() {
 
       <div className="flex py-3 xl:flex-row flex-col justify-end">
         <div className="flex gap-5 mt-5 xl:mt-0">
-          <Button variant="outline" onClick={generateAllAttendancePdf}>
+          <Button variant="outline" onClick={generateAllAttendancePdf} data-testid="generateAttendanceUserButton">
             <DownloadIcon className="h-5 w-5" />
           </Button>
           <div className="relative">
@@ -229,6 +229,7 @@ export default function UserAttendance() {
               type="search"
               placeholder="Search"
               className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
+              data-testid="searchAttendanceUser"
             />
           </div>
         </div>
@@ -275,11 +276,12 @@ export default function UserAttendance() {
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger asChild data-testid="dropdownAttendance">
                         <Button
                           aria-haspopup="true"
                           size="icon"
                           variant="ghost"
+                          data-testid="toggleMenuButton"
                         >
                           <Ellipsis className="h-4 w-4" />
                           <span className="sr-only">Toggle menu</span>
@@ -291,6 +293,7 @@ export default function UserAttendance() {
                           <Button
                             variant="ghost"
                             onClick={() => navigate(`/attendance/${item.id}`)}
+                            data-testid="detailAttendanceButton"
                           >
                             Detail
                           </Button>

@@ -64,10 +64,11 @@ export default function SettingAttendance() {
               type="search"
               placeholder="Search by schedule name"
               className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
+              data-testid="searchSchedule"
             />
           </div>
           <Link to="/attendance/settings/schedule">
-            <Button size="sm">New schedule</Button>
+            <Button size="sm" data-testid="newScheduleButton">New schedule</Button>
           </Link>
         </div>
       </div>
@@ -112,6 +113,7 @@ export default function SettingAttendance() {
                           aria-haspopup="true"
                           size="icon"
                           variant="ghost"
+                          data-testid="toggleMenuButton"
                         >
                           <Ellipsis className="h-4 w-4" />
                           <span className="sr-only">Toggle menu</span>
@@ -127,6 +129,7 @@ export default function SettingAttendance() {
                               `/attendance/settings/schedule/${item.id}/edit`
                             )
                           }
+                          data-testid="detailScheduleButton"
                         >
                           Edit
                         </Button>
@@ -135,7 +138,7 @@ export default function SettingAttendance() {
                             asChild
                             className="w-full justify-start"
                           >
-                            <Button variant="ghost">Details</Button>
+                            <Button variant="ghost" data-testid="dialogDetailSchedule">Details</Button>
                           </DialogTrigger>
                           <DialogContent className="sm:max-w-[700px] p-6 flex flex-col gap-4">
                             <DialogHeader>
@@ -163,6 +166,7 @@ export default function SettingAttendance() {
                               className="mt-2"
                               variant="destructive"
                               onClick={() => handleDelete(item.id)}
+                              data-testid="deleteScheduleButton"
                             >
                               Delete Schedule
                             </Button>

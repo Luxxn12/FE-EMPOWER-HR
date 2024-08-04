@@ -100,14 +100,12 @@ export const updatePersonalEmployee = async ( employee_id: number, formData: For
     }
 
     setAxiosConfig(token);
-    console.log('Sending request to:', `/employee/${employee_id}`);
-    console.log('With data:', formData);
+
     const resp = await axiosConfig.put<IEmployeeById>(`/employee/${employee_id}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log('Response:', resp);
     return resp.data;
   } catch (error: any) {
     console.error('Error:', error);

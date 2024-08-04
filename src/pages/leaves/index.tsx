@@ -134,6 +134,7 @@ export default function Leaves() {
           className="pl-12 pr-8 focus:ring-primary focus:ring-offset-2"
           value={searchQuery}
           onChange={handleSearch}
+          data-testid="searchLeave"
         />
       </div>
 
@@ -177,7 +178,7 @@ export default function Leaves() {
                     {item.end_date}
                   </TableCell>
                   <TableCell className="text-gray-500">
-                    <Link to={`/leaves/${item.leave_id}`}>
+                    <Link to={`/leaves/${item.leave_id}`} data-testid="leavesStatusLink">
                       <p
                         className={
                           item.status === "approved"

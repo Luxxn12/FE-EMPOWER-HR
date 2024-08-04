@@ -33,6 +33,7 @@ function FormEmployment({ form, onSubmit }: EmploymentDataProps) {
             <CustomFormSelect
               control={form.control}
               name="employment_status"
+              data-testid="employment_status"
               label="Employment status "
               placeholder="Select a Category"
               options={categorisStatus}
@@ -40,6 +41,7 @@ function FormEmployment({ form, onSubmit }: EmploymentDataProps) {
             <CustomFormSelect
               control={form.control}
               name="schedule"
+              data-testid="schedule"
               label="schedule "
               placeholder="Select a Category"
               options={categorisSchedule}
@@ -49,6 +51,7 @@ function FormEmployment({ form, onSubmit }: EmploymentDataProps) {
               <CustomFormField
                 control={form.control}
                 name="join_date"
+                data-testid="join_date"
                 label="Join date"
               >
                 {(field) => (
@@ -67,6 +70,7 @@ function FormEmployment({ form, onSubmit }: EmploymentDataProps) {
               <CustomFormSelect
                 control={form.control}
                 name="job_level"
+                data-testid="job_level"
                 label="Job level "
                 placeholder="Select a Category"
                 options={categoriesJobLevel}
@@ -76,6 +80,7 @@ function FormEmployment({ form, onSubmit }: EmploymentDataProps) {
               <CustomFormField
                 control={form.control}
                 name="department"
+                data-testid="department"
                 label="Department"
               >
                 {(field) => (
@@ -93,6 +98,7 @@ function FormEmployment({ form, onSubmit }: EmploymentDataProps) {
               <CustomFormSelect
                 control={form.control}
                 name="approval_line"
+                data-testid="approval_line"
                 label="Approval line "
                 placeholder="Select a Category"
                 options={categoriesApproval}
@@ -102,7 +108,8 @@ function FormEmployment({ form, onSubmit }: EmploymentDataProps) {
               <CustomFormSelect
                 control={form.control}
                 name="job_position"
-                label="Job positionroval "
+                data-testid="job_position"
+                label="Job position "
                 placeholder="Select a Category"
                 options={categoriesPosition}
               />

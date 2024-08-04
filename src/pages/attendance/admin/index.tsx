@@ -177,6 +177,7 @@ export default function Attendance() {
         <Button
           variant="outline"
           onClick={() => navigate("/attendance/settings")}
+          data-testid="settingsButton"
         >
           Settings
         </Button>
@@ -229,7 +230,7 @@ export default function Attendance() {
             <DatePicker onDateChange={handleDateChange} />
           </div>
           <div className="flex gap-5 mt-5 xl:mt-0">
-            <Button variant="outline" onClick={generateAllAttendancePdf}>
+            <Button variant="outline" onClick={generateAllAttendancePdf} id="donwloadAttendanceReport" data-testid="donwloadAttendanceReport">
               <DownloadIcon className="h-5 w-5" />
             </Button>
             <div className="relative">
@@ -241,6 +242,7 @@ export default function Attendance() {
                 type="search"
                 placeholder="Search"
                 className="pl-9 pr-4 focus:ring-primary focus:ring-offset-2"
+                data-testid="searchAttendance"
               />
             </div>
           </div>
@@ -293,6 +295,7 @@ export default function Attendance() {
                           aria-haspopup="true"
                           size="icon"
                           variant="ghost"
+                          data-testid="toggleMenu"
                         >
                           <Ellipsis className="h-4 w-4" />
                           <span className="sr-only">Toggle menu</span>
@@ -304,6 +307,7 @@ export default function Attendance() {
                           <Button
                             variant="ghost"
                             onClick={() => navigate(`/attendance/${item.id}`)}
+                            data-testid="detailButton"
                           >
                             Detail
                           </Button>

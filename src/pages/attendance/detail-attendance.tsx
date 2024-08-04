@@ -76,7 +76,10 @@ export default function DetailAttendance() {
   };
 
   return (
-    <MainLayout title="Empower HR - Attendance" description="Empower HR - Detail Attendance">
+    <MainLayout
+      title="Empower HR - Attendance"
+      description="Empower HR - Detail Attendance"
+    >
       <h1 className="text-2xl font-bold mb-4">Detail Attendance</h1>
       {loading ? (
         <p>Please wait...</p>
@@ -86,13 +89,16 @@ export default function DetailAttendance() {
             center={center}
             zoom={zoom}
             style={{ height: "50vh", width: "100%" }}
+            data-testid="mapsContainer"
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-            <Marker position={center}>
-              <Popup>{address ? address : "Fetching address..."}</Popup>
+            <Marker position={center} data-testid="popupMaps">
+              <Popup data-testid="popupMapsFetching">
+                {address ? address : "Fetching address..."}
+              </Popup>
             </Marker>
           </MapContainer>
 

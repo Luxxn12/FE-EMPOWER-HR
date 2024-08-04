@@ -153,22 +153,26 @@ export default function LiveAttendance() {
             </div>
           </div>
           <div className="lg:px-8 py-2 px-4">
-            <text className="font-medium">Notes (optional)</text>
+            <h5 className="font-medium">Notes (optional)</h5>
             <Textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
+              id="notes"
+              data-testid="notes"
             />
           </div>
           <div className="lg:px-8 px-4 py-5 grid grid-cols-2 gap-5">
             <Button
               onClick={handleClockIn}
               disabled={attendanceIdToUse !== null}
+              data-testid="clockInButton"
             >
               Clock In
             </Button>
             <Button
               onClick={handleClockOut}
               disabled={attendanceIdToUse === null}
+              data-testid="clockOutButton"
             >
               Clock Out
             </Button>

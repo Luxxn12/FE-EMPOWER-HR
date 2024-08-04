@@ -69,19 +69,20 @@ export default function RequestLeaves() {
   return (
     <MainLayout title="Request Leaves" description="">
       <h1 className="text-2xl font-bold">Request Leaves</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} data-testid="formRequestLeave">
         <div className="py-4">
           <div className="grid grid-cols-2 gap-4 mb-3">
             <div className="space-y-2">
               <Label htmlFor="start_date">Start date *</Label>
               <Popover>
-                <PopoverTrigger asChild>
+                <PopoverTrigger asChild data-testid="popoverTriggerContentStartDate">
                   <Button
                     variant={"outline"}
                     className={cn(
                       "w-full justify-start text-left font-normal",
                       !startDate && "text-muted-foreground"
                     )}
+                    data-testid="startDateButton"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {startDate ? (
@@ -91,7 +92,7 @@ export default function RequestLeaves() {
                     )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="w-auto p-0" align="start" data-testid="popoverContentStartDate">
                   <Calendar
                     mode="single"
                     selected={startDate}
@@ -102,6 +103,7 @@ export default function RequestLeaves() {
                       }
                     }}
                     initialFocus
+                    data-testid="start_date"
                   />
                 </PopoverContent>
               </Popover>
@@ -109,13 +111,14 @@ export default function RequestLeaves() {
             <div className="space-y-2">
               <Label htmlFor="end_date">End date *</Label>
               <Popover>
-                <PopoverTrigger asChild>
+                <PopoverTrigger asChild data-testid="popoverTriggerContentEndDate">
                   <Button
                     variant={"outline"}
                     className={cn(
                       "w-full justify-start text-left font-normal",
                       !endDate && "text-muted-foreground"
                     )}
+                    data-testid="endDateButton"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {endDate ? (
@@ -136,6 +139,7 @@ export default function RequestLeaves() {
                       }
                     }}
                     initialFocus
+                    data-testid="end_date"
                   />
                 </PopoverContent>
               </Popover>
@@ -147,6 +151,7 @@ export default function RequestLeaves() {
               id="reason"
               placeholder="Reason for leave"
               {...register("reason", { required: true })}
+              data-testid="reason"
             />
             {errors.reason && (
               <p className="text-red-500 text-sm">{errors.reason.message}</p>
@@ -156,10 +161,11 @@ export default function RequestLeaves() {
             <Button
               variant={"outline"}
               onClick={() => navigate("/leaves-user")}
+              data-testid="cancelButton"
             >
               Cancel
             </Button>
-            <Button type="submit" className="pl-4 pr-4" disabled={isLoading}>
+            <Button type="submit" className="pl-4 pr-4" disabled={isLoading} data-testid="submitButton">
               {isLoading ? "Submitting..." : "Submit"}
             </Button>
           </div>

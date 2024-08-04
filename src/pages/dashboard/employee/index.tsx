@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button"
-import { getDashboardEmployee } from "@/utils/apis/dashboard/api"
-import { DashboardEmployeeType } from "@/utils/apis/dashboard/type"
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import ImgDashboard from '@/assets/image-dashboard.png'
-import { Pie, PieChart } from "recharts"
+import { Button } from "@/components/ui/button";
+import { getDashboardEmployee } from "@/utils/apis/dashboard/api";
+import { DashboardEmployeeType } from "@/utils/apis/dashboard/type";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import ImgDashboard from "@/assets/image-dashboard.png";
+import { Pie, PieChart } from "recharts";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import {
   ChartConfig,
@@ -12,7 +12,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Squircle } from "lucide-react"
+import { Squircle } from "lucide-react";
 
 const chartConfig = {
   desktop: {
@@ -30,27 +30,28 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 function DashboardEmployee() {
-  const [dataDashboardEmployee, setDataDashboardEmployee] = useState<DashboardEmployeeType>()
+  const [dataDashboardEmployee, setDataDashboardEmployee] =
+    useState<DashboardEmployeeType>();
 
   useEffect(() => {
-    fetchDataEmployee()
-  }, [])
+    fetchDataEmployee();
+  }, []);
 
   async function fetchDataEmployee() {
     try {
-      const response = await getDashboardEmployee()
-      setDataDashboardEmployee(response.data)
+      const response = await getDashboardEmployee();
+      setDataDashboardEmployee(response.data);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
   const currentDate: Date = new Date();
 
-  const formattedDate = currentDate.toLocaleString('en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
+  const formattedDate = currentDate.toLocaleString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
   });
 
   const chartData = [
@@ -66,35 +67,46 @@ function DashboardEmployee() {
     },
   ];
 
-  const maleVisitors = isNaN(Number(dataDashboardEmployee?.male.toFixed())) ? 0 : Number(dataDashboardEmployee?.male.toFixed());
-  const femaleVisitors = isNaN(Number(dataDashboardEmployee?.female.toFixed())) ? 0 : Number(dataDashboardEmployee?.female.toFixed());
+  const maleVisitors = isNaN(Number(dataDashboardEmployee?.male.toFixed()))
+    ? 0
+    : Number(dataDashboardEmployee?.male.toFixed());
+  const femaleVisitors = isNaN(Number(dataDashboardEmployee?.female.toFixed()))
+    ? 0
+    : Number(dataDashboardEmployee?.female.toFixed());
 
   const chartDataPai = [
     { browser: "Male", visitors: maleVisitors, fill: "#5D54D5" },
     { browser: "Female", visitors: femaleVisitors, fill: "#029BDE" },
   ];
   return (
-    <div >
-      <div className='py-8 px-12 bg-white border border-gray[#D5D5D5] rounded-sm'>
-        <div className='flex justify-between'>
+    <div>
+      <div className="py-8 px-12 bg-white border border-gray[#D5D5D5] rounded-sm">
+        <div className="flex justify-between">
           <div>
-            <h1 className='font-bold text-2xl'>Hi!, Empower {dataDashboardEmployee?.name}!</h1>
-            <h6 className='text-gray-400 text-sm mt-2'>{formattedDate}</h6>
-            <div className='pt-10'>
-              <h6 className='font-bold text-sm mb-4'>Shortcut</h6>
-              <Link to={'/attendance/live-attendance'}>
-                <Button variant="outline" className='rounded-3xl'>Live acttendance</Button>
+            <h1 className="font-bold text-2xl">
+              Hi!, Empower {dataDashboardEmployee?.name}!
+            </h1>
+            <h6 className="text-gray-400 text-sm mt-2">{formattedDate}</h6>
+            <div className="pt-10">
+              <h6 className="font-bold text-sm mb-4">Shortcut</h6>
+              <Link
+                to={"/attendance/live-attendance"}
+                data-testid="button-live"
+              >
+                <Button variant="outline" className="rounded-3xl">
+                  Live acttendance
+                </Button>
               </Link>
             </div>
           </div>
           <div>
-            <img alt='img-dashboard.png' src={ImgDashboard} width={225} />
+            <img alt="img-dashboard.png" src={ImgDashboard} width={225} />
           </div>
         </div>
       </div>
-      <div className='grid lg:grid-cols-2 grid-cols-1 gap-5 mt-8'>
-        <div className='py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm'>
-          <text className='text-xl'>Employment Status</text>
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-5 mt-8">
+        <div className="py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm">
+          <text className="text-xl">Employment Status</text>
           <div className="pt-10">
             <ChartContainer config={chartConfig}>
               <BarChart
@@ -128,8 +140,8 @@ function DashboardEmployee() {
             </ChartContainer>
           </div>
         </div>
-        <div className='py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm'>
-          <text className='text-xl'>Gender Diversity</text>
+        <div className="py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm">
+          <text className="text-xl">Gender Diversity</text>
           <div>
             <ChartContainer
               config={chartConfig}

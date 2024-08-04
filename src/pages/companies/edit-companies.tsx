@@ -2,7 +2,10 @@ import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getDetailCompenies, updateCompanies } from "@/utils/apis/companies/api";
+import {
+  getDetailCompenies,
+  updateCompanies,
+} from "@/utils/apis/companies/api";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -93,29 +96,63 @@ export default function EditCompanies() {
       <div className="py-5">
         <div className="w-full mb-3 space-y-2">
           <Label htmlFor="company_picture">Image Companies *</Label>
-          <Input id="company_picture" type="file" onChange={handleFileChange} />
+          <Input
+            id="company_picture"
+            data-testid="company_picture"
+            type="file"
+            onChange={handleFileChange}
+          />
         </div>
         <div className="w-full mb-3 space-y-2">
           <Label htmlFor="company_name">Campanies name *</Label>
-          <Input type="text" id="company_name" placeholder="Name Perusahaan" value={company.company_name} onChange={handleInputChange} />
+          <Input
+            type="text"
+            data-testid="company_name"
+            id="company_name"
+            placeholder="Name Perusahaan"
+            value={company.company_name}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="w-full mb-3 space-y-2">
           <Label htmlFor="email">Email *</Label>
-          <Input type="text" id="email" placeholder="Exemple@gmail.com" value={company.email} onChange={handleInputChange} />
+          <Input
+            type="text"
+            id="email"
+            data-testid="email"
+            placeholder="Exemple@gmail.com"
+            value={company.email}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="w-full mb-3 space-y-2">
           <Label htmlFor="npwp">NPWP *</Label>
-          <Input type="text" id="npwp" placeholder="12172919729179" value={company.npwp} onChange={handleInputChange} />
+          <Input
+            type="text"
+            id="npwp"
+            data-testid="npwp"
+            placeholder="12172919729179"
+            value={company.npwp}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="w-full mb-3 space-y-2">
           <Label htmlFor="phone">Phone *</Label>
-          <Input type="text" id="phone" placeholder="12172919729179" value={company.phone} onChange={handleInputChange} />
+          <Input
+            type="text"
+            id="phone"
+            data-testid="phone"
+            placeholder="12172919729179"
+            value={company.phone}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="w-full mb-3 space-y-2">
           <Label htmlFor="company_address">Company Address *</Label>
           <Input
             type="text"
             id="company_address"
+            data-testid="company_address"
             placeholder="Jalan Gunung Antena 1 No 11A, Padangan sambian kelod, denpasar barat, bali"
             value={company.company_address}
             onChange={handleInputChange}
@@ -123,16 +160,26 @@ export default function EditCompanies() {
         </div>
         <div className="w-full mb-3 space-y-2">
           <Label htmlFor="signature">Signature *</Label>
-          <Input id="signature" type="file" onChange={handleFileChange}
+          <Input
+            id="signature"
+            data-testid="signature"
+            type="file"
+            onChange={handleFileChange}
           />
         </div>
         <div className="flex justify-end gap-5 mt-6">
-          <Link to={'/companies'}>
-            <Button variant={"outline"}>Cancel</Button>
+          <Link to={"/companies"}>
+            <Button variant={"outline"} data-testid="button-cancel">
+              Cancel
+            </Button>
           </Link>
-          <Button className="pl-4 pr-4" onClick={handleSubmit} disabled={isLoading}
+          <Button
+            className="pl-4 pr-4"
+            data-testid="button-submit"
+            onClick={handleSubmit}
+            disabled={isLoading}
           >
-            {isLoading ? 'Loading...' : 'Save Companies'}
+            {isLoading ? "Loading..." : "Save Companies"}
           </Button>
         </div>
       </div>
