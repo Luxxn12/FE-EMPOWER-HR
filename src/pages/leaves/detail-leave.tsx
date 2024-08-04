@@ -162,7 +162,7 @@ export default function DetailLeave() {
         <h1 className="text-2xl font-bold">Leave Details</h1>
 
         {(leave?.status === "approved" || leave?.status === "rejected") && (
-          <Button onClick={generateLeavePdf}>Leave report</Button>
+          <Button onClick={generateLeavePdf} data-testid="generateLeaveButton">Leave report</Button>
         )}
       </div>
 
@@ -221,7 +221,7 @@ export default function DetailLeave() {
               Submit to send a leave approval request
             </p>
             <div className="mt-3">
-              <Button size="sm" onClick={handleApprove}>
+              <Button size="sm" onClick={handleApprove} data-testid="approveLeaveButton">
                 Submit
               </Button>
             </div>
@@ -231,9 +231,9 @@ export default function DetailLeave() {
             <p className="text-xl font-bold">Reject</p>
             <div className="grid xl:grid-cols-2 grid-cols-1">
               <div className="space-y-2">
-                <Label htmlFor="reject-reason">Reject Reason</Label>
+                <Label htmlFor="rejectReason">Reject Reason</Label>
                 <Input
-                  id="reject-reason"
+                  id="rejectReason"
                   type="text"
                   placeholder="Enter reason for rejection"
                   className="border border-gray-300 p-2"
@@ -242,6 +242,7 @@ export default function DetailLeave() {
                     setRejectReason(e.target.value);
                     setRejectError(null);
                   }}
+                  data-testid="rejectReason"
                 />
                 {rejectError && (
                   <p className="text-red-500 text-sm">{rejectError}</p>
@@ -254,6 +255,7 @@ export default function DetailLeave() {
                 size="sm"
                 className="pl-4 pr-4"
                 onClick={handleReject}
+                data-testid="rejectLeaveButton"
               >
                 Reject
               </Button>

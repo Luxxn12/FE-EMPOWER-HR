@@ -148,6 +148,7 @@ export default function EditSchedule() {
             id="name"
             placeholder="Headquarter schedule"
             {...register("name")}
+            data-testid="name"
           />
           {errors.name && (
             <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -163,6 +164,7 @@ export default function EditSchedule() {
                   "w-full justify-start text-left font-normal",
                   !date && "text-muted-foreground"
                 )}
+                data-testid="dateButton"
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {date ? format(date, "dd-MM-yyyy") : <span>Pick a date</span>}
@@ -177,6 +179,7 @@ export default function EditSchedule() {
                   setValue("effective_date", d ? format(d, "dd-MM-yyyy") : "");
                 }}
                 initialFocus
+                data-testid="calendar"
               />
             </PopoverContent>
           </Popover>
@@ -193,6 +196,7 @@ export default function EditSchedule() {
             id="repeat"
             placeholder="29 days"
             {...register("repeat_until")}
+            data-testid="repeat"
           />
           {errors.repeat_until && (
             <p className="text-red-500 text-sm">
@@ -203,7 +207,12 @@ export default function EditSchedule() {
         <div className="grid grid-cols-2 gap-4 mb-3">
           <div className="space-y-2">
             <Label htmlFor="schedule_in">Schedule In *</Label>
-            <Input id="schedule_in" type="time" {...register("schedule_in")} />
+            <Input
+              id="schedule_in"
+              type="time"
+              {...register("schedule_in")}
+              data-testid="schedule_in"
+            />
             {errors.schedule_in && (
               <p className="text-red-500 text-sm">
                 {errors.schedule_in.message}
@@ -216,6 +225,7 @@ export default function EditSchedule() {
               id="schedule_out"
               type="time"
               {...register("schedule_out")}
+              data-testid="schedule_out"
             />
             {errors.schedule_out && (
               <p className="text-red-500 text-sm">
@@ -227,7 +237,12 @@ export default function EditSchedule() {
         <div className="grid grid-cols-2 gap-4 mb-3">
           <div className="space-y-2">
             <Label htmlFor="break_start">Break Start *</Label>
-            <Input id="break_start" type="time" {...register("break_start")} />
+            <Input
+              id="break_start"
+              type="time"
+              {...register("break_start")}
+              data-testid="break_start"
+            />
             {errors.break_start && (
               <p className="text-red-500 text-sm">
                 {errors.break_start.message}
@@ -236,7 +251,12 @@ export default function EditSchedule() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="break_end">Break End *</Label>
-            <Input id="break_end" type="time" {...register("break_end")} />
+            <Input
+              id="break_end"
+              type="time"
+              {...register("break_end")}
+              data-testid="break_end"
+            />
             {errors.break_end && (
               <p className="text-red-500 text-sm">{errors.break_end.message}</p>
             )}
@@ -248,14 +268,22 @@ export default function EditSchedule() {
             id="description"
             placeholder="Optional"
             {...register("description")}
+            data-testid="description"
           />
           {errors.description && (
             <p className="text-red-500 text-sm">{errors.description.message}</p>
           )}
         </div>
         <div className="flex justify-end gap-5 mt-6">
-          <Button variant={"link"}>Cancel</Button>
-          <Button className="pl-4 pr-4" type="submit" disabled={isLoading}>
+          <Button variant={"link"} data-testid="cancelButton">
+            Cancel
+          </Button>
+          <Button
+            className="pl-4 pr-4"
+            type="submit"
+            disabled={isLoading}
+            data-testid="submitButton"
+          >
             {isLoading ? "Saving..." : "Save Schedule"}
           </Button>
         </div>

@@ -60,7 +60,7 @@ export default function LeavesUser() {
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Leaves user</h1>
         <div>
-          <Button onClick={() => navigate("/leaves/request-leaves")}>
+          <Button onClick={() => navigate("/leaves/request-leaves")} data-testid="requestLeaveButtonButton">
             Request leave
           </Button>
         </div>
@@ -109,6 +109,7 @@ export default function LeavesUser() {
           className="pl-12 pr-8 focus:ring-primary focus:ring-offset-2"
           value={searchQuery}
           onChange={handleSearch}
+          data-testid="searchLeavesButton"
         />
       </div>
 
@@ -152,7 +153,7 @@ export default function LeavesUser() {
                     {item.end_date}
                   </TableCell>
                   <TableCell className="text-gray-500">
-                    <Link to={`/leaves/${item.leave_id}`}>
+                    <Link to={`/leaves/${item.leave_id}`} data-testid="statusLink">
                       <p
                         className={
                           item.status === "approved"
