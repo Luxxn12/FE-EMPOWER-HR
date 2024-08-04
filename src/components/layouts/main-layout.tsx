@@ -145,17 +145,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({
                       )}
                     </Avatar>
                     <div className="grid gap-0.5 leading-none">
-                      <div className="font-semibold">John Doe</div>
-                      <div className="text-sm text-muted-foreground">john@example.com</div>
+                      {role == "admin" ? (
+                        <div className="font-semibold">ADMIN</div>
+                      ) : (
+                      <div className="font-semibold">EMPLOYEE</div>
+                      )}
                     </div>
                   </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="#" className="flex items-center gap-2">
-                      <div className="h-4 w-4" />
-                      <p>Profile</p>
-                    </Link>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <AlertDialog >
