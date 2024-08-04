@@ -136,19 +136,15 @@ export default function UserAttendance() {
       year: "numeric",
     });
 
-    // Add title
     doc.setFontSize(16);
     doc.text(title, 14, 20);
 
-    // Add description
     doc.setFontSize(12);
     doc.text(description, 14, 30);
 
-    // Add month and year
     doc.setFontSize(12);
     doc.text(monthYear, 14, 40);
 
-    // Prepare table body
     const tableBody = attendance.map((item) => [
       item.employementData && item.employementData[0]
         ? item.employementData[0].name

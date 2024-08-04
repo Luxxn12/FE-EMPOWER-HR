@@ -32,8 +32,8 @@ export default function DetailLeave() {
 
   const fetchLeave = async () => {
     try {
-      const data = await getLeavesById(numberId!);
-      setLeave(data.data);
+      const resp = await getLeavesById(numberId!);
+      setLeave(resp.data);
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -148,8 +148,13 @@ export default function DetailLeave() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading || error) {
+    return (
+      <MainLayout title="" description="">
+        {loading ? <p>Please wait...</p> : <p>Something went wrong: {error}</p>}
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout title="" description="">
@@ -211,10 +216,10 @@ export default function DetailLeave() {
       {role === "admin" && leave?.status === "pending" && (
         <>
           <div className="pt-8 flex flex-col">
-            <text className="text-xl font-bold">Approve</text>
-            <text className="text-sm text-gray-500 mt-1">
+            <p className="text-xl font-bold">Approve</p>
+            <p className="text-sm text-gray-500 mt-1">
               Submit to send a leave approval request
-            </text>
+            </p>
             <div className="mt-3">
               <Button size="sm" onClick={handleApprove}>
                 Submit
@@ -223,7 +228,7 @@ export default function DetailLeave() {
           </div>
           <Separator className="my-8 bg-gray-300" />
           <div className="flex flex-col">
-            <text className="text-xl font-bold">Reject</text>
+            <p className="text-xl font-bold">Reject</p>
             <div className="grid xl:grid-cols-2 grid-cols-1">
               <div className="space-y-2">
                 <Label htmlFor="reject-reason">Reject Reason</Label>

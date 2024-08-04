@@ -125,6 +125,24 @@ export default function Attendance() {
   const generateAllAttendancePdf = () => {
     const doc = new jsPDF();
 
+    const title = "Attendance Report";
+    const description =
+      "This document contains the attendance data for the month.";
+    const currentDate = new Date();
+    const monthYear = currentDate.toLocaleString("default", {
+      month: "long",
+      year: "numeric",
+    });
+
+    doc.setFontSize(16);
+    doc.text(title, 14, 20);
+
+    doc.setFontSize(12);
+    doc.text(description, 14, 30);
+
+    doc.setFontSize(12);
+    doc.text(monthYear, 14, 40);
+
     const tableBody = attendance.map((item) => [
       item.employementData && item.employementData[0]
         ? item.employementData[0].name
@@ -138,9 +156,13 @@ export default function Attendance() {
     ]);
 
     autoTable(doc, {
+      startY: 50,
       head: [["Employee Name", "Employee ID", "Date", "Clock In", "Clock Out"]],
       body: tableBody,
     });
+
+    const finalY = (doc as any).autoTable.previous.finalY;
+    doc.text("Signature: ____________________", 14, finalY + 20);
 
     doc.save("all_attendance_data.pdf");
   };
