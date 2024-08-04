@@ -12,7 +12,7 @@ export default function Companies() {
 
   const fetchData = async () => {
     try {
-      const response = await getCompanies()
+      const response = await getCompanies();
       setData(response.data);
     } catch (error) {
       toast.error((error as Error).message);
@@ -58,7 +58,13 @@ export default function Companies() {
               </div>
               <div className="flex flex-col mb-4">
                 <text className="font-bold">Signature</text>
-                <img className="mt-1" src={isData?.signature} alt={isData?.signature} width={"50%"} height={"auto"} />
+                <img
+                  className="mt-1"
+                  src={isData?.signature}
+                  alt={isData?.signature}
+                  width={"50%"}
+                  height={"auto"}
+                />
               </div>
             </div>
             <div className="flex flex-col xl:py-4 py-0">

@@ -25,12 +25,28 @@ export const categoriesJobLevel = [
 
 export const categoriesApproval = [
     "Lukman",
-    "Alif"
+    "Alif",
+    "Nur",
+    "Alfath",
+    "Wahid",
+    "Maulana",
+    "Rafi",
+    "Hafiz",
+    "Abdul",
+    "Hafiz",
+    "Hafizh"
 ]
 
 export const categoriesPosition = [
     "Software Engineer",
-    "IT Support"
+    "IT Support",
+    "Project Manager",
+    "HRD",
+    "Finance",
+    "Accounting",
+    "Marketing",
+    "Sales",
+    "Other"
 ]
 
 export const categoriesStatus = [

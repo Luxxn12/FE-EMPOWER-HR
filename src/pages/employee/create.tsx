@@ -63,28 +63,20 @@ const CreateEmployee = () => {
       salary: Number(payrollValues.salary),
       account_number: Number(payrollValues.account_number),
     };
-
-    console.log({
-      personal: formPersonal.getValues(),
-      employment: formEmployment.getValues(),
-      payroll: parsedPayrollValues,
-    });
     if (!isLastStep) return next();
 
     try {
       const body = {
-        // personal: formPersonal.getValues(),
         personal: {
           ...formPersonal.getValues(),
-          password: 'default-password',
+          password: "default-password",
         },
         employment: formEmployment.getValues(),
         payroll: parsedPayrollValues,
       };
       await createEmployee(body);
-      console.log(body)
       toast.success(`Employee created successfully`);
-      navigate("/employees")
+      navigate("/employees");
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -112,11 +104,11 @@ const CreateEmployee = () => {
 
       <div className="mt-6 flex justify-start gap-2">
         {!isFirstStep && (
-          <Button type="button" onClick={back}>
+          <Button type="button" data-testid="button-back" onClick={back}>
             Back
           </Button>
         )}
-        <Button type="submit" form="forms">
+        <Button type="submit" data-testid="button-submit" form="forms">
           {isLastStep ? "Finish" : "Next"}
         </Button>
       </div>

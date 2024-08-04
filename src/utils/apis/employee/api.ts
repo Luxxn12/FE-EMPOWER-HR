@@ -4,14 +4,14 @@ import { EmploymentIdSchema, IEmployeeById, IEmployeeGetAll, RootDataEmployee, U
 
 const token = localStorage.getItem("token");
 
-export const getAllEmployee = async () => {
+export const getAllEmployee = async (page: number) => {
   try {
     if (!token) {
       throw new Error("Token not found in localStorage");
     }
 
     setAxiosConfig(token);
-    const response = await axiosConfig.get("/employee");
+    const response = await axiosConfig.get("/employee?page=" + page);
     return response.data as Response<IEmployeeGetAll[]>;
   } catch (error: any) {
     const message = error.response?.data?.message || "An error occurrend";
@@ -100,14 +100,12 @@ export const updatePersonalEmployee = async ( employee_id: number, formData: For
     }
 
     setAxiosConfig(token);
-    console.log('Sending request to:', `/employee/${employee_id}`);
-    console.log('With data:', formData);
+
     const resp = await axiosConfig.put<IEmployeeById>(`/employee/${employee_id}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log('Response:', resp);
     return resp.data;
   } catch (error: any) {
     console.error('Error:', error);

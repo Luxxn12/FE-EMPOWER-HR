@@ -2,9 +2,16 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { PersonalSchema } from "@/utils/apis/employee/type";
 import { UseFormReturn } from "react-hook-form";
-import { CustomFormField, CustomFormSelect } from "@/components/custom-form-field";
+import {
+  CustomFormField,
+  CustomFormSelect,
+} from "@/components/custom-form-field";
 import { Form } from "@/components/ui/form";
-import { categoriesGender, categoriesReligion, categoriesStatus } from "@/utils/constant";
+import {
+  categoriesGender,
+  categoriesReligion,
+  categoriesStatus,
+} from "@/utils/constant";
 
 type PersonalDataProps = {
   form: UseFormReturn<PersonalSchema, any, undefined>;
@@ -24,7 +31,12 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
           className="space-y-3 my-4 lg:w-3/4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <CustomFormField control={form.control} name="name" label="Fullname">
+          <CustomFormField
+            control={form.control}
+            data-testid="name"
+            name="name"
+            label="Fullname"
+          >
             {(field) => (
               <Input
                 {...field}
@@ -35,7 +47,12 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
               />
             )}
           </CustomFormField>
-          <CustomFormField control={form.control} name="email" label="Email">
+          <CustomFormField
+            control={form.control}
+            data-testid="email"
+            name="email"
+            label="Email"
+          >
             {(field) => (
               <Input
                 {...field}
@@ -50,6 +67,7 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
           <CustomFormField
             control={form.control}
             name="phone"
+            data-testid="phone"
             label="Phone number"
           >
             {(field) => (
@@ -66,6 +84,7 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
           <CustomFormField
             control={form.control}
             name="place_birth"
+            data-testid="place_birth"
             label="Place of birth"
           >
             {(field) => (
@@ -81,6 +100,7 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
           <CustomFormField
             control={form.control}
             name="birth_date"
+            data-testid="birth_date"
             label="Date of birth"
           >
             {(field) => (
@@ -95,27 +115,35 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
             )}
           </CustomFormField>
           <CustomFormSelect
-              control={form.control}
-              name="gender"
-              label="Gender"
-              placeholder="Select a Category"
-              options={categoriesGender}
-            />
+            control={form.control}
+            name="gender"
+            data-testid="gender"
+            label="Gender"
+            placeholder="Select a Category"
+            options={categoriesGender}
+          />
           <CustomFormSelect
-              control={form.control}
-              name="status"
-              label="Status"
-              placeholder="Select a Category"
-              options={categoriesStatus}
-            />
+            control={form.control}
+            name="status"
+            data-testid="status"
+            label="Status"
+            placeholder="Select a Category"
+            options={categoriesStatus}
+          />
           <CustomFormSelect
-              control={form.control}
-              name="religion"
-              label="Religion"
-              placeholder="Select a Category"
-              options={categoriesReligion}
-            />
-          <CustomFormField control={form.control} name="nik" label="Nik">
+            control={form.control}
+            name="religion"
+            label="Religion"
+            data-testid="religion"
+            placeholder="Select a Category"
+            options={categoriesReligion}
+          />
+          <CustomFormField
+            control={form.control}
+            data-testid="nik"
+            name="nik"
+            label="Nik"
+          >
             {(field) => (
               <Input
                 {...field}
@@ -129,6 +157,7 @@ export function FormPersonal({ form, onSubmit }: PersonalDataProps) {
           <CustomFormField
             control={form.control}
             name="address"
+            data-testid="address"
             label="Address"
           >
             {(field) => (

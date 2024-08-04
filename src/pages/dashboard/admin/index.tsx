@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button"
-import { getDashboardAdmin } from "@/utils/apis/dashboard/api"
-import { DashboardAdminType } from "@/utils/apis/dashboard/type"
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import ImgDashboard from '@/assets/image-dashboard.png'
-import { Pie, PieChart } from "recharts"
+import { Button } from "@/components/ui/button";
+import { getDashboardAdmin } from "@/utils/apis/dashboard/api";
+import { DashboardAdminType } from "@/utils/apis/dashboard/type";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import ImgDashboard from "@/assets/image-dashboard.png";
+import { Pie, PieChart } from "recharts";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import {
   ChartConfig,
@@ -12,7 +12,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Squircle } from "lucide-react"
+import { Squircle } from "lucide-react";
 
 const chartConfig = {
   desktop: {
@@ -29,29 +29,29 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-
 function DashboardAdmin() {
-  const [dataDashboardAdmin, setDataDashboardAdmin] = useState<DashboardAdminType>()
+  const [dataDashboardAdmin, setDataDashboardAdmin] =
+    useState<DashboardAdminType>();
 
   useEffect(() => {
-    fetchDataAdmin()
-  }, [])
+    fetchDataAdmin();
+  }, []);
 
   async function fetchDataAdmin() {
     try {
-      const response = await getDashboardAdmin()
-      setDataDashboardAdmin(response.data)
+      const response = await getDashboardAdmin();
+      setDataDashboardAdmin(response.data);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
   const currentDate: Date = new Date();
 
-  const formattedDate = currentDate.toLocaleString('en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
+  const formattedDate = currentDate.toLocaleString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
   });
 
   const chartData = [
@@ -67,8 +67,12 @@ function DashboardAdmin() {
     },
   ];
 
-  const maleVisitors = isNaN(Number(dataDashboardAdmin?.male.toFixed())) ? 0 : Number(dataDashboardAdmin?.male.toFixed());
-  const femaleVisitors = isNaN(Number(dataDashboardAdmin?.female.toFixed())) ? 0 : Number(dataDashboardAdmin?.female.toFixed());
+  const maleVisitors = isNaN(Number(dataDashboardAdmin?.male.toFixed()))
+    ? 0
+    : Number(dataDashboardAdmin?.male.toFixed());
+  const femaleVisitors = isNaN(Number(dataDashboardAdmin?.female.toFixed()))
+    ? 0
+    : Number(dataDashboardAdmin?.female.toFixed());
 
   const chartDataPai = [
     { browser: "Male", visitors: maleVisitors, fill: "#5D54D5" },
@@ -76,53 +80,68 @@ function DashboardAdmin() {
   ];
 
   return (
-    <div >
-      <div className='py-8 px-12 bg-white border border-gray[#D5D5D5] rounded-sm'>
-        <div className='flex justify-between'>
+    <div>
+      <div className="py-8 px-12 bg-white border border-gray[#D5D5D5] rounded-sm">
+        <div className="flex justify-between">
           <div>
-            <h1 className='font-bold text-2xl'>Hi!, Empower {dataDashboardAdmin?.name}!</h1>
-            <h6 className='text-gray-400 text-sm mt-2'>{formattedDate}</h6>
-            <div className='pt-10'>
-              <h6 className='font-bold text-sm mb-4'>Shortcut</h6>
-              <Link to={'/attendance/live-attendance'}>
-                <Button variant="outline" className='rounded-3xl'>Live acttendance</Button>
+            <h1 className="font-bold text-2xl">
+              Hi!, Empower {dataDashboardAdmin?.name}!
+            </h1>
+            <h6 className="text-gray-400 text-sm mt-2">{formattedDate}</h6>
+            <div className="pt-10">
+              <h6 className="font-bold text-sm mb-4">Shortcut</h6>
+              <Link
+                to={"/attendance/live-attendance"}
+                data-testid="button-live"
+              >
+                <Button variant="outline" className="rounded-3xl">
+                  Live acttendance
+                </Button>
               </Link>
             </div>
           </div>
           <div>
-            <img alt='img-dashboard.png' src={ImgDashboard} width={225} />
+            <img alt="img-dashboard.png" src={ImgDashboard} width={225} />
           </div>
         </div>
       </div>
-      <div className='grid lg:grid-cols-4 grid-cols-2 gap-5 mt-8'>
-        <div className='py-2 px-5 bg-[#E4E9F7] border border-gray[#D5D5D5] rounded-sm'>
+      <div className="grid lg:grid-cols-4 grid-cols-2 gap-5 mt-8">
+        <div className="py-2 px-5 bg-[#E4E9F7] border border-gray[#D5D5D5] rounded-sm">
           <p>Attendace</p>
-          <div className='flex justify-center py-3'>
-            <h1 className='font-bold text-5xl'>{dataDashboardAdmin?.attendance.toFixed()}</h1>
+          <div className="flex justify-center py-3">
+            <h1 className="font-bold text-5xl">
+              {dataDashboardAdmin?.attendance.toFixed()}
+            </h1>
           </div>
         </div>
-        <div className='py-2 px-5 bg-[#E3FBE4] border border-gray[#D5D5D5] rounded-sm'>
+        <div className="py-2 px-5 bg-[#E3FBE4] border border-gray[#D5D5D5] rounded-sm">
           <p>Leaves</p>
-          <div className='flex justify-center py-3'>
-            <h1 className='font-bold text-5xl'>{dataDashboardAdmin?.leaves.toFixed()}</h1>
+          <div className="flex justify-center py-3">
+            <h1 className="font-bold text-5xl">
+              {dataDashboardAdmin?.leaves.toFixed()}
+            </h1>
           </div>
         </div>
-        <div className='py-2 px-5 bg-[#E8F3F3] border border-gray[#D5D5D5] rounded-sm'>
+        <div className="py-2 px-5 bg-[#E8F3F3] border border-gray[#D5D5D5] rounded-sm">
           <p>Payroll</p>
-          <div className='flex justify-center py-3'>
-            <h1 className='font-bold text-5xl'>{dataDashboardAdmin?.payroll.toFixed()}</h1>
+          <div className="flex justify-center py-3">
+            <h1 className="font-bold text-5xl">
+              {dataDashboardAdmin?.payroll.toFixed()}
+            </h1>
           </div>
         </div>
-        <div className='py-2 px-5 bg-[#F9F6D2] border border-gray[#D5D5D5] rounded-sm'>
+        <div className="py-2 px-5 bg-[#F9F6D2] border border-gray[#D5D5D5] rounded-sm">
           <p>Employees</p>
-          <div className='flex justify-center py-3'>
-            <h1 className='font-bold text-5xl'>{dataDashboardAdmin?.total_users}</h1>
+          <div className="flex justify-center py-3">
+            <h1 className="font-bold text-5xl">
+              {dataDashboardAdmin?.total_users}
+            </h1>
           </div>
         </div>
       </div>
-      <div className='grid lg:grid-cols-2 grid-cols-1 gap-5 mt-8'>
-        <div className='py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm'>
-          <text className='text-xl'>Employment Status</text>
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-5 mt-8">
+        <div className="py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm">
+          <text className="text-xl">Employment Status</text>
           <div className="pt-10">
             <ChartContainer config={chartConfig}>
               <BarChart
@@ -156,9 +175,8 @@ function DashboardAdmin() {
             </ChartContainer>
           </div>
         </div>
-        <div className='py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm'>
-          <text className='text-xl'>Gender Diversity</text>
-          {/* <PaiChart dataMaleAdmin={dataDashboardAdmin?.male.toFixed()} dataFemaleAdmin={dataDashboardAdmin?.female.toFixed()} /> */}
+        <div className="py-2 px-5 bg-white border border-gray[#D5D5D5] rounded-sm">
+          <text className="text-xl">Gender Diversity</text>
           <div>
             <ChartContainer
               config={chartConfig}
@@ -195,7 +213,6 @@ function DashboardAdmin() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

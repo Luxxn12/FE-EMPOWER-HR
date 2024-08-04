@@ -1,10 +1,16 @@
-import { CustomFormField, CustomFormSelect } from "@/components/custom-form-field";
+import {
+  CustomFormField,
+  CustomFormSelect,
+} from "@/components/custom-form-field";
 import MainLayout from "@/components/layouts/main-layout";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { createPayroll } from "@/utils/apis/payroll/api";
-import { editPayrollSchema, EditPayrollSchemaById } from "@/utils/apis/payroll/type";
+import {
+  editPayrollSchema,
+  EditPayrollSchemaById,
+} from "@/utils/apis/payroll/type";
 import { categorisBank } from "@/utils/constant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,11 +26,11 @@ const EditPayroll = () => {
       acoount_num: "",
       salary: "",
     },
-  })
+  });
 
   async function onSubmit(data: EditPayrollSchemaById) {
     try {
-      const response = await createPayroll(data)
+      const response = await createPayroll(data);
       toast.success(response.message);
       navigate("/payroll");
     } catch (error: any) {
@@ -37,13 +43,18 @@ const EditPayroll = () => {
       description="Empower HR - Edit Payroll"
     >
       <Form {...form}>
-        <form action="" className="lg:w-3/4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          action=""
+          className="lg:w-3/4"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <div className="grid gap-6 md:grid-cols-2">
             <div className="mt-3">
               <CustomFormSelect
                 control={form.control}
                 name="bank_name"
                 label="Bank Name"
+                data-testid="bank_name"
                 placeholder="Select a Category"
                 options={categorisBank}
               />
@@ -53,6 +64,7 @@ const EditPayroll = () => {
                 control={form.control}
                 name="acoount_num"
                 label="Bank Account"
+                data-testid="acoount_num"
               >
                 {(field) => (
                   <Input
@@ -67,7 +79,12 @@ const EditPayroll = () => {
             </div>
           </div>
           <div className="mt-3">
-            <CustomFormField control={form.control} name="salary" label="Salary">
+            <CustomFormField
+              data-testid="salary"
+              control={form.control}
+              name="salary"
+              label="Salary"
+            >
               {(field) => (
                 <Input
                   {...field}
@@ -80,9 +97,13 @@ const EditPayroll = () => {
             </CustomFormField>
           </div>
           <div className="flex justify-start gap-2 my-3">
-            <Button>Submit</Button>
+            <Button type="submit" data-testid="button-submit">
+              Submit
+            </Button>
             <Link to={"/payroll"}>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" data-testid="button-cancel">
+                Cancel
+              </Button>
             </Link>
           </div>
         </form>
