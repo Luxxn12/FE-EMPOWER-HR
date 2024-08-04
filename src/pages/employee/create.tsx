@@ -63,12 +63,6 @@ const CreateEmployee = () => {
       salary: Number(payrollValues.salary),
       account_number: Number(payrollValues.account_number),
     };
-
-    console.log({
-      personal: formPersonal.getValues(),
-      employment: formEmployment.getValues(),
-      payroll: parsedPayrollValues,
-    });
     if (!isLastStep) return next();
 
     try {
@@ -81,7 +75,6 @@ const CreateEmployee = () => {
         payroll: parsedPayrollValues,
       };
       await createEmployee(body);
-      console.log(body);
       toast.success(`Employee created successfully`);
       navigate("/employees");
     } catch (error: any) {
