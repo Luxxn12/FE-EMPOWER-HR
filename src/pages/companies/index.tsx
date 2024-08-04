@@ -2,13 +2,13 @@ import MainLayout from "@/components/layouts/main-layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { getCompanies } from "@/utils/apis/companies/api";
-import { ICompanies } from "@/utils/apis/companies/type";
+import { ICompaniesIndex } from "@/utils/apis/companies/type";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function Companies() {
-  const [isData, setData] = useState<ICompanies>();
+  const [isData, setData] = useState<ICompaniesIndex>();
 
   const fetchData = async () => {
     try {
