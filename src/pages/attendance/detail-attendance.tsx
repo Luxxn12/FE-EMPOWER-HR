@@ -18,9 +18,6 @@ export default function DetailAttendance() {
   const { attendance_id } = useParams<{ attendance_id: string }>();
   const numberId = attendance_id ? parseInt(attendance_id, 10) : null;
 
-  const center: LatLngTuple = [-6.25997 ?? 0, 106.778944 ?? 0];
-  const zoom = 13;
-
   const fetchAttendance = async () => {
     try {
       setLoading(true);
@@ -57,6 +54,9 @@ export default function DetailAttendance() {
   useEffect(() => {
     fetchAttendance();
   }, [numberId]);
+
+  const center: LatLngTuple = [parseFloat(attendance?.lat || "0"), parseFloat(attendance?.long || "0")];
+  const zoom = 13;
 
   const fetchAddress = async (lat: number, lng: number) => {
     try {
