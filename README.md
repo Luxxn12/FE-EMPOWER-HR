@@ -101,6 +101,7 @@ Link to demo Empower HR
 **For support:** 
   ![Email](https://img.shields.io/badge/Email-lukman.bip2023@gmail.com-informational?style=flat-square&logo=gmail)  
  [![LinkedIn](https://img.shields.io/badge/LinkedIn-moh-alif-al-lukman-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/moh-alif-al-lukman/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ardii2711-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/ardii2711/)
 - lukman.bip2023@gmail.com 
 - berykurniawan46@gmail.com
 
