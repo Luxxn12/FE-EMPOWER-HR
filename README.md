@@ -99,10 +99,10 @@ Link to demo Empower HR
 ## Support
 
 **For support:** 
+  ![Email](https://img.shields.io/badge/Email-lukman.bip2023@gmail.com-informational?style=flat-square&logo=gmail)  
+ [![LinkedIn](https://img.shields.io/badge/LinkedIn-moh-alif-al-lukman-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/moh-alif-al-lukman/)
 - lukman.bip2023@gmail.com 
 - berykurniawan46@gmail.com
-  ![Email](https://img.shields.io/badge/Email-lukman.bip2023@gmail.com-informational?style=flat-square&logo=gmail)  
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-moh-alif-al-lukman-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/moh-alif-al-lukman/)
 
 ## Screenshots Empower HR
 
