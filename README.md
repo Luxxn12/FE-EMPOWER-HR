@@ -50,8 +50,8 @@ Empower HR is an innovative startup in the field of HR software providers
 
 ## Authors
 
-- [@Luxxn12](https://www.github.com/Luxxn12)
-- [@Berykwn](https://github.com/Berykwn)
+-  [![GitHub](https://img.shields.io/badge/GitHub-Luxxn12-181717?style=flat-square&logo=github)](https://github.com/Luxxn12)
+-  [![GitHub](https://img.shields.io/badge/GitHub-Berykwn-181717?style=flat-square&logo=github)](https://github.com/Berykwn)
 
 ## Color Reference
 
